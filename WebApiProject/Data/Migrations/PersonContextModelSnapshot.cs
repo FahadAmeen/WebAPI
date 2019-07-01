@@ -20,10 +20,13 @@ namespace WebApiProject.Data.Migrations
 
             modelBuilder.Entity("WebApiProject.Models.Person", b =>
                 {
-                    b.Property<string>("Name")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Persons");
                 });

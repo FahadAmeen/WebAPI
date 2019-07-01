@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
@@ -28,7 +30,7 @@ namespace WebApiProject.Controllers
 
         // GET: api/People/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPerson([FromRoute] string id)
+        public async Task<IActionResult> GetPerson([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -47,14 +49,14 @@ namespace WebApiProject.Controllers
 
         // PUT: api/People/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson([FromRoute] string id, [FromBody] Person person)
+        public async Task<IActionResult> PutPerson([FromRoute] int id, [FromBody] Person person)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != person.Name)
+            if (id != person.Id)
             {
                 return BadRequest();
             }
@@ -92,12 +94,12 @@ namespace WebApiProject.Controllers
             _context.Persons.Add(person);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPerson", new { id = person.Name }, person);
+            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
 
         // DELETE: api/People/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson([FromRoute] string id)
+        public async Task<IActionResult> DeletePerson([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -116,9 +118,9 @@ namespace WebApiProject.Controllers
             return Ok(person);
         }
 
-        private bool PersonExists(string id)
+        private bool PersonExists(int id)
         {
-            return _context.Persons.Any(e => e.Name == id);
+            return _context.Persons.Any(e => e.Id == id);
         }
     }
 }
