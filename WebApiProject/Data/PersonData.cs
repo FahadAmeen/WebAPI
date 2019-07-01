@@ -8,7 +8,7 @@ using WebApiProject.Models;
 
 namespace WebApiProject.Data
 {
-    public class DummyData
+    public class PersonData
     {
         public static void Initialize(IApplicationBuilder app)
         {

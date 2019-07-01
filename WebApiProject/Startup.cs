@@ -47,7 +47,7 @@ namespace WebApiProject
 
             app.UseHttpsRedirection();
             app.UseMvc();
-            DummyData.Initialize(app);
+            PersonData.Initialize(app);
         }
     }
 }
