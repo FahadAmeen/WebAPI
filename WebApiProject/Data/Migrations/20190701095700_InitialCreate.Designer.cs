@@ -9,7 +9,7 @@ using WebApiProject.Data;
 namespace WebApiProject.Data.Migrations
 {
     [DbContext(typeof(PersonContext))]
-    [Migration("20190701081124_InitialCreate")]
+    [Migration("20190701095700_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,10 +22,13 @@ namespace WebApiProject.Data.Migrations
 
             modelBuilder.Entity("WebApiProject.Models.Person", b =>
                 {
-                    b.Property<string>("Name")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Persons");
                 });

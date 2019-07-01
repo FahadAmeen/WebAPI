@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApiProject.Data.Migrations
 {
@@ -10,11 +11,13 @@ namespace WebApiProject.Data.Migrations
                 name: "Persons",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Persons", x => x.Name);
+                    table.PrimaryKey("PK_Persons", x => x.Id);
                 });
         }
 
