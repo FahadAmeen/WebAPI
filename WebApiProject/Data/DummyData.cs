@@ -14,7 +14,7 @@ namespace WebApiProject.Data
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<PersonContext>();
+                var context = serviceScope.ServiceProvider.GetService<DBContext>();
                 context.Database.EnsureCreated();
                 //context.Database.Migrate();
 
@@ -30,10 +30,10 @@ namespace WebApiProject.Data
         public static List<Person> GetPersons()
         {
             List<Person> persons = new List<Person>() {
-                new Person {Name="person1"},
-                new Person {Name="person2"},
-                new Person {Name="person3"},
-                new Person {Name="person4"}
+                new Person {Id = 1,Name="person1"},
+                new Person {Id = 2,Name="person2"},
+                new Person {Id = 3,Name="person3"},
+                new Person {Id = 4,Name="person4"}
             };
             return persons;
         }

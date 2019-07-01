@@ -7,7 +7,7 @@ using WebApiProject.Data;
 
 namespace WebApiProject.Data.Migrations
 {
-    [DbContext(typeof(PersonContext))]
+    [DbContext(typeof(DBContext))]
     partial class PersonContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

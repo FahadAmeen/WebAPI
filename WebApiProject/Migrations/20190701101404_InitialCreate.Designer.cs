@@ -8,7 +8,7 @@ using WebApiProject.Data;
 
 namespace WebApiProject.Data.Migrations
 {
-    [DbContext(typeof(PersonContext))]
+    [DbContext(typeof(DBContext))]
     [Migration("20190701101404_InitialCreate")]
     partial class InitialCreate
     {

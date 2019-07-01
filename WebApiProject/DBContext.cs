@@ -7,9 +7,9 @@ using WebApiProject.Models;
 
 namespace WebApiProject.Data
 {
-    public class PersonContext:DbContext
+    public class DBContext:DbContext
     {
-        public PersonContext(DbContextOptions options) : base(options)
+        public DBContext(DbContextOptions options) : base(options)
         {
             
         }

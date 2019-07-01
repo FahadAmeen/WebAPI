@@ -14,9 +14,9 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class PeopleController : ControllerBase
     {
-        private readonly PersonContext _context;
+        private readonly DBContext _context;
 
-        public PeopleController(PersonContext context)
+        public PeopleController(DBContext context)
         {
             _context = context;
         }
