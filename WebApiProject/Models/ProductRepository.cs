@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-
-
+using System.Net;
+using System.Web.Http;
+using WebApiProject.Models.Interface;
 
 namespace WebApiProject.Models
 {
     public class ProductRepository : IProductRepository
     {
-        private List<Product> products = new List<Product>();
+        private readonly List<Product> _products = new List<Product>();
         private int _nextId = 1;
 
         public ProductRepository()
@@ -16,9 +17,10 @@ namespace WebApiProject.Models
             Add(new Product { Name = "Yo-yo", Category = "Toys", Price = 3.75 });
         }
 
+
         public Product Get(int id)
         {
-            return products.Find(p => p.Id == id);
+            return _products.Find(p => p.Id == id);
         }
 
         public Product Add(Product item)
@@ -29,36 +31,39 @@ namespace WebApiProject.Models
             }
 
             item.Id = _nextId++;
-            products.Add(item);
+            _products.Add(item);
             return item;
         }
 
         public void Remove(int id)
         {
-            products.RemoveAll(p => p.Id == id);
+            _products.RemoveAll(p => p.Id == id);
         }
 
         public bool Update(Product item)
         {
             if (item == null)
-            {
-                throw new ArgumentNullException("item");
+            { 
+                throw new ArgumentNullException(nameof(item));
+                return false;
             }
 
-            int index = products.FindIndex(p => p.Id == item.Id);
+            int index = _products.FindIndex(p => p.Id == item.Id);
 
             if (index == -1)
             {
                 return false;
             }
-            products.RemoveAt(index);
-            products.Add(item);
+            _products.RemoveAt(index);
+            _products.Add(item);
             return true;
         }
 
         public IEnumerable<Product> GetAll()
         {
-            return products;
+            return _products;
         }
+
+        
     }
 }
