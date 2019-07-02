@@ -20,6 +20,7 @@ namespace WebApiProject.Data
         }
 
         public DbSet<Person> Persons { get; set; }
+        public DbSet<ToDoItem> ToDoItems { get; set; }
 
     }
 }

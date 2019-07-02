@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
+using WebApiProject.Data;
 using WebApiProject.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,13 +18,12 @@ namespace WebApiProject.Controllers
 
     public class TodoController : Controller
     {
-        private readonly TodoContext _context;
-
-        public TodoController(TodoContext context)
+        private readonly DBContext _context;
+        public TodoController(DBContext context)
         {
             _context = context;
 
-            if (_context.ToDoItems.Count() == 0)
+            if (!_context.ToDoItems.Any())
             {
                 // Create a new ToDoItem if collection is empty,
                 // which means you can't delete all ToDoItems.

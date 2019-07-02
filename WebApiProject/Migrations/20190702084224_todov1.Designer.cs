@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
-namespace WebApiProject.Data.Migrations
+namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190701101404_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190702084224_todov1")]
+    partial class todov1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,21 @@ namespace WebApiProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("IsComplete");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ToDoItems");
                 });
 #pragma warning restore 612, 618
         }

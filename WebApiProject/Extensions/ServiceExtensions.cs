@@ -11,7 +11,7 @@ namespace WebApiProject.Models
     {
         public static void ConfigureDbContext(this IServiceCollection services)
         {
-            services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList"));
+            //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList"));
         }
     }
 }

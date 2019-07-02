@@ -3,7 +3,7 @@
 
 namespace WebApiProject.Models
 {
-    public class TodoContext : DbContext
+    public class TodoContext 
     {
         /// <inheritdoc />
         public TodoContext(DbContextOptions<TodoContext> options) : base(options)
@@ -11,6 +11,10 @@ namespace WebApiProject.Models
 
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
         public DbSet<ToDoItem> ToDoItems { get; set; }
     }
 }

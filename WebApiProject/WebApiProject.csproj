@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190702081737_todoItems.cs" />
+    <Compile Remove="Migrations\20190702081737_todoItems.Designer.cs" />
+    <Compile Remove="Models\TodoContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
