@@ -18,9 +18,9 @@ namespace WebApiProject.Data
                 context.Database.EnsureCreated();
                 //context.Database.Migrate();
 
-                // Look for any ailments
-                if (context.Persons != null && context.Persons.Any())
-                    return; // DB has already been seeded
+                //// Look for any ailments
+                //if (context.Persons != null && context.Persons.Any())
+                //    return; // DB has already been seeded
 
                 var persons = GetPersons().ToArray();
                 if (context.Persons != null) context.Persons.AddRange(persons);
@@ -31,6 +31,10 @@ namespace WebApiProject.Data
         {
             List<Person> persons = new List<Person>() {
                 new Person {Name="p1",Age=25,Gender="Male"},
+                new Person {Name="p2",Age=25,Gender="Male"},
+                new Person {Name="p3",Age=25,Gender="Male"},
+                new Person {Name="p4",Age=25,Gender="Female"},
+                new Person {Name="p5",Age=25,Gender="Male"},
                 new Person {Name="p2",Age=25,Gender="Male"},
                 new Person {Name="p3",Age=25,Gender="Male"},
                 new Person {Name="p4",Age=25,Gender="Male"}
