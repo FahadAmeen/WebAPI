@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace WebApiProject.Models
 {
-    public interface IProductRepository
+    public interface IRecordRepository
     {
-        IEnumerable<Product> GetAll();
-        Product Get(int id);
-        Product Add(Product item);
+        IEnumerable<Record> GetAll();
+        Record Get(int id);
+        Record Add(Record item);
         void Remove(int id);
-        bool Update(Product item);
+        bool Update(Record item);
         Task SaveChangesAsync();
     }
 }
