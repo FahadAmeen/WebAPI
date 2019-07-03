@@ -42,14 +42,6 @@ namespace WebApiProject.Controllers
                 p => string.Equals(p.Category, category, StringComparison.OrdinalIgnoreCase));
         }
 
-        //// POST api/values
-        //[Microsoft.AspNetCore.Mvc.HttpPost]
-        //public Product PostProduct(Product item)
-        //{
-        //    item = repository.Add(item);
-        //    return item;
-        //}
-
         // POST api/values
         [Microsoft.AspNetCore.Mvc.HttpPost]
         public HttpResponseMessage PostProduct(Product item)
