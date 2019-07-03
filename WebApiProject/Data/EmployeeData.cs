@@ -18,9 +18,9 @@ namespace WebApiProject.Data
                 context.Database.EnsureCreated();
                 //context.Database.Migrate();
 
-                //// Look for any ailments
-                //if (context.Employees != null && context.Employees.Any())
-                //    return; // DB has already been seeded
+                // Look for any ailments
+                if (context.Employees != null && context.Employees.Any())
+                    return; // DB has already been seeded
 
                 var employees = GetEmployees().ToArray();
                 if (context.Employees != null) context.Employees.AddRange(employees);

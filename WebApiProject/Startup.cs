@@ -50,6 +50,9 @@ namespace WebApiProject
             PersonData.Initialize(app);
             EmployeeData.Initialize(app);
             UserModelData.Initialize(app);
+            StudentRegisterationsData.Initialize(app);
+            UserData.Initialize(app);
+            RegisteredUserData.Initialize(app);
         }
     }
 }

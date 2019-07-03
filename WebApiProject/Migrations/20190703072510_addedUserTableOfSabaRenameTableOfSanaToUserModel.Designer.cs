@@ -9,8 +9,8 @@ using WebApiProject.Data;
 namespace WebApiProject.Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190703054434_SanaUserModelTablev3")]
-    partial class SanaUserModelTablev3
+    [Migration("20190703072510_addedUserTableOfSabaRenameTableOfSanaToUserModel")]
+    partial class addedUserTableOfSabaRenameTableOfSanaToUserModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,6 +52,44 @@ namespace WebApiProject.Data.Migrations
                     b.ToTable("Persons");
                 });
 
+            modelBuilder.Entity("WebApiProject.Models.StudentRegisteration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Detail");
+
+                    b.Property<string>("Filename");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Program");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudentRegisterations");
+                });
+
+            modelBuilder.Entity("WebApiProject.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address");
+
+                    b.Property<string>("Employe_Role");
+
+                    b.Property<string>("File");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("WebApiProject.Models.UserModel", b =>
                 {
                     b.Property<int>("Id")
@@ -70,7 +108,7 @@ namespace WebApiProject.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("UserModels");
                 });
 #pragma warning restore 612, 618
         }

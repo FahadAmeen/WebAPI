@@ -12,56 +12,56 @@ namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserModelsController : ControllerBase
+    public class RegisteredUsersController : ControllerBase
     {
         private readonly DBContext _context;
 
-        public UserModelsController(DBContext context)
+        public RegisteredUsersController(DBContext context)
         {
             _context = context;
         }
 
-        // GET: api/UserModels
+        // GET: api/RegisteredUsers
         [HttpGet]
-        public IEnumerable<UserModel> GetUsers()
+        public IEnumerable<RegisteredUser> GetRegisteredUsers()
         {
-            return _context.UserModels;
+            return _context.RegisteredUsers;
         }
 
-        // GET: api/UserModels/5
+        // GET: api/RegisteredUsers/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserModel([FromRoute] int id)
+        public async Task<IActionResult> GetRegisteredUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var userModel = await _context.UserModels.FindAsync(id);
+            var registeredUser = await _context.RegisteredUsers.FindAsync(id);
 
-            if (userModel == null)
+            if (registeredUser == null)
             {
                 return NotFound();
             }
 
-            return Ok(userModel);
+            return Ok(registeredUser);
         }
 
-        // PUT: api/UserModels/5
+        // PUT: api/RegisteredUsers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserModel([FromRoute] int id, [FromBody] UserModel userModel)
+        public async Task<IActionResult> PutRegisteredUser([FromRoute] int id, [FromBody] RegisteredUser registeredUser)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != userModel.Id)
+            if (id != registeredUser.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(userModel).State = EntityState.Modified;
+            _context.Entry(registeredUser).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +69,7 @@ namespace WebApiProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserModelExists(id))
+                if (!RegisteredUserExists(id))
                 {
                     return NotFound();
                 }
@@ -82,45 +82,45 @@ namespace WebApiProject.Controllers
             return NoContent();
         }
 
-        // POST: api/UserModels
+        // POST: api/RegisteredUsers
         [HttpPost]
-        public async Task<IActionResult> PostUserModel([FromBody] UserModel userModel)
+        public async Task<IActionResult> PostRegisteredUser([FromBody] RegisteredUser registeredUser)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.UserModels.Add(userModel);
+            _context.RegisteredUsers.Add(registeredUser);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
+            return CreatedAtAction("GetRegisteredUser", new { id = registeredUser.Id }, registeredUser);
         }
 
-        // DELETE: api/UserModels/5
+        // DELETE: api/RegisteredUsers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserModel([FromRoute] int id)
+        public async Task<IActionResult> DeleteRegisteredUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var userModel = await _context.UserModels.FindAsync(id);
-            if (userModel == null)
+            var registeredUser = await _context.RegisteredUsers.FindAsync(id);
+            if (registeredUser == null)
             {
                 return NotFound();
             }
 
-            _context.UserModels.Remove(userModel);
+            _context.RegisteredUsers.Remove(registeredUser);
             await _context.SaveChangesAsync();
 
-            return Ok(userModel);
+            return Ok(registeredUser);
         }
 
-        private bool UserModelExists(int id)
+        private bool RegisteredUserExists(int id)
         {
-            return _context.UserModels.Any(e => e.Id == id);
+            return _context.RegisteredUsers.Any(e => e.Id == id);
         }
     }
 }

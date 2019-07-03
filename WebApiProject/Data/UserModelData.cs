@@ -19,11 +19,11 @@ namespace WebApiProject.Data
                 //context.Database.Migrate();
 
                 // Look for any ailments
-                if (context.Users != null && context.Users.Any())
+                if (context.UserModels != null && context.UserModels.Any())
                     return; // DB has already been seeded
 
                 var users = GetUsers().ToArray();
-                if (context.Users != null) context.Users.AddRange(users);
+                if (context.UserModels != null) context.UserModels.AddRange(users);
                 context.SaveChanges();
             }
         }
