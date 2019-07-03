@@ -18,66 +18,53 @@ namespace WebApiProject.Controllers
 
     public class TodoController : Controller
     {
-        private readonly DBContext _context;
-        public TodoController(DBContext context)
+        private static List<ToDoItem> _context = new List<ToDoItem>();
+
+        public TodoController()
         {
-            _context = context;
-
-            if (!_context.ToDoItems.Any())
-            {
-                // Create a new ToDoItem if collection is empty,
-                // which means you can't delete all ToDoItems.
-                _context.ToDoItems.Add(new ToDoItem { Name = "Item1" });
-                _context.SaveChanges();
-            }
         }
-
-        // PUT: api/Todo/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutToDoItem(long id, ToDoItem item)
-        {
-            if (id != item.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(item).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
 
         // POST: api/Todo
         [HttpPost]
-        public async Task<ActionResult<ToDoItem>> PostToDoItem(ToDoItem item)
+        public List<ToDoItem> PostTodoItem(ToDoItem item)
         {
-            _context.ToDoItems.Add(item);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetToDoItem), new { id = item.Id }, item);
+            _context.Add(item);
+            return _context;
         }
 
+        //put: api/Todo
+        [HttpPut("{id}")]
+        public List<ToDoItem> PutTodoItem(long id, ToDoItem item)
+        {
 
-        // GET: api/Todo
+            var index = _context.FindIndex(c => c.Id == id);
+            _context[index].Name = item.Name;
+            _context[index].IsComplete = item.IsComplete;
+
+            return _context;
+        }
+
+        //GET = api/Todo
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItems()
+        public List<ToDoItem> GetToDoItems()
         {
-            return await _context.ToDoItems.ToListAsync();
+            if (_context.Count == 0)
+            {
+                _context.Add(new ToDoItem() { Name = "HeyItem1" });
+            }
+            return _context;
         }
 
-        // GET: api/Todo/5
+        //GET = api/Todo/3
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDoItem>> GetToDoItem(long id)
+        public ToDoItem GetTodoItem(long id)
         {
-            var ToDoItem = await _context.ToDoItems.FindAsync(id);
-
-            if (ToDoItem == null)
+            if (_context.Count == 0)
             {
-                return NotFound();
+                _context.Add(new ToDoItem() { Name = "HeyItem1" });
             }
-
-            return ToDoItem;
+            var index = _context.FindIndex(c => c.Id == id);
+            return _context[index];
         }
 
 
@@ -86,19 +73,13 @@ namespace WebApiProject.Controllers
 
         // DELETE: api/Todo/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteToDoItem(long id)
+        public async Task<IActionResult> DeleteTodoItem(long id)
         {
-            var ToDoItem = await _context.ToDoItems.FindAsync(id);
 
-            if (ToDoItem == null)
-            {
-                return NotFound();
-            }
-
-            _context.ToDoItems.Remove(ToDoItem);
-            await _context.SaveChangesAsync();
-
+            var index = _context.FindIndex(c => c.Id == id);
+            _context.RemoveAt(index);
             return NoContent();
+
         }
     }
 

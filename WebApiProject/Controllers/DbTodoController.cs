@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApiProject.Data;
 using WebApiProject.Models;
 
 namespace WebApiProject.Controllers
@@ -11,59 +13,69 @@ namespace WebApiProject.Controllers
     [Route("api/[controller]")]
     [ApiController] //this indicates that this controller responds to web api requests. 
 
+
     public class DbTodoController : Controller
     {
-        
-        private static List<ToDoItem> _context = new List<ToDoItem>();
+        private readonly DBContext _context;
+        public DbTodoController(DBContext context)
+        {
+            _context = context;
 
-        public DbTodoController()
-        { 
+            if (!_context.ToDoItems.Any())
+            {
+                // Create a new ToDoItem if collection is empty,
+                // which means you can't delete all ToDoItems.
+                _context.ToDoItems.Add(new ToDoItem { Name = "Item1" });
+                _context.SaveChanges();
+            }
         }
+
+        // PUT: api/Todo/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutToDoItem(long id, ToDoItem item)
+        {
+            if (id != item.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(item).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         // POST: api/Todo
         [HttpPost]
-        public List<ToDoItem> PostTodoItem(ToDoItem item)
+        public async Task<ActionResult<ToDoItem>> PostToDoItem(ToDoItem item)
         {
-            _context.Add(item);
-            return _context;
-        }
+            _context.ToDoItems.Add(item);
+            await _context.SaveChangesAsync();
 
-        //put: api/Todo
-        [HttpPut("{id}")]
-        public List<ToDoItem> PutTodoItem(long id, ToDoItem item)
-        {
-           
-            var index = _context.FindIndex(c => c.Id == id);
-            _context[index].Name = item.Name;
-            _context[index].IsComplete = item.IsComplete;
-            
-            return _context;
+            return CreatedAtAction(nameof(GetToDoItem), new { id = item.Id }, item);
         }
 
 
-
-
-        //GET = api/Todo
+        // GET: api/Todo
         [HttpGet]
-        public List<ToDoItem> GetToDoItems()
+        public async Task<ActionResult<IEnumerable<ToDoItem>>> GetToDoItems()
         {
-            if (_context.Count == 0)
-            {
-                _context.Add(new ToDoItem() { Name = "HeyItem1" });
-            }
-            return _context;
+            return await _context.ToDoItems.ToListAsync();
         }
 
-        //GET = api/Todo/3
+        // GET: api/Todo/5
         [HttpGet("{id}")]
-        public ToDoItem GetTodoItem(long id)
+        public async Task<ActionResult<ToDoItem>> GetToDoItem(long id)
         {
-            if (_context.Count == 0)
+            var ToDoItem = await _context.ToDoItems.FindAsync(id);
+
+            if (ToDoItem == null)
             {
-                _context.Add(new ToDoItem() { Name = "HeyItem1" });
+                return NotFound();
             }
-            var index = _context.FindIndex(c => c.Id == id);
-            return _context[index];
+
+            return ToDoItem;
         }
 
 
@@ -72,13 +84,19 @@ namespace WebApiProject.Controllers
 
         // DELETE: api/Todo/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTodoItem(long id)
+        public async Task<IActionResult> DeleteToDoItem(long id)
         {
-            
-            var index = _context.FindIndex(c => c.Id == id);
-            _context.RemoveAt(index);
-            return NoContent();
+            var ToDoItem = await _context.ToDoItems.FindAsync(id);
 
+            if (ToDoItem == null)
+            {
+                return NotFound();
+            }
+
+            _context.ToDoItems.Remove(ToDoItem);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
