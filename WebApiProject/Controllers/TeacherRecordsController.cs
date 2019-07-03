@@ -12,11 +12,11 @@ namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RecordsController : ControllerBase
+    public class TeacherRecordsController : ControllerBase
     {
         private readonly DBContext _context;
 
-        public RecordsController(DBContext context)
+        public TeacherRecordsController(DBContext context)
         {
             _context = context;
         }
