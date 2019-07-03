@@ -27,21 +27,9 @@ namespace WebApiProject.Controllers
         {
             return Repository.GetAll();
         }
-
-        //[Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
-        //public Product GetProduct(int id)
-        //{
-        //    Product item = Repository.Get(id);
-        //    if (item == null)
-        //    {
-        //        throw new HttpResponseException(HttpStatusCode.NotFound);
-        //    }
-        //    return item;
-        //}
-
+        
 
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
-        
         public Product GetProduct(int id)
         {
             Product item = Repository.Get(id);
