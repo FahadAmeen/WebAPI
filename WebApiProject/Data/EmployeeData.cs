@@ -33,6 +33,18 @@ namespace WebApiProject.Data
                 new Employee {Designation="d1",Salary=25000},
                 new Employee {Designation="d2",Salary=30000},
                 new Employee {Designation="d3",Salary=20005},
+                new Employee {Designation="d4",Salary=10025},
+                new Employee {Designation="d1",Salary=25000},
+                new Employee {Designation="d2",Salary=30000},
+                new Employee {Designation="d3",Salary=20005},
+                new Employee {Designation="d4",Salary=10025},
+                new Employee {Designation="d1",Salary=25000},
+                new Employee {Designation="d2",Salary=30000},
+                new Employee {Designation="d3",Salary=20005},
+                new Employee {Designation="d4",Salary=10025},
+                new Employee {Designation="d1",Salary=25000},
+                new Employee {Designation="d2",Salary=30000},
+                new Employee {Designation="d3",Salary=20005},
                 new Employee {Designation="d4",Salary=10025}
             };
             return persons;

@@ -33,6 +33,10 @@ namespace WebApiProject.Data
                 new Person {Name="p1",Age=25,Gender="Male"},
                 new Person {Name="p2",Age=25,Gender="Male"},
                 new Person {Name="p3",Age=25,Gender="Male"},
+                new Person {Name="p4",Age=25,Gender="Female"},
+                new Person {Name="p5",Age=25,Gender="Male"},
+                new Person {Name="p2",Age=25,Gender="Male"},
+                new Person {Name="p3",Age=25,Gender="Male"},
                 new Person {Name="p4",Age=25,Gender="Male"}
             };
             return persons;
