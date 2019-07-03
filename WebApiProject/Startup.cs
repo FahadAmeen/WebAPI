@@ -49,6 +49,7 @@ namespace WebApiProject
             app.UseMvc();
             PersonData.Initialize(app);
             EmployeeData.Initialize(app);
+            UserModelData.Initialize(app);
         }
     }
 }
