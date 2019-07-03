@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using WebApiProject.Models;
 
 namespace WebApiProject.Data
 {
-    public class PersonData
+    public class EmployeeData
     {
         public static void Initialize(IApplicationBuilder app)
         {
@@ -19,24 +19,23 @@ namespace WebApiProject.Data
                 //context.Database.Migrate();
 
                 // Look for any ailments
-                if (context.Persons != null && context.Persons.Any())
+                if (context.Employees != null && context.Employees.Any())
                     return; // DB has already been seeded
 
-                var persons = GetPersons().ToArray();
-                if (context.Persons != null) context.Persons.AddRange(persons);
+                var employees = GetEmployees().ToArray();
+                if (context.Employees != null) context.Employees.AddRange(employees);
                 context.SaveChanges();
             }
         }
-        public static List<Person> GetPersons()
+        public static List<Employee> GetEmployees()
         {
-            List<Person> persons = new List<Person>() {
-                new Person {Name="p1",Age=25,Gender="Male"},
-                new Person {Name="p2",Age=25,Gender="Male"},
-                new Person {Name="p3",Age=25,Gender="Male"},
-                new Person {Name="p4",Age=25,Gender="Male"}
+            List<Employee> persons = new List<Employee>() {
+                new Employee {Designation="d1",Salary=25000},
+                new Employee {Designation="d2",Salary=30000},
+                new Employee {Designation="d3",Salary=20005},
+                new Employee {Designation="d4",Salary=10025}
             };
             return persons;
         }
-
     }
 }
