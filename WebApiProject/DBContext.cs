@@ -21,6 +21,11 @@ namespace WebApiProject.Data
 
         public DbSet<Person> Persons { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<UserModel> UserModels { get; set; }
+        public DbSet<StudentRegisteration> StudentRegisterations { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<RegisteredUser> RegisteredUsers { get; set; }
         public DbSet<WebApiProject.Models.Product> Product { get; set; }
 
 
