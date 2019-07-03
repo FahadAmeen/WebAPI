@@ -5,6 +5,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190703054434_SanaUserModelTablev3.cs" />
+    <Compile Remove="Migrations\20190703054434_SanaUserModelTablev3.Designer.cs" />
+    <Compile Remove="Migrations\20190703061811_addedRegisteredUserTableOfAhmad.cs" />
+    <Compile Remove="Migrations\20190703061811_addedRegisteredUserTableOfAhmad.Designer.cs" />
+    <Compile Remove="Migrations\20190703070314_addedStudentRegistrationTableOfSaad.cs" />
+    <Compile Remove="Migrations\20190703070314_addedStudentRegistrationTableOfSaad.Designer.cs" />
+    <Compile Remove="Migrations\20190703071604_addedUserTableOfSaba.cs" />
+    <Compile Remove="Migrations\20190703071604_addedUserTableOfSaba.Designer.cs" />
+    <Compile Remove="Migrations\20190703071927_addedUserTableOfSabaRenameTableOfSanaToUserModel.cs" />
+    <Compile Remove="Migrations\20190703071927_addedUserTableOfSabaRenameTableOfSanaToUserModel.Designer.cs" />
+    <Compile Remove="Migrations\20190703072011_addedUserTableOfSabaRenameTableOfSanaToUserModelv1.cs" />
+    <Compile Remove="Migrations\20190703072011_addedUserTableOfSabaRenameTableOfSanaToUserModelv1.Designer.cs" />
+    <Compile Remove="Migrations\20190703072215_addedUserTableOfSabaRenameTableOfSanaToUserModelv2.cs" />
+    <Compile Remove="Migrations\20190703072215_addedUserTableOfSabaRenameTableOfSanaToUserModelv2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Models\TodoContext.cs" />
   </ItemGroup>
 

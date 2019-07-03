@@ -30,10 +30,14 @@ namespace WebApiProject.Data
         public static List<Person> GetPersons()
         {
             List<Person> persons = new List<Person>() {
-                new Person {Id = 1,Name="person1"},
-                new Person {Id = 2,Name="person2"},
-                new Person {Id = 3,Name="person3"},
-                new Person {Id = 4,Name="person4"}
+                new Person {Name="p1",Age=25,Gender="Male"},
+                new Person {Name="p2",Age=25,Gender="Male"},
+                new Person {Name="p3",Age=25,Gender="Male"},
+                new Person {Name="p4",Age=25,Gender="Female"},
+                new Person {Name="p5",Age=25,Gender="Male"},
+                new Person {Name="p2",Age=25,Gender="Male"},
+                new Person {Name="p3",Age=25,Gender="Male"},
+                new Person {Name="p4",Age=25,Gender="Male"}
             };
             return persons;
         }

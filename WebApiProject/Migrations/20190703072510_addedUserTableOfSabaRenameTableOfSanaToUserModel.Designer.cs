@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
 namespace WebApiProject.Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class PersonContextModelSnapshot : ModelSnapshot
+    [Migration("20190703072510_addedUserTableOfSabaRenameTableOfSanaToUserModel")]
+    partial class addedUserTableOfSabaRenameTableOfSanaToUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,29 +50,6 @@ namespace WebApiProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
-                });
-
-            modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email_address");
-
-                    b.Property<string>("FileName");
-
-                    b.Property<string>("Job_type");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Password");
-
-                    b.Property<string>("Phone_number");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RegisteredUsers");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.StudentRegisteration", b =>
@@ -130,21 +109,6 @@ namespace WebApiProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserModels");
-                });
-
-            modelBuilder.Entity("WebApiProject.Models.Record", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("Salary");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Records");
                 });
 #pragma warning restore 612, 618
         }
