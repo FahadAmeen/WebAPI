@@ -50,6 +50,23 @@ namespace WebApiProject.Migrations
                     b.ToTable("Persons");
                 });
 
+            modelBuilder.Entity("WebApiProject.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double>("Price");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Product");
+                });
+
             modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>
                 {
                     b.Property<int>("Id")
@@ -92,6 +109,27 @@ namespace WebApiProject.Migrations
                     b.ToTable("StudentRegisterations");
                 });
 
+            modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("File");
+
+                    b.Property<bool>("IsComplete");
+
+                    b.Property<string>("Priority");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ToDoItems");
+                });
+
             modelBuilder.Entity("WebApiProject.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -130,38 +168,6 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserModels");
-                });
-
-            modelBuilder.Entity("WebApiProject.Models.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Category");
-
-                    b.Property<string>("Name");
-
-                    b.Property<double>("Price");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsComplete");
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ToDoItems");
                 });
 #pragma warning restore 612, 618
         }

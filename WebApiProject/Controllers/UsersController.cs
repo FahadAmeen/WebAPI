@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration.Ini;
 using WebApiProject.Data;
 using WebApiProject.Models;
 
@@ -19,6 +21,7 @@ namespace WebApiProject.Controllers
         public UsersController(DBContext context)
         {
             _context = context;
+          
         }
 
         // GET: api/Users
@@ -27,6 +30,133 @@ namespace WebApiProject.Controllers
         {
             return _context.Users;
         }
+
+        [HttpGet("GetAll")]
+        public IEnumerable<User> GetUsers(int pageNo, int pageSize=5)
+        {
+            
+            pageNo = pageNo - 1;
+
+            return _context.Users.Skip(pageNo * pageSize).Take(pageSize);
+           
+        }
+
+        [HttpGet("Sort")]
+        public IEnumerable<User> GetUsers(string by, int pageNo=1, int pageSize = 5)
+        {
+            pageNo = pageNo - 1;
+            by = by.ToLower();
+
+            var selectUsers = from s in _context.Users
+                select s;
+            switch (by)
+            {
+                case "id":
+                    selectUsers = _context.Users.OrderBy(user => user.Id);
+                    break;
+                   
+                case "name":
+                    selectUsers = _context.Users.OrderBy(user => user.Name);
+                    break;
+
+                case "employee_role":
+                    selectUsers = _context.Users.OrderBy(user => user.Employe_Role);
+                    break;
+
+                case "address":
+                    selectUsers = _context.Users.OrderBy(user => user.Address);
+                    break;
+
+                case "file":
+                    selectUsers = _context.Users.OrderBy(user => user.File);
+                    break;
+
+                default:
+                    break;
+
+
+            }
+            return selectUsers.Skip(pageNo * pageSize).Take(pageSize);
+        }
+
+
+
+        [HttpGet("Search")]
+        public IEnumerable<User> Search(string inColumn, string forWord,string sortBy="", int pageNo = 1, int pageSize = 5)
+        {
+            pageNo = pageNo - 1;
+            sortBy = sortBy.ToLower();
+
+            var selectUsers = from s in _context.Users
+                select s;
+
+            if (!String.IsNullOrEmpty(forWord))
+            {
+                switch (sortBy)
+                {
+                    case "id":
+                        selectUsers = _context.Users.OrderBy(user => user.Id);
+                        break;
+
+                    case "name":
+                        selectUsers = _context.Users.OrderBy(user => user.Name);
+                        break;
+
+                    case "employee_role":
+                        selectUsers = _context.Users.OrderBy(user => user.Employe_Role);
+                        break;
+
+                    case "address":
+                        selectUsers = _context.Users.OrderBy(user => user.Address);
+                        break;
+
+                    case "file":
+                        selectUsers = _context.Users.OrderBy(user => user.File);
+                        break;
+
+                    default:
+                        break;
+
+
+                }
+                inColumn = inColumn.ToLower();
+                switch (inColumn)
+                {
+                    case "id":
+                        selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
+                        break;
+
+                    case "name":
+                        selectUsers = selectUsers.Where(s => s.Name.Contains(forWord));
+                        break;
+
+
+                    case "employee_role":
+                        selectUsers = selectUsers.Where(s => s.Employe_Role.Contains(forWord));
+                        break;
+
+                    case "address":
+                        selectUsers = selectUsers.Where(s => s.Address.Contains(forWord));
+                        break;
+
+                    case "file":
+                        selectUsers = selectUsers.Where(s => s.File.Contains(forWord));
+                        break;
+
+                    default:
+                        break;
+                }
+                return selectUsers.Skip(pageNo * pageSize).Take(pageSize);
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+
 
         // GET: api/Users/5
         [HttpGet("{id}")]
@@ -46,6 +176,7 @@ namespace WebApiProject.Controllers
 
             return Ok(user);
         }
+
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
