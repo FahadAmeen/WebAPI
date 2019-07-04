@@ -26,9 +26,14 @@ namespace WebApiProject.Controllers
         public async Task<IList<Movie>> GetMovies(int page=1, int limit=int.MaxValue, string sort="Id")
         {
             var skip = (page - 1) * limit;
-            var movies = _context.Movies.OrderBy(p => EF.Property<object>(p, sort));
-            
-            return await movies.Skip(skip).Take(limit).ToArrayAsync();
+
+            //if (sort.Equals("Id") || sort.Equals("Title") || sort.Equals("Director") || sort.Equals("Genre") || sort.Equals("ReleaseDate") || sort.Equals("Description") || sort.Equals("Poster"))
+            //{
+                var movies = _context.Movies.OrderBy(p => EF.Property<object>(p, sort));
+
+                return await movies.Skip(skip).Take(limit).ToArrayAsync();
+
+            //}
         }
 
         // GET: api/Movies/5
@@ -49,44 +54,7 @@ namespace WebApiProject.Controllers
 
             return Ok(movie);
         }
-
-        //public async Task<IActionResult> GetMovies([FromRoute]string searchString)
-        //{
-        //    var movies = from m in _context.Movies
-        //                 select m;
-        //    if (!String.IsNullOrEmpty(searchString))
-        //    {
-        //        movies = movies.Where(s => s.Title.Equals(searchString));
-        //    }
-
-        //    return Ok(await movies.ToListAsync());
-        //}
-        //// GET: api/Movies/name
-        ////[HttpGet("{id}")]
-        //public async Task<IActionResult> GetMovies([FromBody] Movie m)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var movie = await _context.Movies.SearchCustomer(m.Title);
-        //    if (movie.Count > 0)
-        //    {
-        //        return Ok
-        //    }
-
-        //    if (movie == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(movie);
-        //}
-
-
-
-
+        
 
         // PUT: api/Movies/5
         [HttpPut("{id}")]
