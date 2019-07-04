@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,28 +21,16 @@ namespace WebApiProject.Controllers
         {
             _context = context;
         }
-
-        //// GET: api/Movies
-        //[HttpGet("{pageNumber}/{pageSize}")]
-        //public IEnumerable<Movie> GetMovies()
-        //{
-        //    var dataPage = _context.Movies.Skip(5).Take(5);
-        //    return _context.Movies;
-        //}
+        //api/Movies?page=3&limit=8&sort=Director
         [HttpGet]
-        public async Task<IList<Movie>> GetMovies(int page, int limit)
+        public async Task<IList<Movie>> GetMovies(int page=1, int limit=int.MaxValue, string sort="Id")
         {
-
-            if (page == 0)
-                page = 1;
-
-            if (limit == 0)
-                limit = int.MaxValue;
-
             var skip = (page - 1) * limit;
-            var movies = _context.Movies.Skip(skip).Take(limit);
-            return await movies.ToArrayAsync();
+            var movies = _context.Movies.OrderBy(p => EF.Property<object>(p, sort));
+            
+            return await movies.Skip(skip).Take(limit).ToArrayAsync();
         }
+
         // GET: api/Movies/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMovie([FromRoute] int id)
