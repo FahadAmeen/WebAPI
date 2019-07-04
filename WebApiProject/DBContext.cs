@@ -26,7 +26,7 @@ namespace WebApiProject.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<RegisteredUser> RegisteredUsers { get; set; }
-
+        public DbSet<Movie> Movies { get; set; }
 
     }
 }
