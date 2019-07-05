@@ -34,11 +34,11 @@ namespace WebApiProject.Controllers
         //[HttpGet("GetAll")]
         //public IEnumerable<User> GetUsers(int pageNo, int pageSize=5)
         //{
-            
+
         //    pageNo = pageNo - 1;
 
         //    return _context.Users.Skip(pageNo * pageSize).Take(pageSize);
-           
+
         //}
 
         //[HttpGet("Sort")]
@@ -54,7 +54,7 @@ namespace WebApiProject.Controllers
         //        case "id":
         //            selectUsers = _context.Users.OrderBy(user => user.Id);
         //            break;
-                   
+
         //        case "name":
         //            selectUsers = _context.Users.OrderBy(user => user.Name);
         //            break;
@@ -80,49 +80,30 @@ namespace WebApiProject.Controllers
         //}
 
 
-
         [HttpGet("GetAll")]
-        public async Task<IList<User>> Search(string inColumn="", string forWord="",string sortBy="Id", int pageNo = 0, int pageSize = 5)
+        public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
         {   //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
             pageNo = pageNo - 1;
-            
+
             var users = _context.Users.OrderBy(p => EF.Property<object>(p, sortBy));
+
             var selectUsers = from s in users select s;
 
             if (!String.IsNullOrEmpty(forWord))
             {
-
-                inColumn = inColumn.ToLower();
                 switch (inColumn)
                 {
-                    case "id":
+                    case "Id":
                         selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
                         break;
 
-                    case "name":
-                        selectUsers = selectUsers.Where(s => s.Name.Contains(forWord));
-                        break;
-
-
-                    case "employee_role":
-                        selectUsers = selectUsers.Where(s => s.Employe_Role.Contains(forWord));
-                        break;
-
-                    case "address":
-                        selectUsers = selectUsers.Where(s => s.Address.Contains(forWord));
-                        break;
-
-                    case "file":
-                        selectUsers = selectUsers.Where(s => s.File.Contains(forWord));
-                        break;
-
                     default:
+                        selectUsers = selectUsers.Where(s => EF.Property<string>(s, inColumn).Contains(forWord));
                         break;
                 }
-
             }
-            
-            if (pageNo>0)
+
+            if (pageNo > -1)
             {
                 return await selectUsers.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
             }
@@ -130,8 +111,6 @@ namespace WebApiProject.Controllers
             {
                 return await selectUsers.ToArrayAsync();
             }
-            
-            //return await users.ToArrayAsync(); ;
 
         }
 
