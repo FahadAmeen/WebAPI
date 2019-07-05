@@ -22,22 +22,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190702081737_todoItems.cs" />
-    <Compile Remove="Migrations\20190702081737_todoItems.Designer.cs" />
     <Compile Remove="Models\TodoContext.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.2.0" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+    <PackageReference Include="ReflectionIT.Mvc.Paging" Version="3.4.0" />
   </ItemGroup>
 
 </Project>
