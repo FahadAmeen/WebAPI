@@ -22,6 +22,24 @@ namespace WebApiProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Movies",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(nullable: true),
+                    Director = table.Column<string>(nullable: true),
+                    Genre = table.Column<string>(nullable: true),
+                    ReleaseDate = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    Poster = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Movies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Persons",
                 columns: table => new
                 {
@@ -140,6 +158,9 @@ namespace WebApiProject.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Movies");
 
             migrationBuilder.DropTable(
                 name: "Persons");

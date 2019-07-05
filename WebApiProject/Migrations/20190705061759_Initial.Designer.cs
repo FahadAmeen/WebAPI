@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
-namespace WebApiProject.Data.Migrations
+namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190704052558_addedMovieTableOfFahad")]
-    partial class addedMovieTableOfFahad
+    [Migration("20190705061759_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,6 +75,23 @@ namespace WebApiProject.Data.Migrations
                     b.ToTable("Persons");
                 });
 
+            modelBuilder.Entity("WebApiProject.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double>("Price");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Product");
+                });
+
             modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>
                 {
                     b.Property<int>("Id")
@@ -115,6 +132,27 @@ namespace WebApiProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StudentRegisterations");
+                });
+
+            modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("File");
+
+                    b.Property<bool>("IsComplete");
+
+                    b.Property<string>("Priority");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ToDoItems");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.User", b =>

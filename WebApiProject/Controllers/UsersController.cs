@@ -23,7 +23,7 @@ namespace WebApiProject.Controllers
             _context = context;
           
         }
-        [Route("getAll")]
+       
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> GetUsers()
@@ -82,54 +82,56 @@ namespace WebApiProject.Controllers
 
 
         [HttpGet("GetAll")]
-        public IEnumerable<User> Search(string inColumn, string forWord,string sortBy="id", int pageNo = 1, int pageSize = 5)
-        {
+        public async Task<IList<User>> Search(string inColumn="", string forWord="",string sortBy="Id", int pageNo = 0, int pageSize = 5)
+        {   //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
             pageNo = pageNo - 1;
-            sortBy = sortBy.ToLower();
+            
+            var users = _context.Users.OrderBy(p => EF.Property<object>(p, sortBy));
+            var selectUsers = from s in users select s;
 
-            var selectUsers = from s in _context.Users
-                select s;
+            if (!String.IsNullOrEmpty(forWord))
+            {
 
-            //selectUsers = _context.Users.OrderBy(user => EF.Property<object>(user, sortBy));
+                inColumn = inColumn.ToLower();
+                switch (inColumn)
+                {
+                    case "id":
+                        selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
+                        break;
 
-            //if (!String.IsNullOrEmpty(forWord))
-            //{
-
-            //    inColumn = inColumn.ToLower();
-            //    switch (inColumn)
-            //    {
-            //        case "id":
-            //            selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
-            //            break;
-
-            //        case "name":
-            //            selectUsers = selectUsers.Where(s => s.Name.Contains(forWord));
-            //            break;
+                    case "name":
+                        selectUsers = selectUsers.Where(s => s.Name.Contains(forWord));
+                        break;
 
 
-            //        case "employee_role":
-            //            selectUsers = selectUsers.Where(s => s.Employe_Role.Contains(forWord));
-            //            break;
+                    case "employee_role":
+                        selectUsers = selectUsers.Where(s => s.Employe_Role.Contains(forWord));
+                        break;
 
-            //        case "address":
-            //            selectUsers = selectUsers.Where(s => s.Address.Contains(forWord));
-            //            break;
+                    case "address":
+                        selectUsers = selectUsers.Where(s => s.Address.Contains(forWord));
+                        break;
 
-            //        case "file":
-            //            selectUsers = selectUsers.Where(s => s.File.Contains(forWord));
-            //            break;
+                    case "file":
+                        selectUsers = selectUsers.Where(s => s.File.Contains(forWord));
+                        break;
 
-            //        default:
-            //            break;
-            //    }
+                    default:
+                        break;
+                }
 
-            //}
-            //else
-            //{
-            //    return null;
-            //}
-
-            return selectUsers.Skip(pageNo * pageSize).Take(pageSize);
+            }
+            
+            if (pageNo>0)
+            {
+                return await selectUsers.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
+            }
+            else
+            {
+                return await selectUsers.ToArrayAsync();
+            }
+            
+            //return await users.ToArrayAsync(); ;
 
         }
 

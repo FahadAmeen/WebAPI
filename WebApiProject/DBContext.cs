@@ -30,6 +30,6 @@ namespace WebApiProject.Data
         public DbSet<Product> Product { get; set; }
 
         public DbSet<ToDoItem> ToDoItems { get; set; }
-
+        public object Mapping { get; internal set; }
     }
 }
