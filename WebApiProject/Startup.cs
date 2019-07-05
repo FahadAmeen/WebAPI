@@ -53,6 +53,7 @@ namespace WebApiProject
             StudentRegisterationsData.Initialize(app);
             UserData.Initialize(app);
             RegisteredUserData.Initialize(app);
+           // PersonData.Initialize(app);
             MovieData.Initialize(app);
         }
     }
