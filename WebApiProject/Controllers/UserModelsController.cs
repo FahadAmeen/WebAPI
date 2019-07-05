@@ -23,7 +23,7 @@ namespace WebApiProject.Controllers
 
         //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
-        public async Task<IList<UserModel>> GetUser(int page = 1, int limit = int.MaxValue, string sort = "Id",string search="")
+        public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id",string search="")
         {
             var skip = (page - 1) * limit;
             if (search=="")
