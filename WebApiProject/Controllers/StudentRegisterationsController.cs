@@ -62,7 +62,7 @@ namespace WebApiProject.Controllers
         //}
         // GET: api/StudentRegisterations
         [HttpGet ("Get")]
-        public IEnumerable<StudentRegisteration> GetStudentRegisterations(int pageNo,string searchWith,string searchData, string sortData="", int pageSize=5)
+        public IEnumerable<StudentRegisteration> GetStudentRegisterations(int pageNo=1,string searchWith="",string searchData="1", string sortData="", int pageSize=5)
         {
             // _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Name);
             pageNo = pageNo - 1;
@@ -123,7 +123,7 @@ namespace WebApiProject.Controllers
                     default:
                         break;
                 }
-                return user.Skip(pageNo * pageSize).Take(pageSize);
+             
             }
             else
                 return null;
