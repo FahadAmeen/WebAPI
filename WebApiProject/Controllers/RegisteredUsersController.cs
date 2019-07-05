@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Remotion.Linq.Clauses;
 using WebApiProject.Data;
 using WebApiProject.Models;
 
@@ -15,10 +16,97 @@ namespace WebApiProject.Controllers
     public class RegisteredUsersController : ControllerBase
     {
         private readonly DBContext _context;
-
         public RegisteredUsersController(DBContext context)
         {
             _context = context;
+        }
+
+
+        [HttpGet("GetAll")]
+        public IEnumerable<RegisteredUser> Index(int pageIndex, int pageSize=10, string sortOrder="no")
+        {
+            pageIndex = pageIndex - 1;
+            sortOrder = sortOrder.ToLower();
+            var user = from s in _context.RegisteredUsers
+                           select s;
+            switch (sortOrder)
+            {
+                case "id":
+                    user=_context.RegisteredUsers.OrderBy(RegisteredUser=>RegisteredUser.Id);
+                    break;
+                case "name":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Name);
+                    break;
+                case "email_address":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Email_address);
+                    break;
+                case "file_name":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.FileName);
+                    break;
+                case "job_type":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Job_type);
+                    break;
+                case "phone_number":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Phone_number);
+                    break;
+                default:
+                    return user.Skip(pageIndex * pageSize).Take(pageSize);
+            }
+            return user.Skip(pageIndex * pageSize).Take(pageSize);
+        }
+
+        [HttpGet("Search")]
+        public IEnumerable<RegisteredUser> Indexx(int pageIndex, string sortOrder = "no", string val="name", int pageSize = 10)
+        {
+            pageIndex = pageIndex - 1;
+            sortOrder = sortOrder.ToLower();
+            var user = from s in _context.RegisteredUsers
+                select s;
+            switch (sortOrder)
+            {
+                case "id":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Id);
+                    break;
+                case "name":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Name);
+                    break;
+                case "email_address":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Email_address);
+                    break;
+                case "file_name":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.FileName);
+                    break;
+                case "job_type":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Job_type);
+                    break;
+                case "phone_number":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Phone_number);
+                    break;
+                default:
+                    return user.Skip(pageIndex * pageSize).Take(pageSize);
+            }
+            switch (val)
+            {
+                case "name":
+                    user= _context.RegisteredUsers.Where(p => string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
+                    break;
+                case "email_address":
+                    user= _context.RegisteredUsers.Where(p => string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
+                    break;
+                case "file_name":
+                    user = _context.RegisteredUsers.Where(p => string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
+                    break;
+                case "job_type":
+                    user = _context.RegisteredUsers.Where(p => string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
+                    break;
+                case "phone_number":
+                    user = _context.RegisteredUsers.Where(p => string.Equals(p.Phone_number, val, StringComparison.OrdinalIgnoreCase));
+                    break;
+                default:
+                    break;
+            }
+            return user.Skip(pageIndex * pageSize).Take(pageSize);
+
         }
 
         // GET: api/RegisteredUsers
@@ -27,6 +115,58 @@ namespace WebApiProject.Controllers
         {
             return _context.RegisteredUsers;
         }
+
+        //api/RegisteredUsers/name?val=userName
+        [Microsoft.AspNetCore.Mvc.HttpGet()]
+        [Route("name")]
+        public IQueryable<RegisteredUser> GetProductsByName(string val)
+        {
+           return _context.RegisteredUsers.Where(p => string.Equals(p.Name, val,StringComparison.OrdinalIgnoreCase));
+        }
+
+        //api/RegisteredUsers/emailAddress?val=userName@gmail.com
+        [Microsoft.AspNetCore.Mvc.HttpGet()]
+        [Route("emailAddress")]
+        public IQueryable<RegisteredUser> GetProductsByEmail(string val)
+        {
+            return _context.RegisteredUsers.Where(p => string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
+         }
+
+        //api/RegisteredUsers/phoneNumber?val=923367455435 ---  WITHOUT '+' CHAR IN THE BEGINNING OF NUMBER  ----
+        [Microsoft.AspNetCore.Mvc.HttpGet()]
+        [Route("phoneNumber")]
+        public IQueryable<RegisteredUser> GetProductsByNumber(string val)
+        {
+            return _context.RegisteredUsers.Where(p => p.Phone_number.Contains(val));
+        }
+
+
+        //api/RegisteredUsers/password?val=password
+        [Microsoft.AspNetCore.Mvc.HttpGet()]
+        [Route("password")]
+        public IQueryable<RegisteredUser> GetProductsByPassword(string val)
+        {
+            return _context.RegisteredUsers.Where(p => string.Equals(p.Password, val, StringComparison.OrdinalIgnoreCase));
+        }
+
+
+        //api/RegisteredUsers/jobType?val=ty
+        [Microsoft.AspNetCore.Mvc.HttpGet()]
+        [Route("jobType")]
+        public IQueryable<RegisteredUser> GetProductsByJobType(string val)
+        {
+            return _context.RegisteredUsers.Where(p => string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
+        }
+
+
+        //api/RegisteredUsers/fileName?var=filename
+        [Microsoft.AspNetCore.Mvc.HttpGet()]
+        [Route("fileName")]
+        public IQueryable<RegisteredUser> GetProductsByFileName(string val)
+        {
+            return _context.RegisteredUsers.Where(p => string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
+        }
+
 
         // GET: api/RegisteredUsers/5
         [HttpGet("{id}")]

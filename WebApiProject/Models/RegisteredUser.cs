@@ -18,5 +18,7 @@ namespace WebApiProject.Models
         public string Job_type { get; set; }
         public string Password { get; set; }
         public string FileName { get; set; }
+
+       
     }
 }

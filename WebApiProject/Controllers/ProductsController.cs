@@ -28,20 +28,7 @@ namespace WebApiProject.Controllers
             return Repository.GetAll();
         }
 
-        //[Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
-        //public Product GetProduct(int id)
-        //{
-        //    Product item = Repository.Get(id);
-        //    if (item == null)
-        //    {
-        //        throw new HttpResponseException(HttpStatusCode.NotFound);
-        //    }
-        //    return item;
-        //}
-
-
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
-        
         public Product GetProduct(int id)
         {
             Product item = Repository.Get(id);
@@ -59,14 +46,6 @@ namespace WebApiProject.Controllers
             return Repository.GetAll().Where(
                 p => string.Equals(p.Category, category, StringComparison.OrdinalIgnoreCase));
         }
-
-        //// POST api/values
-        //[Microsoft.AspNetCore.Mvc.HttpPost]
-        //public Product PostProduct(Product item)
-        //{
-        //    item = repository.Add(item);
-        //    return item;
-        //}
 
         // POST api/values
         [Microsoft.AspNetCore.Mvc.HttpPost]

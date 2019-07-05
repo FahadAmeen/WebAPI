@@ -24,8 +24,9 @@ namespace WebApiProject.Controllers
         [HttpGet]
         public IEnumerable<Product> GetProduct()
         {
-            return _context.Product;
+            return _context.Products;
         }
+
 
         // GET: api/DBProd/5
         [HttpGet("{id}")]
@@ -36,7 +37,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
 
             if (product == null)
             {
@@ -89,7 +90,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Product.Add(product);
+            _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetProduct", new { id = product.Id }, product);
@@ -104,13 +105,13 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Products.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
 
-            _context.Product.Remove(product);
+            _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 
             return Ok(product);
@@ -118,7 +119,7 @@ namespace WebApiProject.Controllers
 
         private bool ProductExists(int id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return _context.Products.Any(e => e.Id == id);
         }
     }
 }
