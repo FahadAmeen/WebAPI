@@ -72,7 +72,8 @@ namespace WebApiProject.Controllers
             user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
 
 
-           // var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
+            // var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
+         //   return await users.Skip(skip).Take(limit).ToArrayAsync();
 
             switch (sortData)
             {
@@ -134,7 +135,7 @@ namespace WebApiProject.Controllers
             else
                 return null;
 
-            return user.Skip(pageNo * pageSize).Take(pageSize);
+          //  return await user.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
         }
 
 
