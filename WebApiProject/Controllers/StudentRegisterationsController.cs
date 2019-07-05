@@ -102,22 +102,28 @@ namespace WebApiProject.Controllers
                     case "id":
                         user = user.Where(s => s.Id == Int32.Parse(searchData));
                         break;
+
                     case "name":
                         user = user.Where(s => s.Name.Contains(searchData));
                         break;
-                    case "program":
-                        user = user.Where(s => s.Program.Contains(searchData));
-                        break;
+
+
                     case "detail":
                         user = user.Where(s => s.Detail.Contains(searchData));
                         break;
+
+                    case "program":
+                        user = user.Where(s => s.Program.Contains(searchData));
+                        break;
+
                     case "filename":
                         user = user.Where(s => s.Filename.Contains(searchData));
                         break;
+
                     default:
                         break;
                 }
-                //return user;
+                return user.Skip(pageNo * pageSize).Take(pageSize);
             }
             else
                 return null;
