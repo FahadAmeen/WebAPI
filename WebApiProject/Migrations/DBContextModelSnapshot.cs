@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
-namespace WebApiProject.Data.Migrations
+namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class PersonContextModelSnapshot : ModelSnapshot
+    partial class DBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,21 @@ namespace WebApiProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("WebApiProject.Models.Record", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Records");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>
@@ -130,21 +145,6 @@ namespace WebApiProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserModels");
-                });
-
-            modelBuilder.Entity("WebApiProject.Models.Record", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("Salary");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Records");
                 });
 #pragma warning restore 612, 618
         }

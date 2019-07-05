@@ -19,14 +19,116 @@ namespace WebApiProject.Controllers
         public StudentRegisterationsController(DBContext context)
         {
             _context = context;
+           
         }
 
+
+        //[HttpGet("GetAll")]
+        //public string get(int pageNo, string searchWith, string searchData, string sortData = "", int pageSize = 5)
+        //{
+        //    // _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Name);
+        //    pageNo = pageNo - 1;
+        //    sortData = sortData.ToLower();
+        //    var user = from s in _context.StudentRegisterations select s;
+        //    if (!String.IsNullOrEmpty(searchData))
+        //    {
+        //        searchWith = searchWith.ToLower();
+
+        //        switch (searchWith)
+        //        {
+        //            case "id":
+        //                user = user.Where(s => s.Id == Int32.Parse(searchData));
+        //                return "id6";
+        //            case "name":
+        //                user = user.Where(s => s.Name.Contains(searchData));
+        //                return "id5";
+        //            case "program":
+        //                user = user.Where(s => s.Program.Contains(searchData));
+        //                return "id4";
+        //            case "detail":
+        //                user = user.Where(s => s.Detail.Contains(searchData));
+        //                return "id3";
+        //            case "filename":
+        //                user = user.Where(s => s.Filename.Contains(searchData));
+        //                return "id2";
+        //            default:
+        //                return "id1";
+        //        }
+        //    }
+        //    else
+        //        return null;
+
+           
+        //}
         // GET: api/StudentRegisterations
-        [HttpGet]
-        public IEnumerable<StudentRegisteration> GetStudentRegisterations()
+        [HttpGet ("Get")]
+        public IEnumerable<StudentRegisteration> GetStudentRegisterations(int pageNo,string searchWith,string searchData, string sortData="", int pageSize=5)
         {
-            return _context.StudentRegisterations;
+            // _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Name);
+            pageNo = pageNo - 1;
+            sortData = sortData.ToLower();
+            var user = from s in _context.StudentRegisterations select s;
+            switch (sortData)
+            {
+                case "id":
+                    user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
+                    break;
+
+                case "name":
+                    user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Name);
+                    break;
+
+                case "program":
+                    user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Program);
+                    break;
+
+                case "detail":
+                    user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Detail);
+                    break;
+                case "filename":
+                    user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Filename);
+                    break;
+                default:
+                    break;
+
+            }
+            if (!String.IsNullOrEmpty(searchData))
+            {
+             
+                searchWith = searchWith.ToLower();
+
+                switch (searchWith)
+                {
+                    case "id":
+                        user = user.Where(s => s.Id == Int32.Parse(searchData));
+                        break;
+                    case "name":
+                        user = user.Where(s => s.Name.Contains(searchData));
+                        break;
+                    case "program":
+                        user = user.Where(s => s.Program.Contains(searchData));
+                        break;
+                    case "detail":
+                        user = user.Where(s => s.Detail.Contains(searchData));
+                        break;
+                    case "filename":
+                        user = user.Where(s => s.Filename.Contains(searchData));
+                        break;
+                    default:
+                        break;
+                }
+                //return user;
+            }
+            else
+                return null;
+
+            return user.Skip(pageNo * pageSize).Take(pageSize);
         }
+
+        //private void HttpResponseException(string v)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         // GET: api/StudentRegisterations/5
         [HttpGet("{id}")]
@@ -75,7 +177,7 @@ namespace WebApiProject.Controllers
                 }
                 else
                 {
-                    throw;
+                    return NoContent();
                 }
             }
 
@@ -117,6 +219,11 @@ namespace WebApiProject.Controllers
 
             return Ok(studentRegisteration);
         }
+
+
+      //  public async Task<IActionResult> Index(string sOrder)
+
+
 
         private bool StudentRegisterationExists(int id)
         {
