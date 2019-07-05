@@ -111,6 +111,14 @@ namespace WebApiProject.Controllers
             return _context.RegisteredUsers;
         }
 
+        // GET: api/RegisteredUsers
+        [HttpGet("GetCount")]
+        public int GetCount()
+        {
+            return _context.RegisteredUsers.Count();
+        }
+
+
         //api/RegisteredUsers/name?val=userName
         [Microsoft.AspNetCore.Mvc.HttpGet()]
         [Route("name")]
