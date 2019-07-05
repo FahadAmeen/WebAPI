@@ -32,7 +32,14 @@ namespace WebApiProject.Controllers
             return await users.Skip(skip).Take(limit).ToArrayAsync();
 
         }
+        //[HttpGet]
+        //public IList<UserModel> SearchUsers([FromBody]string search)
+        //{
+        //    var users = _context.UserModels.Where(x => x.Name.Equals(search)).ToList();
+        //    return users;
 
+
+        //}
 
         //// GET: api/UserModels
         //[HttpGet]
