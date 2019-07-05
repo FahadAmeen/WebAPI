@@ -23,11 +23,8 @@ namespace WebApiProject.Controllers
 
         //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
-        public async Task<IList<UserModel>> GetUser(int page, int limit, string sort)
+        public async Task<IList<UserModel>> GetUser(int page = 1, int limit = int.MaxValue, string sort = "Id")
         {
-            page = 1;
-            limit = int.MaxValue;
-            sort = "Id";
             var skip = (page - 1) * limit;
 
             var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
