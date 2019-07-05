@@ -82,76 +82,52 @@ namespace WebApiProject.Controllers
 
 
         [HttpGet("GetAll")]
-        public IEnumerable<User> Search(string inColumn, string forWord,string sortBy="", int pageNo = 1, int pageSize = 5)
+        public IEnumerable<User> Search(string inColumn, string forWord,string sortBy="id", int pageNo = 1, int pageSize = 5)
         {
             pageNo = pageNo - 1;
             sortBy = sortBy.ToLower();
 
             var selectUsers = from s in _context.Users
                 select s;
-            switch (sortBy)
-            {
-                case "id":
-                    selectUsers = _context.Users.OrderBy(user => user.Id);
-                    break;
 
-                case "name":
-                    selectUsers = _context.Users.OrderBy(user => user.Name);
-                    break;
+            //selectUsers = _context.Users.OrderBy(user => EF.Property<object>(user, sortBy));
 
-                case "employee_role":
-                    selectUsers = _context.Users.OrderBy(user => user.Employe_Role);
-                    break;
+            //if (!String.IsNullOrEmpty(forWord))
+            //{
 
-                case "address":
-                    selectUsers = _context.Users.OrderBy(user => user.Address);
-                    break;
+            //    inColumn = inColumn.ToLower();
+            //    switch (inColumn)
+            //    {
+            //        case "id":
+            //            selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
+            //            break;
 
-                case "file":
-                    selectUsers = _context.Users.OrderBy(user => user.File);
-                    break;
-
-                default:
-                    break;
+            //        case "name":
+            //            selectUsers = selectUsers.Where(s => s.Name.Contains(forWord));
+            //            break;
 
 
-            }
-            if (!String.IsNullOrEmpty(forWord))
-            {
-                
-                inColumn = inColumn.ToLower();
-                switch (inColumn)
-                {
-                    case "id":
-                        selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
-                        break;
+            //        case "employee_role":
+            //            selectUsers = selectUsers.Where(s => s.Employe_Role.Contains(forWord));
+            //            break;
 
-                    case "name":
-                        selectUsers = selectUsers.Where(s => s.Name.Contains(forWord));
-                        break;
+            //        case "address":
+            //            selectUsers = selectUsers.Where(s => s.Address.Contains(forWord));
+            //            break;
 
+            //        case "file":
+            //            selectUsers = selectUsers.Where(s => s.File.Contains(forWord));
+            //            break;
 
-                    case "employee_role":
-                        selectUsers = selectUsers.Where(s => s.Employe_Role.Contains(forWord));
-                        break;
+            //        default:
+            //            break;
+            //    }
 
-                    case "address":
-                        selectUsers = selectUsers.Where(s => s.Address.Contains(forWord));
-                        break;
-
-                    case "file":
-                        selectUsers = selectUsers.Where(s => s.File.Contains(forWord));
-                        break;
-
-                    default:
-                        break;
-                }
-                
-            }
-            else
-            {
-                return null;
-            }
+            //}
+            //else
+            //{
+            //    return null;
+            //}
 
             return selectUsers.Skip(pageNo * pageSize).Take(pageSize);
 
