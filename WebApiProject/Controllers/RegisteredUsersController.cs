@@ -55,59 +55,60 @@ namespace WebApiProject.Controllers
             return user.Skip(pageIndex * pageSize).Take(pageSize);
         }
 
-        [HttpGet("Search")]
-        public IEnumerable<RegisteredUser> Indexx(int pageIndex, string sortOrder = "no", string val="name", int pageSize = 10)
-        {
-            pageIndex = pageIndex - 1;
-            sortOrder = sortOrder.ToLower();
-            var user = from s in _context.RegisteredUsers
-                select s;
-            switch (sortOrder)
-            {
-                case "id":
-                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Id);
-                    break;
-                case "name":
-                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Name);
-                    break;
-                case "email_address":
-                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Email_address);
-                    break;
-                case "file_name":
-                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.FileName);
-                    break;
-                case "job_type":
-                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Job_type);
-                    break;
-                case "phone_number":
-                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Phone_number);
-                    break;
-                default:
-                    return user.Skip(pageIndex * pageSize).Take(pageSize);
-            }
-            switch (val)
-            {
-                case "name":
-                    user= _context.RegisteredUsers.Where(p => string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
-                    break;
-                case "email_address":
-                    user= _context.RegisteredUsers.Where(p => string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
-                    break;
-                case "file_name":
-                    user = _context.RegisteredUsers.Where(p => string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
-                    break;
-                case "job_type":
-                    user = _context.RegisteredUsers.Where(p => string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
-                    break;
-                case "phone_number":
-                    user = _context.RegisteredUsers.Where(p => string.Equals(p.Phone_number, val, StringComparison.OrdinalIgnoreCase));
-                    break;
-                default:
-                    break;
-            }
-            return user.Skip(pageIndex * pageSize).Take(pageSize);
+        //WORKING ON THE BELOW CODE
+        //[HttpGet("Search")]
+        //public IEnumerable<RegisteredUser> Indexx(int pageIndex, string sortOrder = "no", string val="name", int pageSize = 10)
+        //{
+        //    pageIndex = pageIndex - 1;
+        //    sortOrder = sortOrder.ToLower();
+        //    var user = from s in _context.RegisteredUsers
+        //        select s;
+        //    switch (sortOrder)
+        //    {
+        //        case "id":
+        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Id);
+        //            break;
+        //        case "name":
+        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Name);
+        //            break;
+        //        case "email_address":
+        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Email_address);
+        //            break;
+        //        case "file_name":
+        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.FileName);
+        //            break;
+        //        case "job_type":
+        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Job_type);
+        //            break;
+        //        case "phone_number":
+        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Phone_number);
+        //            break;
+        //        default:
+        //            return user.Skip(pageIndex * pageSize).Take(pageSize);
+        //    }
+        //    switch (val)
+        //    {
+        //        case "name":
+        //            user= _context.RegisteredUsers.Where(p => string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
+        //            break;
+        //        case "email_address":
+        //            user= _context.RegisteredUsers.Where(p => string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
+        //            break;
+        //        case "file_name":
+        //            user = _context.RegisteredUsers.Where(p => string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
+        //            break;
+        //        case "job_type":
+        //            user = _context.RegisteredUsers.Where(p => string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
+        //            break;
+        //        case "phone_number":
+        //            user = _context.RegisteredUsers.Where(p => string.Equals(p.Phone_number, val, StringComparison.OrdinalIgnoreCase));
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //    return user.Skip(pageIndex * pageSize).Take(pageSize);
 
-        }
+        //}
 
         // GET: api/RegisteredUsers
         [HttpGet]
