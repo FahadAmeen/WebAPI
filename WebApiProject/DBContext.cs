@@ -30,5 +30,7 @@ namespace WebApiProject.Data
         public DbSet<WebApiProject.Models.Product> Products { get; set; }
 
 
+        public DbSet<Record> Records { get; set; }
+
     }
 }
