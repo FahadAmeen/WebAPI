@@ -91,9 +91,6 @@ namespace WebApiProject.Controllers
 
             if (!String.IsNullOrEmpty(forWord))
             {
-
-                //inColumn = inColumn.ToLower();
-
                 switch (inColumn)
                 {
                     case "Id":
@@ -104,10 +101,9 @@ namespace WebApiProject.Controllers
                         selectUsers = selectUsers.Where(s => EF.Property<string>(s, inColumn).Contains(forWord));
                         break;
                 }
-
             }
 
-            if (pageNo > 0)
+            if (pageNo > -1)
             {
                 return await selectUsers.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
             }
