@@ -23,7 +23,7 @@ namespace WebApiProject.Controllers
             _context = context;
           
         }
-
+        [Route("getAll")]
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> GetUsers()

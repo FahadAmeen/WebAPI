@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
-namespace WebApiProject.Migrations
+namespace WebApiProject.Data.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20190704052558_addedMovieTableOfFahad")]
+    partial class addedMovieTableOfFahad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,23 +75,6 @@ namespace WebApiProject.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("WebApiProject.Models.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Category");
-
-                    b.Property<string>("Name");
-
-                    b.Property<double>("Price");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Product");
-                });
-
             modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>
                 {
                     b.Property<int>("Id")
@@ -130,27 +115,6 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StudentRegisterations");
-                });
-
-            modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("File");
-
-                    b.Property<bool>("IsComplete");
-
-                    b.Property<string>("Priority");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ToDoItems");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.User", b =>
