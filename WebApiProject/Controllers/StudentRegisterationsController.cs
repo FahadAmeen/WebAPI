@@ -72,6 +72,8 @@ namespace WebApiProject.Controllers
             user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
 
 
+           // var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
+
             switch (sortData)
             {
                 case "id":
