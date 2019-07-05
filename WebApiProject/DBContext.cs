@@ -24,12 +24,16 @@ namespace WebApiProject.Data
         public DbSet<UserModel> UserModels { get; set; }
         public DbSet<StudentRegisteration> StudentRegisterations { get; set; }
         public DbSet<User> Users { get; set; }
+
         //public DbSet<ProductRepository> product { get; set; }
         public DbSet<RegisteredUser> RegisteredUsers { get; set; }
         public DbSet<Movie> Movies { get; set; }
         public DbSet<WebApiProject.Models.Product> Products { get; set; }
 
+        public DbSet<Product> Product { get; set; }
 
+        public DbSet<ToDoItem> ToDoItems { get; set; }
+        public object Mapping { get; internal set; }
         public DbSet<Record> Records { get; set; }
 
     }

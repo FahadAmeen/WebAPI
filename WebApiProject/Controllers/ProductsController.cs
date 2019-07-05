@@ -27,6 +27,8 @@ namespace WebApiProject.Controllers
         {
             return Repository.GetAll();
         }
+        
+
 
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
         public Product GetProduct(int id)
