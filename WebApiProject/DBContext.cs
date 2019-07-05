@@ -31,5 +31,7 @@ namespace WebApiProject.Data
 
         public DbSet<ToDoItem> ToDoItems { get; set; }
         public object Mapping { get; internal set; }
+        public DbSet<Record> Records { get; set; }
+
     }
 }
