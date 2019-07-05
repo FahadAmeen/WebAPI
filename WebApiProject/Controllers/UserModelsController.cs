@@ -23,7 +23,7 @@ namespace WebApiProject.Controllers
 
         //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
-        public async Task<IList<UserModel>> GetUser(int page = 1, int limit = int.MaxValue, string sort = "Id",string search="",string searchColumn="Id")
+        public async Task<IList<UserModel>> GetUser(int page = 1, int limit = int.MaxValue, string sort = "Id",string search="")
         {
             var skip = (page - 1) * limit;
             if (search=="")
@@ -33,18 +33,14 @@ namespace WebApiProject.Controllers
                 return await users.Skip(skip).Take(limit).ToArrayAsync();
             }
             else
-            {
-                //var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort)).Where(user=>(p => EF.Property<object>(p, searchColumn)).);
-                var users = _context.UserModels.Where(p => p.Name.Contains(search)).OrderBy(p => EF.Property<object>(p, sort));
-
-
+            { var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search)|| p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
+                
                 return await users.Skip(skip).Take(limit).ToArrayAsync();
-
+            }
+            
             }
 
-            
-
-        }
+         
         //[HttpGet]
         //public IList<UserModel> SearchUsers([FromBody]string search)
         //{
