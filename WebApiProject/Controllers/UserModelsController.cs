@@ -21,12 +21,41 @@ namespace WebApiProject.Controllers
             _context = context;
         }
 
-        // GET: api/UserModels
+        //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
-        public IEnumerable<UserModel> GetUsers()
+        public async Task<IList<UserModel>> GetUser(int page = 1, int limit = int.MaxValue, string sort = "Id",string search="")
         {
-            return _context.UserModels;
-        }
+            var skip = (page - 1) * limit;
+            if (search=="")
+            {
+                var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
+
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+            else
+            { var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search)|| p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
+                
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+            
+            }
+
+         
+        //[HttpGet]
+        //public IList<UserModel> SearchUsers([FromBody]string search)
+        //{
+        //    var users = _context.UserModels.Where(x => x.Name.Equals(search)).ToList();
+        //    return users;
+
+
+        //}
+
+        //// GET: api/UserModels
+        //[HttpGet]
+        //public IEnumerable<UserModel> GetUsers()
+        //{
+        //    return _context.UserModels;
+        //}
 
         // GET: api/UserModels/5
         [HttpGet("{id}")]
