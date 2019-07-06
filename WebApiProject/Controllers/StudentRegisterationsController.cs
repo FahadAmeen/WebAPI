@@ -61,7 +61,20 @@ namespace WebApiProject.Controllers
         {
             pageNo = pageNo - 1;
             sortData = sortData.ToLower();
-            var user = _context.StudentRegisterations.OrderBy(p => EF.Property<object>(p, sortData));
+
+            var user = from s in _context.StudentRegisterations select s;
+            user = _context.StudentRegisterations.OrderBy(p => EF.Property<object>(p, sortData));
+            if (!String.IsNullOrEmpty(searchData = ""))
+            {
+                if ((searchWith == "name") || (searchWith == "program") || searchWith == "detail" || (searchWith == "filename"))
+                {
+                    user = user.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
+                }
+            }
+            else
+            {
+                user = user.Where(s => s.Id == Int32.Parse(searchData));
+            }
             return await user.Skip(pageNo*pageSize).Take(pageSize).ToArrayAsync();
             // return user.Skip(pageNo * pageSize).Take(pageSize);
         }
