@@ -22,6 +22,39 @@ namespace WebApiProject.Controllers
            
         }
 
+
+
+
+
+        //        var users = _context.Users.OrderBy(p => EF.Property<object>(p, sortBy));
+
+        //        var selectUsers = from s in users select s;
+
+        //            if (!String.IsNullOrEmpty(forWord))
+        //            {
+        //                switch (inColumn)
+        //                {
+        //                    case "Id":
+        //                        selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
+        //                        break;
+
+        //                    default:
+        //                        selectUsers = selectUsers.Where(s => EF.Property<string>(s, inColumn).Contains(forWord));
+        //                        break;
+        //                }
+        //}
+
+        //            if (pageNo > -1)
+        //            {
+        //                return await selectUsers.Skip(pageNo* pageSize).Take(pageSize).ToArrayAsync();
+        //            }
+        //            else
+        //            {
+        //                return await selectUsers.ToArrayAsync();
+        //            }
+
+        //        }
+
         // GET: api/StudentRegisterations/Get
         [HttpGet]
         public async Task<IList<StudentRegisteration>> GetStudentRegisterations(int pageNo = 1, string searchWith = "id", string searchData = "", string sortData = "id", int pageSize = 5)
