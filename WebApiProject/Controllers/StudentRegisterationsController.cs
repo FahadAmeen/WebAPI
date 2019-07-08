@@ -23,7 +23,7 @@ namespace WebApiProject.Controllers
         }
 
         // GET: api/StudentRegisterations/Get
-        [HttpGet ("Get")]
+        [HttpGet]
         public IEnumerable<StudentRegisteration> GetStudentRegisterations(int pageNo=1,string searchWith="",string searchData="1", string sortData="", int pageSize=5)
         {
             pageNo = pageNo - 1;
