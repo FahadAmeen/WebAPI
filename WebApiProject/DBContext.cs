@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using BussinessObjects;
+using WebApiProject.Models;
 
-namespace DataAccess
+namespace WebApiProject.Data
 {
-    public class DBContext: DbContext
+    public class DBContext:DbContext
     {
         public DBContext(DbContextOptions options) : base(options)
         {

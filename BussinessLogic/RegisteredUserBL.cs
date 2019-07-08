@@ -3,28 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using BussinessObjects;
+using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Remotion.Linq.Clauses;
-using WebApiProject.Data;
-using WebApiProject.Models;
 
-namespace WebApiProject.Controllers
+
+namespace BussinessLogic
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RegisteredUsersController : ControllerBase
+    
+    public class RegisteredUserBL
     {
         private readonly DBContext _context;
-        public RegisteredUsersController(DBContext context)
+        public RegisteredUserBL(DBContext context)
         {
             _context = context;
         }
 
 
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
-        [HttpGet("GetAll")]
         public IEnumerable<RegisteredUser> Indexx(int pageIndex = 1, string sortOrder = "no", string col = "", string val = "",
             int pageSize = 5)
         {
@@ -102,103 +99,34 @@ namespace WebApiProject.Controllers
         }
 
         // GET: api/RegisteredUsers
-        [HttpGet]
+        
         public IEnumerable<RegisteredUser> GetRegisteredUsers()
         {
             return _context.RegisteredUsers;
         }
 
         // GET: api/RegisteredUsers
-        [HttpGet("GetCount")]
+        
         public int GetCount()
         {
             return _context.RegisteredUsers.Count();
         }
-
-
-        //api/RegisteredUsers/name?val=userName
-        [Microsoft.AspNetCore.Mvc.HttpGet()]
-        [Route("name")]
-        public IQueryable<RegisteredUser> GetProductsByName(string val)
-        {
-            return _context.RegisteredUsers.Where(p => string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
-        }
-
-        //api/RegisteredUsers/emailAddress?val=userName@gmail.com
-        [Microsoft.AspNetCore.Mvc.HttpGet()]
-        [Route("emailAddress")]
-        public IQueryable<RegisteredUser> GetProductsByEmail(string val)
-        {
-            return _context.RegisteredUsers.Where(p => string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
-        }
-
-        //api/RegisteredUsers/phoneNumber?val=923367455435 ---  WITHOUT '+' CHAR IN THE BEGINNING OF NUMBER  ----
-        [Microsoft.AspNetCore.Mvc.HttpGet()]
-        [Route("phoneNumber")]
-        public IQueryable<RegisteredUser> GetProductsByNumber(string val)
-        {
-            return _context.RegisteredUsers.Where(p => p.Phone_number.Contains(val));
-        }
-
-
-        //api/RegisteredUsers/password?val=password
-        [Microsoft.AspNetCore.Mvc.HttpGet()]
-        [Route("password")]
-        public IQueryable<RegisteredUser> GetProductsByPassword(string val)
-        {
-            return _context.RegisteredUsers.Where(p => string.Equals(p.Password, val, StringComparison.OrdinalIgnoreCase));
-        }
-
-
-        //api/RegisteredUsers/jobType?val=ty
-        [Microsoft.AspNetCore.Mvc.HttpGet()]
-        [Route("jobType")]
-        public IQueryable<RegisteredUser> GetProductsByJobType(string val)
-        {
-            return _context.RegisteredUsers.Where(p => string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
-        }
-
-
-        //api/RegisteredUsers/fileName?var=filename
-        [Microsoft.AspNetCore.Mvc.HttpGet()]
-        [Route("fileName")]
-        public IQueryable<RegisteredUser> GetProductsByFileName(string val)
-        {
-            return _context.RegisteredUsers.Where(p => string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
-        }
-
-
         // GET: api/RegisteredUsers/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetRegisteredUser([FromRoute] int id)
+        
+        public async Task<RegisteredUser> GetRegisteredUser( int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var registeredUser = await _context.RegisteredUsers.FindAsync(id);
-
-            if (registeredUser == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(registeredUser);
+            return registeredUser;
         }
 
         // PUT: api/RegisteredUsers/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegisteredUser([FromRoute] int id, [FromBody] RegisteredUser registeredUser)
+        public async Task<string> PutRegisteredUser( int id, RegisteredUser registeredUser)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+          
 
             if (id != registeredUser.Id)
             {
-                return BadRequest();
+                return "fail";
             }
 
             _context.Entry(registeredUser).State = EntityState.Modified;
@@ -211,7 +139,7 @@ namespace WebApiProject.Controllers
             {
                 if (!RegisteredUserExists(id))
                 {
-                    return NotFound();
+                    return "fail";
                 }
                 else
                 {
@@ -219,43 +147,51 @@ namespace WebApiProject.Controllers
                 }
             }
 
-            return NoContent();
+            return "success";
         }
 
         // POST: api/RegisteredUsers
-        [HttpPost]
-        public async Task<IActionResult> PostRegisteredUser([FromBody] RegisteredUser registeredUser)
+        
+        public async Task<string> PostRegisteredUser( RegisteredUser registeredUser)
         {
-            if (!ModelState.IsValid)
+
+            try
             {
-                return BadRequest(ModelState);
+                _context.RegisteredUsers.Add(registeredUser);
+                await _context.SaveChangesAsync();
+
             }
-
-            _context.RegisteredUsers.Add(registeredUser);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetRegisteredUser", new { id = registeredUser.Id }, registeredUser);
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "fail";
+                throw;
+            }
+            return "success";
         }
 
         // DELETE: api/RegisteredUsers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRegisteredUser([FromRoute] int id)
+        
+        public async Task<string> DeleteRegisteredUser( int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+         
             var registeredUser = await _context.RegisteredUsers.FindAsync(id);
             if (registeredUser == null)
             {
-                return NotFound();
+                return "fail";
             }
 
-            _context.RegisteredUsers.Remove(registeredUser);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.RegisteredUsers.Remove(registeredUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return "fail";
+            }
 
-            return Ok(registeredUser);
+            return "success";
         }
 
         private bool RegisteredUserExists(int id)

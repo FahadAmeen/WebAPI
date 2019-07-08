@@ -2,43 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using BussinessObjects;
+using DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Configuration.Ini;
-using WebApiProject.Data;
-using WebApiProject.Models;
 
-namespace WebApiProject.Controllers
+namespace BussinessLogic
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    
+    public class UserBL 
     {
         private readonly DBContext _context;
 
-        public UsersController(DBContext context)
+        public UserBL(DBContext context)
         {
             _context = context;
           
         }
        
         // GET: api/Users
-        [HttpGet]
         public IEnumerable<User> GetUsers()
         {
             return _context.Users;
         }
 
         // GET: api/Users
-        [HttpGet("GetCount")]
+       
         public int GetCount()
         {
             return _context.Users.Count();
         }
 
-        [HttpGet("GetAll")]
+      
         public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
         {   //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
             pageNo = pageNo - 1;
@@ -74,38 +68,35 @@ namespace WebApiProject.Controllers
 
 
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser([FromRoute] int id)
+        
+        public async Task<User> GetUser( int id)
         {
-            if (!ModelState.IsValid)
+
+            var user=new User();
+            try
             {
-                return BadRequest(ModelState);
+                user = await _context.Users.FindAsync(id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
-            var user = await _context.Users.FindAsync(id);
+            
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(user);
+            return user;
         }
 
 
-        // PUT: api/Users/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser([FromRoute] int id, [FromBody] User user)
+        
+        public async Task<string> PutUser( int id, User user)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            
 
             if (id != user.Id)
             {
-                return BadRequest();
+                return "fail";
             }
 
             _context.Entry(user).State = EntityState.Modified;
@@ -118,7 +109,7 @@ namespace WebApiProject.Controllers
             {
                 if (!UserExists(id))
                 {
-                    return NotFound();
+                    return "fail";
                 }
                 else
                 {
@@ -126,43 +117,50 @@ namespace WebApiProject.Controllers
                 }
             }
 
-            return NoContent();
+            return "success";
         }
 
         // POST: api/Users
-        [HttpPost]
-        public async Task<IActionResult> PostUser([FromBody] User user)
+       
+        public async Task<string> PostUser( User user)
         {
-            if (!ModelState.IsValid)
+
+
+            try
             {
-                return BadRequest(ModelState);
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+
             }
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            catch (Exception e)
+            {
+                return "fail";
+            }
+            return "success";
         }
 
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        
+        public async Task<string> DeleteUser( int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
-                return NotFound();
+                return "fail";
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return "fail";
+            }
 
-            return Ok(user);
+            return "success";
         }
 
         private bool UserExists(int id)

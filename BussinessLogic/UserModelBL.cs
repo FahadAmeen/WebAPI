@@ -2,28 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using BussinessObjects;
+using DataAccess;
 using Microsoft.EntityFrameworkCore;
-using WebApiProject.Data;
-using WebApiProject.Models;
-using WebApiProject.Models.Wrappers;
 
-namespace WebApiProject.Controllers
+namespace BussinessLogic
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserModelsController : ControllerBase
+    
+    public class UserModelBL
     {
         private readonly DBContext _context;
 
-        public UserModelsController(DBContext context)
+        public UserModelBL(DBContext context)
         {
             _context = context;
         }
 
-        //api/UserModel?page=3&limit=8&sort=Id
-        [HttpGet]
+        
         public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "")
         {
             var skip = (page - 1) * limit;
@@ -41,7 +36,6 @@ namespace WebApiProject.Controllers
 
         }
 
-        [HttpGet("{countResponse}")]
         public UserModelInfoWrapper CountAndData()
         {
             //int count = _context.UserModels.Count();
@@ -50,7 +44,6 @@ namespace WebApiProject.Controllers
             users.data = _context.UserModels.ToList();
             return users;
         }
-        [HttpGet("{count}")]
         public int TotalRecords()
         {
             
@@ -59,36 +52,33 @@ namespace WebApiProject.Controllers
 
 
         // GET: api/UserModels/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserModel([FromRoute] int id)
+       
+        public async Task<UserModel> GetUserModel( int id)
         {
-            if (!ModelState.IsValid)
+            var userModel=new UserModel();
+
+            try
             {
-                return BadRequest(ModelState);
+                 userModel = await _context.UserModels.FindAsync(id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
             }
 
-            var userModel = await _context.UserModels.FindAsync(id);
-
-            if (userModel == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(userModel);
+            
+            return userModel;
         }
 
         // PUT: api/UserModels/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserModel([FromRoute] int id, [FromBody] UserModel userModel)
+        public async Task<string> PutUserModel( int id, UserModel userModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            
 
             if (id != userModel.Id)
             {
-                return BadRequest();
+                return"fail";
             }
 
             _context.Entry(userModel).State = EntityState.Modified;
@@ -101,7 +91,7 @@ namespace WebApiProject.Controllers
             {
                 if (!UserModelExists(id))
                 {
-                    return NotFound();
+                    return "fail";
                 }
                 else
                 {
@@ -109,43 +99,47 @@ namespace WebApiProject.Controllers
                 }
             }
 
-            return NoContent();
+            return "success";
         }
 
         // POST: api/UserModels
-        [HttpPost]
-        public async Task<IActionResult> PostUserModel([FromBody] UserModel userModel)
+        public async Task<string> PostUserModel( UserModel userModel)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
+                _context.UserModels.Add(userModel);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return "fail";
             }
 
-            _context.UserModels.Add(userModel);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
+            return "success";
         }
 
         // DELETE: api/UserModels/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUserModel([FromRoute] int id)
+        
+        public async Task<string> DeleteUserModel(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var userModel = await _context.UserModels.FindAsync(id);
             if (userModel == null)
             {
-                return NotFound();
+                return "fail";
             }
 
-            _context.UserModels.Remove(userModel);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.UserModels.Remove(userModel);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return "fail";
+            }
 
-            return Ok(userModel);
+            return "success";
         }
 
         private bool UserModelExists(int id)

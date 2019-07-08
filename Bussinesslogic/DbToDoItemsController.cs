@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using BussinessObjects;
+using DataAccess;
 using Microsoft.EntityFrameworkCore;
-using WebApiProject.Data;
-using WebApiProject.Models;
 
-namespace WebApiProject.Controllers
+namespace BussinessLogic
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class DbToDoItemsController : ControllerBase
+   
+    public class DbToDoItemsController 
     {
         private readonly DBContext _context;
 
@@ -22,44 +19,25 @@ namespace WebApiProject.Controllers
         }
 
         // GET: api/DbToDoItems
-        [HttpGet]
+       
         public IEnumerable<ToDoItem> GetToDoItems()
         {
             return _context.ToDoItems;
         }
 
         // GET: api/DbToDoItems/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetToDoItem([FromRoute] long id)
+        public async Task<ToDoItem> GetToDoItem( long id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            
 
             var toDoItem = await _context.ToDoItems.FindAsync(id);
-
-            if (toDoItem == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(toDoItem);
+            return toDoItem;
         }
 
         // PUT: api/DbToDoItems/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutToDoItem([FromRoute] long id, [FromBody] ToDoItem toDoItem)
+        public async Task<string> PutToDoItem( long id, ToDoItem toDoItem)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != toDoItem.Id)
-            {
-                return BadRequest();
-            }
+            
 
             _context.Entry(toDoItem).State = EntityState.Modified;
 
@@ -71,7 +49,7 @@ namespace WebApiProject.Controllers
             {
                 if (!ToDoItemExists(id))
                 {
-                    return NotFound();
+                    return "fail";
                 }
                 else
                 {
@@ -79,43 +57,41 @@ namespace WebApiProject.Controllers
                 }
             }
 
-            return NoContent();
+            return "pass";
+
         }
 
         // POST: api/DbToDoItems
-        [HttpPost]
-        public async Task<IActionResult> PostToDoItem([FromBody] ToDoItem toDoItem)
+       
+        public async Task<string> PostToDoItem( ToDoItem toDoItem)
         {
-            if (!ModelState.IsValid)
+
+            try
             {
-                return BadRequest(ModelState);
+                _context.ToDoItems.Add(toDoItem);
+                await _context.SaveChangesAsync();
+                return "pass";
             }
-
-            _context.ToDoItems.Add(toDoItem);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetToDoItem", new { id = toDoItem.Id }, toDoItem);
+            catch (Exception e)
+            {
+                return "fail";
+            }
         }
 
         // DELETE: api/DbToDoItems/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteToDoItem([FromRoute] long id)
+        public async Task<string> DeleteToDoItem(long id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
 
             var toDoItem = await _context.ToDoItems.FindAsync(id);
             if (toDoItem == null)
             {
-                return NotFound();
+                return "fail";
             }
 
             _context.ToDoItems.Remove(toDoItem);
             await _context.SaveChangesAsync();
 
-            return Ok(toDoItem);
+            return "pass";
         }
 
         private bool ToDoItemExists(long id)

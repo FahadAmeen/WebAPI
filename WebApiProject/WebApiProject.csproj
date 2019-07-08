@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\TodoContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -34,9 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bussinesslogic\Bussinesslogic.csproj" />
-    <ProjectReference Include="..\BussinessObject\BussinessObject.csproj" />
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\BussinessObjects\BussinessObjects.csproj" />
   </ItemGroup>
 
 </Project>
