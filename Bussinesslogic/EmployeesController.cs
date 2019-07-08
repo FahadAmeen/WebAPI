@@ -7,62 +7,61 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
 using WebApiProject.Models;
-using BussinessObject;
 
 namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DbToDoItemsController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
         private readonly DBContext _context;
 
-        public DbToDoItemsController(DBContext context)
+        public EmployeesController(DBContext context)
         {
             _context = context;
         }
 
-        // GET: api/DbToDoItems
+        // GET: api/Employees
         [HttpGet]
-        public IEnumerable<ToDoItem> GetToDoItems()
+        public IEnumerable<Employee> GetEmployees()
         {
-            return _context.ToDoItems;
+            return _context.Employees;
         }
 
-        // GET: api/DbToDoItems/5
+        // GET: api/Employees/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetToDoItem([FromRoute] long id)
+        public async Task<IActionResult> GetEmployee([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var toDoItem = await _context.ToDoItems.FindAsync(id);
+            var employee = await _context.Employees.FindAsync(id);
 
-            if (toDoItem == null)
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            return Ok(toDoItem);
+            return Ok(employee);
         }
 
-        // PUT: api/DbToDoItems/5
+        // PUT: api/Employees/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutToDoItem([FromRoute] long id, [FromBody] ToDoItem toDoItem)
+        public async Task<IActionResult> PutEmployee([FromRoute] int id, [FromBody] Employee employee)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != toDoItem.Id)
+            if (id != employee.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(toDoItem).State = EntityState.Modified;
+            _context.Entry(employee).State = EntityState.Modified;
 
             try
             {
@@ -70,7 +69,7 @@ namespace WebApiProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ToDoItemExists(id))
+                if (!EmployeeExists(id))
                 {
                     return NotFound();
                 }
@@ -83,45 +82,45 @@ namespace WebApiProject.Controllers
             return NoContent();
         }
 
-        // POST: api/DbToDoItems
+        // POST: api/Employees
         [HttpPost]
-        public async Task<IActionResult> PostToDoItem([FromBody] ToDoItem toDoItem)
+        public async Task<IActionResult> PostEmployee([FromBody] Employee employee)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.ToDoItems.Add(toDoItem);
+            _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetToDoItem", new { id = toDoItem.Id }, toDoItem);
+            return CreatedAtAction("GetEmployee", new { id = employee.Id }, employee);
         }
 
-        // DELETE: api/DbToDoItems/5
+        // DELETE: api/Employees/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteToDoItem([FromRoute] long id)
+        public async Task<IActionResult> DeleteEmployee([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var toDoItem = await _context.ToDoItems.FindAsync(id);
-            if (toDoItem == null)
+            var employee = await _context.Employees.FindAsync(id);
+            if (employee == null)
             {
                 return NotFound();
             }
 
-            _context.ToDoItems.Remove(toDoItem);
+            _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
 
-            return Ok(toDoItem);
+            return Ok(employee);
         }
 
-        private bool ToDoItemExists(long id)
+        private bool EmployeeExists(int id)
         {
-            return _context.ToDoItems.Any(e => e.Id == id);
+            return _context.Employees.Any(e => e.Id == id);
         }
     }
 }

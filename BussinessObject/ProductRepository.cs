@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Web.Http;
-using WebApiProject.Models.Interface;
+
 
 namespace WebApiProject.Models
 {
-    public class ProductRepository : IProductRepository
+    public class ProductRepository 
     {
         private readonly List<Product> _products = new List<Product>();
         private int _nextId = 1;

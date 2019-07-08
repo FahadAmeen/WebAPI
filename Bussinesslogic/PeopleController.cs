@@ -7,62 +7,61 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
 using WebApiProject.Models;
-using BussinessObject;
 
 namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DbToDoItemsController : ControllerBase
+    public class PeopleController : ControllerBase
     {
         private readonly DBContext _context;
 
-        public DbToDoItemsController(DBContext context)
+        public PeopleController(DBContext context)
         {
             _context = context;
         }
 
-        // GET: api/DbToDoItems
+        // GET: api/People
         [HttpGet]
-        public IEnumerable<ToDoItem> GetToDoItems()
+        public IEnumerable<Person> GetPersons()
         {
-            return _context.ToDoItems;
+            return _context.Persons;
         }
 
-        // GET: api/DbToDoItems/5
+        // GET: api/People/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetToDoItem([FromRoute] long id)
+        public async Task<IActionResult> GetPerson([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var toDoItem = await _context.ToDoItems.FindAsync(id);
+            var person = await _context.Persons.FindAsync(id);
 
-            if (toDoItem == null)
+            if (person == null)
             {
                 return NotFound();
             }
 
-            return Ok(toDoItem);
+            return Ok(person);
         }
 
-        // PUT: api/DbToDoItems/5
+        // PUT: api/People/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutToDoItem([FromRoute] long id, [FromBody] ToDoItem toDoItem)
+        public async Task<IActionResult> PutPerson([FromRoute] int id, [FromBody] Person person)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != toDoItem.Id)
+            if (id != person.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(toDoItem).State = EntityState.Modified;
+            _context.Entry(person).State = EntityState.Modified;
 
             try
             {
@@ -70,7 +69,7 @@ namespace WebApiProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ToDoItemExists(id))
+                if (!PersonExists(id))
                 {
                     return NotFound();
                 }
@@ -83,45 +82,45 @@ namespace WebApiProject.Controllers
             return NoContent();
         }
 
-        // POST: api/DbToDoItems
+        // POST: api/People
         [HttpPost]
-        public async Task<IActionResult> PostToDoItem([FromBody] ToDoItem toDoItem)
+        public async Task<IActionResult> PostPerson([FromBody] Person person)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.ToDoItems.Add(toDoItem);
+            _context.Persons.Add(person);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetToDoItem", new { id = toDoItem.Id }, toDoItem);
+            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
         }
 
-        // DELETE: api/DbToDoItems/5
+        // DELETE: api/People/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteToDoItem([FromRoute] long id)
+        public async Task<IActionResult> DeletePerson([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var toDoItem = await _context.ToDoItems.FindAsync(id);
-            if (toDoItem == null)
+            var person = await _context.Persons.FindAsync(id);
+            if (person == null)
             {
                 return NotFound();
             }
 
-            _context.ToDoItems.Remove(toDoItem);
+            _context.Persons.Remove(person);
             await _context.SaveChangesAsync();
 
-            return Ok(toDoItem);
+            return Ok(person);
         }
 
-        private bool ToDoItemExists(long id)
+        private bool PersonExists(int id)
         {
-            return _context.ToDoItems.Any(e => e.Id == id);
+            return _context.Persons.Any(e => e.Id == id);
         }
     }
 }
