@@ -25,13 +25,13 @@ namespace WebApiProject.Controllers
 
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         [HttpGet("GetAll")]
-        public IEnumerable<RegisteredUser> Indexx(int pageIndex, string sortOrder = "no", string col="name",string val = "userName",
-            int pageSize = 10)
+        public IEnumerable<RegisteredUser> Indexx(int pageIndex = 1, string sortOrder = "no", string col = "", string val = "",
+            int pageSize = 5)
         {
             pageIndex = pageIndex - 1;
             sortOrder = sortOrder.ToLower();
             var user = from s in _context.RegisteredUsers
-                select s;
+                       select s;
             switch (sortOrder)
             {
                 case "id":
@@ -56,8 +56,9 @@ namespace WebApiProject.Controllers
                     user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Password);
                     break;
                 default:
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Name);
                     break;
-                //return user.Skip(pageIndex * pageSize).Take(pageSize);
+                    //return user.Skip(pageIndex * pageSize).Take(pageSize);
             }
 
             if (!String.IsNullOrEmpty(val))
@@ -97,10 +98,6 @@ namespace WebApiProject.Controllers
                 }
 
             }
-            else
-            {
-                return null;
-            }
             return user.Skip(pageIndex * pageSize).Take(pageSize);
         }
 
@@ -111,12 +108,20 @@ namespace WebApiProject.Controllers
             return _context.RegisteredUsers;
         }
 
+        // GET: api/RegisteredUsers
+        [HttpGet("GetCount")]
+        public int GetCount()
+        {
+            return _context.RegisteredUsers.Count();
+        }
+
+
         //api/RegisteredUsers/name?val=userName
         [Microsoft.AspNetCore.Mvc.HttpGet()]
         [Route("name")]
         public IQueryable<RegisteredUser> GetProductsByName(string val)
         {
-           return _context.RegisteredUsers.Where(p => string.Equals(p.Name, val,StringComparison.OrdinalIgnoreCase));
+            return _context.RegisteredUsers.Where(p => string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
         }
 
         //api/RegisteredUsers/emailAddress?val=userName@gmail.com
@@ -125,7 +130,7 @@ namespace WebApiProject.Controllers
         public IQueryable<RegisteredUser> GetProductsByEmail(string val)
         {
             return _context.RegisteredUsers.Where(p => string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
-         }
+        }
 
         //api/RegisteredUsers/phoneNumber?val=923367455435 ---  WITHOUT '+' CHAR IN THE BEGINNING OF NUMBER  ----
         [Microsoft.AspNetCore.Mvc.HttpGet()]
