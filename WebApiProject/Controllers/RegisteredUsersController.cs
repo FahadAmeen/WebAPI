@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,17 +23,19 @@ namespace WebApiProject.Controllers
         }
 
 
+        //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         [HttpGet("GetAll")]
-        public IEnumerable<RegisteredUser> Index(int pageIndex, int pageSize=10, string sortOrder="no")
+        public IEnumerable<RegisteredUser> Indexx(int pageIndex, string sortOrder = "no", string col="name",string val = "userName",
+            int pageSize = 10)
         {
             pageIndex = pageIndex - 1;
             sortOrder = sortOrder.ToLower();
             var user = from s in _context.RegisteredUsers
-                           select s;
+                select s;
             switch (sortOrder)
             {
                 case "id":
-                    user=_context.RegisteredUsers.OrderBy(RegisteredUser=>RegisteredUser.Id);
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Id);
                     break;
                 case "name":
                     user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Name);
@@ -49,66 +52,57 @@ namespace WebApiProject.Controllers
                 case "phone_number":
                     user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Phone_number);
                     break;
+                case "password":
+                    user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Password);
+                    break;
                 default:
-                    return user.Skip(pageIndex * pageSize).Take(pageSize);
+                    break;
+                //return user.Skip(pageIndex * pageSize).Take(pageSize);
+            }
+
+            if (!String.IsNullOrEmpty(val))
+            {
+                col = col.ToLower();
+                switch (col)
+                {
+                    case "id":
+                        user = user.Where(s => s.Id == Int32.Parse(val));
+                        break;
+                    case "name":
+                        user = _context.RegisteredUsers.Where(p =>
+                            string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case "email_address":
+                        user = _context.RegisteredUsers.Where(p =>
+                            string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case "file_name":
+                        user = _context.RegisteredUsers.Where(p =>
+                            string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case "job_type":
+                        user = _context.RegisteredUsers.Where(p =>
+                            string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case "phone_number":
+                        user = _context.RegisteredUsers.Where(p =>
+                            string.Equals(p.Phone_number, val, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    case "password":
+                        user = _context.RegisteredUsers.Where(p =>
+                            string.Equals(p.Password, val, StringComparison.OrdinalIgnoreCase));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            else
+            {
+                return null;
             }
             return user.Skip(pageIndex * pageSize).Take(pageSize);
         }
-
-        //WORKING ON THE BELOW CODE
-        //[HttpGet("Search")]
-        //public IEnumerable<RegisteredUser> Indexx(int pageIndex, string sortOrder = "no", string val="name", int pageSize = 10)
-        //{
-        //    pageIndex = pageIndex - 1;
-        //    sortOrder = sortOrder.ToLower();
-        //    var user = from s in _context.RegisteredUsers
-        //        select s;
-        //    switch (sortOrder)
-        //    {
-        //        case "id":
-        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Id);
-        //            break;
-        //        case "name":
-        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Name);
-        //            break;
-        //        case "email_address":
-        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Email_address);
-        //            break;
-        //        case "file_name":
-        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.FileName);
-        //            break;
-        //        case "job_type":
-        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Job_type);
-        //            break;
-        //        case "phone_number":
-        //            user = _context.RegisteredUsers.OrderBy(RegisteredUser => RegisteredUser.Phone_number);
-        //            break;
-        //        default:
-        //            return user.Skip(pageIndex * pageSize).Take(pageSize);
-        //    }
-        //    switch (val)
-        //    {
-        //        case "name":
-        //            user= _context.RegisteredUsers.Where(p => string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
-        //            break;
-        //        case "email_address":
-        //            user= _context.RegisteredUsers.Where(p => string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
-        //            break;
-        //        case "file_name":
-        //            user = _context.RegisteredUsers.Where(p => string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
-        //            break;
-        //        case "job_type":
-        //            user = _context.RegisteredUsers.Where(p => string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
-        //            break;
-        //        case "phone_number":
-        //            user = _context.RegisteredUsers.Where(p => string.Equals(p.Phone_number, val, StringComparison.OrdinalIgnoreCase));
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    return user.Skip(pageIndex * pageSize).Take(pageSize);
-
-        //}
 
         // GET: api/RegisteredUsers
         [HttpGet]
