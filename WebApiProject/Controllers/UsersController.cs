@@ -31,54 +31,12 @@ namespace WebApiProject.Controllers
             return _context.Users;
         }
 
-        //[HttpGet("GetAll")]
-        //public IEnumerable<User> GetUsers(int pageNo, int pageSize=5)
-        //{
-
-        //    pageNo = pageNo - 1;
-
-        //    return _context.Users.Skip(pageNo * pageSize).Take(pageSize);
-
-        //}
-
-        //[HttpGet("Sort")]
-        //public IEnumerable<User> GetUsers(string by, int pageNo=1, int pageSize = 5)
-        //{
-        //    pageNo = pageNo - 1;
-        //    by = by.ToLower();
-
-        //    var selectUsers = from s in _context.Users
-        //        select s;
-        //    switch (by)
-        //    {
-        //        case "id":
-        //            selectUsers = _context.Users.OrderBy(user => user.Id);
-        //            break;
-
-        //        case "name":
-        //            selectUsers = _context.Users.OrderBy(user => user.Name);
-        //            break;
-
-        //        case "employee_role":
-        //            selectUsers = _context.Users.OrderBy(user => user.Employe_Role);
-        //            break;
-
-        //        case "address":
-        //            selectUsers = _context.Users.OrderBy(user => user.Address);
-        //            break;
-
-        //        case "file":
-        //            selectUsers = _context.Users.OrderBy(user => user.File);
-        //            break;
-
-        //        default:
-        //            break;
-
-
-        //    }
-        //    return selectUsers.Skip(pageNo * pageSize).Take(pageSize);
-        //}
-
+        // GET: api/Users
+        [HttpGet("GetCount")]
+        public int GetCount()
+        {
+            return _context.Users.Count();
+        }
 
         [HttpGet("GetAll")]
         public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
