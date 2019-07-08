@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
 using WebApiProject.Models;
+using WebApiProject.Models.Wrappers;
 
 namespace WebApiProject.Controllers
 {
@@ -23,39 +24,39 @@ namespace WebApiProject.Controllers
 
         //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
-        public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id",string search="")
+        public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "")
         {
             var skip = (page - 1) * limit;
-            if (search=="")
+            if (search == "")
             {
                 var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
 
                 return await users.Skip(skip).Take(limit).ToArrayAsync();
             }
             else
-            { var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search)|| p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
-                
+            { var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search) || p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
+
                 return await users.Skip(skip).Take(limit).ToArrayAsync();
             }
+
+        }
+
+        [HttpGet("{countResponse}")]
+        public UserModelInfoWrapper CountAndData()
+        {
+            //int count = _context.UserModels.Count();
+            UserModelInfoWrapper users = new UserModelInfoWrapper();
+            users.count = _context.UserModels.Count();
+            users.data = _context.UserModels.ToList();
+            return users;
+        }
+        [HttpGet("{count}")]
+        public int TotalRecords()
+        {
             
-            }
+            return _context.UserModels.Count();
+        }
 
-         
-        //[HttpGet]
-        //public IList<UserModel> SearchUsers([FromBody]string search)
-        //{
-        //    var users = _context.UserModels.Where(x => x.Name.Equals(search)).ToList();
-        //    return users;
-
-
-        //}
-
-        //// GET: api/UserModels
-        //[HttpGet]
-        //public IEnumerable<UserModel> GetUsers()
-        //{
-        //    return _context.UserModels;
-        //}
 
         // GET: api/UserModels/5
         [HttpGet("{id}")]
