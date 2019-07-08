@@ -29,14 +29,8 @@ namespace WebApiProject.Controllers
         [Route( "GetAll")]
         public int GetCount()
         {
-            int count = _context.StudentRegisterations.Count();
-            count = count + 1;
-            return count;
+            return _context.StudentRegisterations.Count();
         }
-
-//        var count = context.Users
-//.Where(o => Convert.ToInt32(o.Id) == 1)
-//.Count();
 
         // GET: api/StudentRegisterations
         [HttpGet]
