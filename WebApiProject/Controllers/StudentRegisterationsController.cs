@@ -149,6 +149,8 @@ namespace WebApiProject.Controllers
 
         // Get: api/StudentRegisterations/id
 
+        [Route("GetAll")]
+        public 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentRegisteration([FromRoute] int id)
         {
