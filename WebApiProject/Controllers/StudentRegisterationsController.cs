@@ -13,20 +13,6 @@ using System.Net;
 
 
 
-/*
- using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Configuration.Ini;
-using WebApiProject.Data;
-using WebApiProject.Models;
-     */
-
 namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
@@ -40,27 +26,17 @@ namespace WebApiProject.Controllers
             _context = context;
 
         }
+        [Route( "GetAll")]
+        public int GetCount()
+        {
+            int count = _context.StudentRegisterations.Count();
+            count = count + 1;
+            return count;
+        }
 
-
-
-        //    if (!String.IsNullOrEmpty(searchData))
-        //    {
-        //        if (searchWith == "id"|)
-        //        {
-        //            users = users.Where(s => s.Id == Int32.Parse(searchData));
-        //        }
-        //        else
-        //        {
-        //            users = users.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
-        //        }
-        //    }
-        //    return await users.Skip(pageNo* pageSize).Take(pageSize).ToArrayAsync();
-        //}
-
-
-
-        //user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
-
+//        var count = context.Users
+//.Where(o => Convert.ToInt32(o.Id) == 1)
+//.Count();
 
         // GET: api/StudentRegisterations
         [HttpGet]
@@ -149,8 +125,6 @@ namespace WebApiProject.Controllers
 
         // Get: api/StudentRegisterations/id
 
-        [Route("GetAll")]
-        public 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentRegisteration([FromRoute] int id)
         {
