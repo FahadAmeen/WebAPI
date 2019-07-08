@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
-namespace WebApiProject.Data.Migrations
+namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190704052558_addedMovieTableOfFahad")]
-    partial class addedMovieTableOfFahad
+    [Migration("20190704095111_DBProdMig")]
+    partial class DBProdMig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,29 +35,6 @@ namespace WebApiProject.Data.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("WebApiProject.Models.Movie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("Director");
-
-                    b.Property<string>("Genre");
-
-                    b.Property<string>("Poster");
-
-                    b.Property<string>("ReleaseDate");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Movies");
-                });
-
             modelBuilder.Entity("WebApiProject.Models.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -73,6 +50,23 @@ namespace WebApiProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
+                });
+
+            modelBuilder.Entity("WebApiProject.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Category");
+
+                    b.Property<string>("Name");
+
+                    b.Property<double>("Price");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>

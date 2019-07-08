@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration.Ini;
 using WebApiProject.Data;
 using WebApiProject.Models;
 
@@ -19,14 +21,100 @@ namespace WebApiProject.Controllers
         public UsersController(DBContext context)
         {
             _context = context;
+          
         }
-        [Route("getAll")]
+       
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> GetUsers()
         {
             return _context.Users;
         }
+
+        //[HttpGet("GetAll")]
+        //public IEnumerable<User> GetUsers(int pageNo, int pageSize=5)
+        //{
+
+        //    pageNo = pageNo - 1;
+
+        //    return _context.Users.Skip(pageNo * pageSize).Take(pageSize);
+
+        //}
+
+        //[HttpGet("Sort")]
+        //public IEnumerable<User> GetUsers(string by, int pageNo=1, int pageSize = 5)
+        //{
+        //    pageNo = pageNo - 1;
+        //    by = by.ToLower();
+
+        //    var selectUsers = from s in _context.Users
+        //        select s;
+        //    switch (by)
+        //    {
+        //        case "id":
+        //            selectUsers = _context.Users.OrderBy(user => user.Id);
+        //            break;
+
+        //        case "name":
+        //            selectUsers = _context.Users.OrderBy(user => user.Name);
+        //            break;
+
+        //        case "employee_role":
+        //            selectUsers = _context.Users.OrderBy(user => user.Employe_Role);
+        //            break;
+
+        //        case "address":
+        //            selectUsers = _context.Users.OrderBy(user => user.Address);
+        //            break;
+
+        //        case "file":
+        //            selectUsers = _context.Users.OrderBy(user => user.File);
+        //            break;
+
+        //        default:
+        //            break;
+
+
+        //    }
+        //    return selectUsers.Skip(pageNo * pageSize).Take(pageSize);
+        //}
+
+
+        [HttpGet("GetAll")]
+        public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
+        {   //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
+            pageNo = pageNo - 1;
+
+            var users = _context.Users.OrderBy(p => EF.Property<object>(p, sortBy));
+
+            var selectUsers = from s in users select s;
+
+            if (!String.IsNullOrEmpty(forWord))
+            {
+                switch (inColumn)
+                {
+                    case "Id":
+                        selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
+                        break;
+
+                    default:
+                        selectUsers = selectUsers.Where(s => EF.Property<string>(s, inColumn).Contains(forWord));
+                        break;
+                }
+            }
+
+            if (pageNo > -1)
+            {
+                return await selectUsers.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
+            }
+            else
+            {
+                return await selectUsers.ToArrayAsync();
+            }
+
+        }
+
+
 
         // GET: api/Users/5
         [HttpGet("{id}")]
@@ -46,6 +134,7 @@ namespace WebApiProject.Controllers
 
             return Ok(user);
         }
+
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
