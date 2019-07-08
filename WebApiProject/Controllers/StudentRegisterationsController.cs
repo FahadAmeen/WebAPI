@@ -7,6 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
 using WebApiProject.Models;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration.Ini;
+using System.Net;
+
+
+
+/*
+ using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Configuration.Ini;
+using WebApiProject.Data;
+using WebApiProject.Models;
+     */
 
 namespace WebApiProject.Controllers
 {
@@ -19,71 +38,51 @@ namespace WebApiProject.Controllers
         public StudentRegisterationsController(DBContext context)
         {
             _context = context;
-           
+
         }
 
 
 
+        //    if (!String.IsNullOrEmpty(searchData))
+        //    {
+        //        if (searchWith == "id"|)
+        //        {
+        //            users = users.Where(s => s.Id == Int32.Parse(searchData));
+        //        }
+        //        else
+        //        {
+        //            users = users.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
+        //        }
+        //    }
+        //    return await users.Skip(pageNo* pageSize).Take(pageSize).ToArrayAsync();
+        //}
 
 
-//        var users = _context.Users.OrderBy(p => EF.Property<object>(p, sortBy));
 
-//        var selectUsers = from s in users select s;
+        //user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
 
-//                    if (!String.IsNullOrEmpty(forWord))
-//                    {
-//                        switch (inColumn)
-//                        {
-//                            case "Id":
-//                                selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
-//                                break;
-
-//                            default:
-//                                selectUsers = selectUsers.Where(s => EF.Property<string>(s, inColumn).Contains(forWord));
-//                                break;
-//                        }
-//}
-
-//                    if (pageNo > -1)
-//                    {
-//                        return await selectUsers.Skip(pageNo* pageSize).Take(pageSize).ToArrayAsync();
-//                    }
-//                    else
-//                    {
-//                        return await selectUsers.ToArrayAsync();
-//                    }
-
-//                }
 
         // GET: api/StudentRegisterations
         [HttpGet]
-        public async Task<IList<StudentRegisteration>> GetStudentRegisterations(int pageNo = 1, string searchWith = "id", string searchData = "1", string sortData = "id", int pageSize = 5)
+        public async Task<IEnumerable<StudentRegisteration>> GetStudentRegisterationsAsync(int pageNo = 1, string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5)
         {
+
             pageNo = pageNo - 1;
-            sortData = sortData.ToLower();
-            searchWith = searchWith.ToLower();
-
-            var user = _context.StudentRegisterations.OrderBy(p => EF.Property<string>(p, sortData));
-
-            var users = from s in _context.StudentRegisterations select s;
-
+            var user = from s in _context.StudentRegisterations select s;
+            user = _context.StudentRegisterations.OrderBy(s=>EF.Property<object>(s, sortData));
             if (!String.IsNullOrEmpty(searchData))
             {
-                if ((searchWith == "name") | (searchWith == "program") | searchWith == "detail" | (searchWith == "filename"))
+                if (searchWith == "Id" )
                 {
-                users = users.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
+                    user = user.Where(s => s.Id == Int32.Parse(searchData));
+                }
+                else
+                {
+                    user = user.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
                 }
             }
-            else
-            {
-                users = users.Where(s => s.Id == Int32.Parse(searchData));
-            }
-            return await users.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
+            return await user.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
         }
-       
-        
-        
-        //user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
 
         //    switch (sortData)
         //    {
@@ -145,7 +144,7 @@ namespace WebApiProject.Controllers
         //    else
         //        return null;
 
-        //    return user.Skip(pageNo* pageSize).Take(pageSize);
+        //    return user.Skip(pageNo * pageSize).Take(pageSize);
         //}
 
         // Get: api/StudentRegisterations/id
