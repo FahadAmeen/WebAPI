@@ -142,7 +142,7 @@ namespace BussinessLogic
             return "success";
         }
 
-        private bool UserModelExists(int id)
+        public bool UserModelExists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
         }

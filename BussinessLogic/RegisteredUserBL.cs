@@ -194,7 +194,7 @@ namespace BussinessLogic
             return "success";
         }
 
-        private bool RegisteredUserExists(int id)
+        public bool RegisteredUserExists(int id)
         {
             return _context.RegisteredUsers.Any(e => e.Id == id);
         }

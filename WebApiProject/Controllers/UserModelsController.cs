@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using BussinessLogic;
+using BussinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApiProject.Data;
-using WebApiProject.Models;
-using WebApiProject.Models.Wrappers;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WebApiProject.Controllers
 {
@@ -15,46 +12,32 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class UserModelsController : ControllerBase
     {
-        private readonly DBContext _context;
+        private readonly UserModelBL _userBl;
 
-        public UserModelsController(DBContext context)
+        public UserModelsController(UserModelBL userBl)
         {
-            _context = context;
+            _userBl = userBl;
         }
 
         //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
         public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "")
         {
-            var skip = (page - 1) * limit;
-            if (search == "")
-            {
-                var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
-
-                return await users.Skip(skip).Take(limit).ToArrayAsync();
-            }
-            else
-            { var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search) || p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
-
-                return await users.Skip(skip).Take(limit).ToArrayAsync();
-            }
+            return await _userBl.GetUsers(page, limit, sort, search);
 
         }
 
         [HttpGet("{countResponse}")]
         public UserModelInfoWrapper CountAndData()
         {
-            //int count = _context.UserModels.Count();
-            UserModelInfoWrapper users = new UserModelInfoWrapper();
-            users.count = _context.UserModels.Count();
-            users.data = _context.UserModels.ToList();
-            return users;
+           return _userBl.CountAndData();
+            
         }
         [HttpGet("{count}")]
         public int TotalRecords()
         {
-            
-            return _context.UserModels.Count();
+
+            return _userBl.TotalRecords();
         }
 
 
@@ -67,14 +50,16 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userModel = await _context.UserModels.FindAsync(id);
-
-            if (userModel == null)
+            try
             {
-                return NotFound();
-            }
+                await _userBl.GetUserModel(id);
 
-            return Ok(userModel);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
         }
 
         // PUT: api/UserModels/5
@@ -91,11 +76,11 @@ namespace WebApiProject.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(userModel).State = EntityState.Modified;
+            
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _userBl.PutUserModel(id,userModel);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -121,8 +106,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.UserModels.Add(userModel);
-            await _context.SaveChangesAsync();
+            await _userBl.PostUserModel(userModel);
 
             return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
         }
@@ -136,21 +120,21 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var userModel = await _context.UserModels.FindAsync(id);
-            if (userModel == null)
+            try
             {
-                return NotFound();
+                await _userBl.DeleteUserModel(id);
+
+                return Ok();
             }
-
-            _context.UserModels.Remove(userModel);
-            await _context.SaveChangesAsync();
-
-            return Ok(userModel);
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         private bool UserModelExists(int id)
         {
-            return _context.UserModels.Any(e => e.Id == id);
+            return _userBl.UserModelExists(id);
         }
     }
 }

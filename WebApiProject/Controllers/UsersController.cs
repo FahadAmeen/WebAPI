@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using BussinessLogic;
+using BussinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Configuration.Ini;
-using WebApiProject.Data;
-using WebApiProject.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WebApiProject.Controllers
 {
@@ -16,62 +12,34 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly DBContext _context;
+        private readonly UserBL _userBl;
 
-        public UsersController(DBContext context)
+        public UsersController(UserBL userBl)
         {
-            _context = context;
-          
+            _userBl = userBl;
+
         }
        
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> GetUsers()
         {
-            return _context.Users;
+            return _userBl.GetUsers();
         }
 
         // GET: api/Users
         [HttpGet("GetCount")]
         public int GetCount()
         {
-            return _context.Users.Count();
+            return _userBl.GetCount();
         }
 
         [HttpGet("GetAll")]
         public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
         {   //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
-            pageNo = pageNo - 1;
-
-            var users = _context.Users.OrderBy(p => EF.Property<object>(p, sortBy));
-
-            var selectUsers = from s in users select s;
-
-            if (!String.IsNullOrEmpty(forWord))
-            {
-                switch (inColumn)
-                {
-                    case "Id":
-                        selectUsers = selectUsers.Where(s => s.Id == Int32.Parse(forWord));
-                        break;
-
-                    default:
-                        selectUsers = selectUsers.Where(s => EF.Property<string>(s, inColumn).Contains(forWord));
-                        break;
-                }
-            }
-
-            if (pageNo > -1)
-            {
-                return await selectUsers.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
-            }
-            else
-            {
-                return await selectUsers.ToArrayAsync();
-            }
+            return await _userBl.Search(inColumn, forWord, sortBy, pageNo);
 
         }
-
 
 
         // GET: api/Users/5
@@ -83,14 +51,16 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            try
             {
-                return NotFound();
-            }
+                await _userBl.GetUser(id);
 
-            return Ok(user);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
 
@@ -108,11 +78,11 @@ namespace WebApiProject.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+           
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _userBl.PutUser(id, user);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -138,8 +108,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _userBl.PostUser(user);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -153,21 +122,21 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                await _userBl.DeleteUser(id);
+
+                return Ok();
             }
-
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return Ok(user);
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            return _userBl.UserExists(id);
         }
     }
 }

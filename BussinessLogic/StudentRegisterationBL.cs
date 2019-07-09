@@ -129,7 +129,7 @@ namespace BussinessLogic
             return "success";
         }
 
-        private bool StudentRegisterationExists(int id)
+        public bool StudentRegisterationExists(int id)
         {
             return _context.StudentRegisterations.Any(e => e.Id == id);
         }

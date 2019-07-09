@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using BussinessLogic;
+using BussinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApiProject.Data;
-using WebApiProject.Models;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Configuration.Ini;
-using System.Net;
-
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 
 namespace WebApiProject.Controllers
@@ -19,17 +13,17 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class StudentRegisterationsController : ControllerBase
     {
-        private readonly DBContext _context;
+        private readonly StudentRegisterationBL _userBL;
 
-        public StudentRegisterationsController(DBContext context)
+        public StudentRegisterationsController(StudentRegisterationBL userBl)
         {
-            _context = context;
+            _userBL = userBl;
 
         }
         [Route( "GetAll")]
         public int GetCount()
         {
-            return _context.StudentRegisterations.Count();
+            return _userBL.GetCount();
         }
 
         // GET: api/StudentRegisterations
@@ -37,87 +31,10 @@ namespace WebApiProject.Controllers
         public async Task<IEnumerable<StudentRegisteration>> GetStudentRegisterationsAsync(int pageNo = 1, string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5)
         {
 
-            pageNo = pageNo - 1;
-            var user = from s in _context.StudentRegisterations select s;
-            user = _context.StudentRegisterations.OrderBy(s=>EF.Property<object>(s, sortData));
-            if (!String.IsNullOrEmpty(searchData))
-            {
-                if (searchWith == "Id" )
-                {
-                    user = user.Where(s => s.Id == Int32.Parse(searchData));
-                }
-                else
-                {
-                    user = user.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
-                }
-            }
-            return await user.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
+            return await _userBL.GetStudentRegisterationsAsync(pageNo, searchWith, searchData, sortData, pageSize);
         }
 
-        //    switch (sortData)
-        //    {
-        //        case "id":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
-        //            break;
-
-        //        case "name":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Name);
-        //            break;
-
-        //        case "program":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Program);
-        //            break;
-
-        //        case "detail":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Detail);
-        //            break;
-        //        case "filename":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Filename);
-        //            break;
-        //        default:
-        //            break;
-
-        //    }
-        //    if (!String.IsNullOrEmpty(searchData))
-        //    {
-
-        //        searchWith = searchWith.ToLower();
-
-        //        switch (searchWith)
-        //        {
-        //            case "id":
-        //                user = user.Where(s => s.Id == Int32.Parse(searchData));
-        //                break;
-
-        //            case "name":
-        //                user = user.Where(s => s.Name.Contains(searchData));
-        //                break;
-
-
-        //            case "detail":
-        //                user = user.Where(s => s.Detail.Contains(searchData));
-        //                break;
-
-        //            case "program":
-        //                user = user.Where(s => s.Program.Contains(searchData));
-        //                break;
-
-        //            case "filename":
-        //                user = user.Where(s => s.Filename.Contains(searchData));
-        //                break;
-
-        //            default:
-        //                break;
-        //        }
-
-        //    }
-        //    else
-        //        return null;
-
-        //    return user.Skip(pageNo * pageSize).Take(pageSize);
-        //}
-
-        // Get: api/StudentRegisterations/id
+        
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentRegisteration([FromRoute] int id)
@@ -127,14 +44,16 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var studentRegisteration = await _context.StudentRegisterations.FindAsync(id);
-
-            if (studentRegisteration == null)
+            try
             {
-                return NotFound();
-            }
+                await _userBL.GetStudentRegisteration(id);
 
-            return Ok(studentRegisteration);
+            }
+            catch (Exception EX_NAME)
+            {
+                return BadRequest(ModelState);
+            }
+            return Ok();
         }
 
         // PUT: api/StudentRegisterations/5
@@ -151,11 +70,9 @@ namespace WebApiProject.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(studentRegisteration).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await _userBL.PutStudentRegisteration(id, studentRegisteration);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -181,8 +98,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.StudentRegisterations.Add(studentRegisteration);
-            await _context.SaveChangesAsync();
+            await _userBL.PostStudentRegisteration(studentRegisteration);
 
             return CreatedAtAction("GetStudentRegisteration", new { id = studentRegisteration.Id }, studentRegisteration);
         }
@@ -196,21 +112,20 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            var studentRegisteration = await _context.StudentRegisterations.FindAsync(id);
-            if (studentRegisteration == null)
+            try
             {
-                return NotFound();
+                await _userBL.DeleteStudentRegisteration(id);
+                return Ok();
             }
-
-            _context.StudentRegisterations.Remove(studentRegisteration);
-            await _context.SaveChangesAsync();
-
-            return Ok(studentRegisteration);
+            catch (Exception e)
+            {
+                return BadRequest(ModelState);
+            }
         }
 
         private bool StudentRegisterationExists(int id)
         {
-            return _context.StudentRegisterations.Any(e => e.Id == id);
+            return _userBL.StudentRegisterationExists(id);
         }
     }
 }
