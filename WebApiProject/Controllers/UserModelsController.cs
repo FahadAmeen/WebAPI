@@ -24,37 +24,7 @@ namespace WebApiProject.Controllers
             
             _context = context;
         }
-
-
-
-        // [HttpGet]
-        // [Produces("application/xml")]
-        // public IEnumerable<UserModel> GetRecords()
-        // {
-        ////     System.Web.Http.GlobalConfiguration.Configuration.Formatters.JsonFormatter.MediaTypeMappings.Add(
-        ////new System.Net.Http.Formatting.QueryStringMapping("type", "json", new MediaTypeHeaderValue("application/json")));
-
-        ////     System.Web.Http.GlobalConfiguration.Configuration.Formatters.XmlFormatter.MediaTypeMappings.Add(
-        ////         new System.Net.Http.Formatting.QueryStringMapping("type", "xml", new MediaTypeHeaderValue("application/xml")));
-
-        //     return _context.UserModels;
-        // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
         //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
         public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "",string type="json")
@@ -93,7 +63,7 @@ namespace WebApiProject.Controllers
                 return await users.Skip(skip).Take(limit).ToArrayAsync();
             }
         }
-        [HttpGet("{TotalcountResponse}")]
+        [HttpGet("TotalcountResponse")]
         public UserModelInfoWrapper CountAndData()
         {
             //int count = _context.UserModels.Count();
@@ -102,13 +72,12 @@ namespace WebApiProject.Controllers
             users.data = _context.UserModels.ToList();
             return users;
         }
-        [HttpGet("{count}")]
+        [HttpGet("count")]
         public int TotalRecords()
         {
 
             return _context.UserModels.Count();
         }
-
 
         // GET: api/UserModels/5
         [HttpGet("{id}")]

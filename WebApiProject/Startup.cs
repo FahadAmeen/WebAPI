@@ -19,6 +19,7 @@ using WebApiProject.Models;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Net.Http.Formatting;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApiProject
 {
@@ -42,6 +43,7 @@ namespace WebApiProject
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddXmlSerializerFormatters();
+            //services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "UserModel Api", Version = "v1" }); });
 
 
         }
@@ -57,9 +59,15 @@ namespace WebApiProject
             {
                 app.UseHsts();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseMvc();
+            //app.UseSwagger();
+
+            //app.UseSwaggerUI(c => {
+            //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api for UserModels");
+
+            //});
             //PersonData.Initialize(app);
             //EmployeeData.Initialize(app);
             UserModelData.Initialize(app);
