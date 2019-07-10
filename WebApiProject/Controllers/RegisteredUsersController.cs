@@ -60,7 +60,7 @@ namespace WebApiProject.Controllers
                 //return user.Skip(pageIndex * pageSize).Take(pageSize);
             }
 
-            if (!String.IsNullOrEmpty(val))
+            if (String.IsNullOrEmpty(val))
             {
                 col = col.ToLower();
                 switch (col)
