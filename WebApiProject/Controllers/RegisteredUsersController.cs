@@ -25,7 +25,7 @@ namespace WebApiProject.Controllers
 
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         [HttpGet("GetAll")]
-        public IEnumerable<RegisteredUser> Indexx(int pageIndex=1, string sortOrder = "no", string col="name",string val = "userName",
+        public IEnumerable<RegisteredUser> Indexx(int pageIndex=1, string sortOrder = "name", string col="name",string val = "userName",
             int pageSize = 10)
         {
             pageIndex = pageIndex - 1;
