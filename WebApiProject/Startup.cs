@@ -16,6 +16,9 @@ using WebApiProject.Data;
 //to register the dbContext 
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Models;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Net.Http.Formatting;
 
 namespace WebApiProject
 {
@@ -26,6 +29,7 @@ namespace WebApiProject
             Configuration = configuration;
             // Configuration.GetSection("ConnectionStrings"); //this will get whole section from appsettings
             Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+           
         }
 
         public IConfiguration Configuration { get; }
@@ -33,12 +37,13 @@ namespace WebApiProject
         // This method gets called by the runtime. Use this method to add services to the container... registers new services
         public void ConfigureServices(IServiceCollection services)
         {
-           // services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList")); ;
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddXmlSerializerFormatters();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline... adds middleware components
@@ -61,8 +66,7 @@ namespace WebApiProject
             StudentRegisterationsData.Initialize(app);
             UserData.Initialize(app);
             RegisteredUserData.Initialize(app);
-            //MovieData.Initialize(app);
-           // PersonData.Initialize(app);
         }
+        
     }
 }
