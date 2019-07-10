@@ -19,8 +19,8 @@ namespace WebApiProject.Data
             base.OnModelCreating(builder);
         }
 
-        public DbSet<Person> Persons { get; set; }
-        public DbSet<Employee> Employees { get; set; }
+        //public DbSet<Person> Persons { get; set; }
+        //public DbSet<Employee> Employees { get; set; }
         public DbSet<UserModel> UserModels { get; set; }
         public DbSet<StudentRegisteration> StudentRegisterations { get; set; }
         public DbSet<User> Users { get; set; }
@@ -29,9 +29,9 @@ namespace WebApiProject.Data
         public DbSet<RegisteredUser> RegisteredUsers { get; set; }
         //public DbSet<Movie> Movies { get; set; }
 
-        public DbSet<ToDoItem> ToDoItems { get; set; }
-        public object Mapping { get; internal set; }
-        public DbSet<Record> Records { get; set; }
+        //public DbSet<ToDoItem> ToDoItems { get; set; }
+        //public object Mapping { get; internal set; }
+        //public DbSet<Record> Records { get; set; }
 
     }
 }
