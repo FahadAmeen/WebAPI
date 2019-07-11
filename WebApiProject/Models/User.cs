@@ -8,6 +8,16 @@ namespace WebApiProject.Models
 {
     public class User
     {
+       
+        public User()
+        {
+
+        }
+        public User(object v)
+        {
+            
+        }
+
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }

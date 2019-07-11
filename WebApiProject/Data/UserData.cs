@@ -43,8 +43,7 @@ namespace WebApiProject.Data
                 new User {Name="userName11",Employe_Role="role",Address="address",File="UserFile"},
                 new User {Name="userName12",Employe_Role="role",Address="address",File="UserFile"},
                 new User {Name="userName13",Employe_Role="role",Address="address",File="UserFile"},
-
-
+                
             };
             return users;
         }
