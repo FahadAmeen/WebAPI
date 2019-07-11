@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
-
+using DataAccess;
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
