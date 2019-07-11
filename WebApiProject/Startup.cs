@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BussinessLogic;
+using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WebApiProject.Data;
-
 //to register the dbContext 
-using Microsoft.EntityFrameworkCore;
-using WebApiProject.Models;
 
 namespace WebApiProject
 {
@@ -39,6 +30,12 @@ namespace WebApiProject
 
             //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList")); ;
             services.AddMvc();
+            services.AddTransient<IUserModelBL, UserModelBL>();
+            services.AddTransient<IUserModelBL, RegisteredUserBL>();
+            services.AddTransient<IUserModelBL, StudentRegisterationBL>();
+            services.AddTransient<IUserModelBL, UserBL>();
+            
+            services.AddScoped<DbContext, DBContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline... adds middleware components
@@ -55,8 +52,8 @@ namespace WebApiProject
 
             app.UseHttpsRedirection();
             app.UseMvc();
-            PersonData.Initialize(app);
-            EmployeeData.Initialize(app);
+            //PersonData.Initialize(app);
+            //EmployeeData.Initialize(app);
             UserModelData.Initialize(app);
             StudentRegisterationsData.Initialize(app);
             UserData.Initialize(app);

@@ -9,7 +9,7 @@ using DataAccess;
 
 namespace BussinessLogic
 {
-    public class StudentRegisterationBL 
+    public class StudentRegisterationBL :IUserModelBL
     {
         private readonly DBContext _context;
 
@@ -18,12 +18,12 @@ namespace BussinessLogic
             _context = context;
 
         }
-        public int GetCount()
+        public int TotalRecords()
         {
             return _context.StudentRegisterations.Count();
         }
 
-        public async Task<IEnumerable<StudentRegisteration>> GetStudentRegisterationsAsync(int pageNo = 1, string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5)
+        public async Task<IList<object>> GetUsers(string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5,int pageNo = 1)
         {
 
             pageNo = pageNo - 1;
@@ -43,8 +43,25 @@ namespace BussinessLogic
             return await user.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
         }
 
+        public async Task<IList<object>> GetUsers(int page = 1, int limit = 5, string sort = "Id", string search = "")
+        {
+            var skip = (page - 1) * limit;
+            if (search == "")
+            {
+                var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
 
-        public async Task<StudentRegisteration> GetStudentRegisteration( int id)
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+            else
+            {
+                var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search) || p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
+
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+
+        }
+
+        public async Task<object> Get( int id)
         {
             var studentRegisteration=new StudentRegisteration();
 
@@ -62,9 +79,9 @@ namespace BussinessLogic
         }
 
         
-        public async Task<string> PutStudentRegisteration( int id, StudentRegisteration studentRegisteration)
+        public async Task<string> Put( int id, object user)
         {
-           
+            StudentRegisteration studentRegisteration = (StudentRegisteration) user;
 
             if (id != studentRegisteration.Id)
             {
@@ -79,7 +96,7 @@ namespace BussinessLogic
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StudentRegisterationExists(id))
+                if (!Exists(id))
                 {
                     return "fail";
                 }
@@ -93,8 +110,9 @@ namespace BussinessLogic
         }
 
       
-        public async Task<string> PostStudentRegisteration( StudentRegisteration studentRegisteration)
+        public async Task<string> Post( object user)
         {
+            StudentRegisteration studentRegisteration = (StudentRegisteration)user;
             try
             {
                 _context.StudentRegisterations.Add(studentRegisteration);
@@ -108,7 +126,7 @@ namespace BussinessLogic
             return "pass";
         }
 
-        public async Task<string> DeleteStudentRegisteration( int id)
+        public async Task<string> Delete( int id)
         {
             var studentRegisteration = await _context.StudentRegisterations.FindAsync(id);
             if (studentRegisteration == null)
@@ -129,7 +147,7 @@ namespace BussinessLogic
             return "success";
         }
 
-        public bool StudentRegisterationExists(int id)
+        public bool Exists(int id)
         {
             return _context.StudentRegisterations.Any(e => e.Id == id);
         }

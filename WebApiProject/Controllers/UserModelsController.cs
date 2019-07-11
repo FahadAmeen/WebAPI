@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApiProject.Controllers
@@ -12,32 +13,29 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class UserModelsController : ControllerBase
     {
-        private readonly UserModelBL _userBl;
+        private readonly IUserModelBL _userBL;
 
-        public UserModelsController(UserModelBL userBl)
+        public UserModelsController(IUserModelBL userBl)
         {
-            _userBl = userBl;
+            _userBL = userBl;
         }
 
         //api/UserModel?page=3&limit=8&sort=Id
         [HttpGet]
         public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "")
         {
-            return await _userBl.GetUsers(page, limit, sort, search);
+            var List_caster = await _userBL.GetUsers(page, limit, sort, search);
+            List<UserModel> enumerable_caster = List_caster.Cast<UserModel>().ToList();
+            return enumerable_caster;
 
         }
 
-        [HttpGet("{countResponse}")]
-        public UserModelInfoWrapper CountAndData()
-        {
-           return _userBl.CountAndData();
-            
-        }
+       
         [HttpGet("{count}")]
         public int TotalRecords()
         {
 
-            return _userBl.TotalRecords();
+            return _userBL.TotalRecords();
         }
 
 
@@ -52,7 +50,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.GetUserModel(id);
+                await _userBL.Get(id);
 
                 return Ok();
             }
@@ -80,7 +78,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.PutUserModel(id,userModel);
+                await _userBL.Put(id,userModel);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -106,7 +104,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userBl.PostUserModel(userModel);
+            await _userBL.Post(userModel);
 
             return CreatedAtAction("GetUserModel", new { id = userModel.Id }, userModel);
         }
@@ -122,7 +120,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.DeleteUserModel(id);
+                await _userBL.Delete(id);
 
                 return Ok();
             }
@@ -134,7 +132,7 @@ namespace WebApiProject.Controllers
 
         private bool UserModelExists(int id)
         {
-            return _userBl.UserModelExists(id);
+            return _userBL.Exists(id);
         }
     }
 }

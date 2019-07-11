@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BussinessObjects;
-using DataAccess;
 using WebApiProject.Models;
-
+using DataAccess;
 namespace WebApiProject.Data
 {
     public class StudentRegisterationsData

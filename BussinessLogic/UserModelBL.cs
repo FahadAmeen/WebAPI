@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BussinessLogic
 {
     
-    public class UserModelBL
+    public class UserModelBL :IUserModelBL
     {
         private readonly DBContext _context;
 
@@ -19,7 +19,7 @@ namespace BussinessLogic
         }
 
         
-        public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "")
+        public async Task<IList<object>> GetUsers(int page = 1, int limit = 5, string sort = "Id", string search = "")
         {
             var skip = (page - 1) * limit;
             if (search == "")
@@ -34,6 +34,25 @@ namespace BussinessLogic
                 return await users.Skip(skip).Take(limit).ToArrayAsync();
             }
 
+        }
+        public async Task<IList<object>> GetUsers(string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5, int pageNo = 1)
+        {
+
+            pageNo = pageNo - 1;
+            var user = from s in _context.StudentRegisterations select s;
+            user = _context.StudentRegisterations.OrderBy(s => EF.Property<object>(s, sortData));
+            if (!String.IsNullOrEmpty(searchData))
+            {
+                if (searchWith == "Id")
+                {
+                    user = user.Where(s => s.Id == Int32.Parse(searchData));
+                }
+                else
+                {
+                    user = user.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
+                }
+            }
+            return await user.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
         }
 
         public UserModelInfoWrapper CountAndData()
@@ -53,7 +72,7 @@ namespace BussinessLogic
 
         // GET: api/UserModels/5
        
-        public async Task<UserModel> GetUserModel( int id)
+        public async Task<object> Get( int id)
         {
             var userModel=new UserModel();
 
@@ -72,10 +91,10 @@ namespace BussinessLogic
         }
 
         // PUT: api/UserModels/5
-        public async Task<string> PutUserModel( int id, UserModel userModel)
+        public async Task<string> Put( int id, object user)
         {
+           UserModel userModel = (UserModel)user;
             
-
             if (id != userModel.Id)
             {
                 return"fail";
@@ -89,7 +108,7 @@ namespace BussinessLogic
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserModelExists(id))
+                if (!Exists(id))
                 {
                     return "fail";
                 }
@@ -103,8 +122,9 @@ namespace BussinessLogic
         }
 
         // POST: api/UserModels
-        public async Task<string> PostUserModel( UserModel userModel)
+        public async Task<string> Post(object user)
         {
+            UserModel userModel = (UserModel)user;
             try
             {
                 _context.UserModels.Add(userModel);
@@ -120,7 +140,7 @@ namespace BussinessLogic
 
         // DELETE: api/UserModels/5
         
-        public async Task<string> DeleteUserModel(int id)
+        public async Task<string> Delete(int id)
         {
 
             var userModel = await _context.UserModels.FindAsync(id);
@@ -142,7 +162,7 @@ namespace BussinessLogic
             return "success";
         }
 
-        public bool UserModelExists(int id)
+        public bool Exists(int id)
         {
             return _context.UserModels.Any(e => e.Id == id);
         }

@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using BussinessObjects;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Remotion.Linq.Clauses;
 
 
 namespace BussinessLogic
 {
-    
-    public class RegisteredUserBL
+
+    public class RegisteredUserBL : IUserModelBL
     {
         private readonly DBContext _context;
         public RegisteredUserBL(DBContext context)
@@ -22,8 +20,8 @@ namespace BussinessLogic
 
 
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
-        public IEnumerable<RegisteredUser> Indexx(int pageIndex = 1, string sortOrder = "no", string col = "", string val = "",
-            int pageSize = 5)
+        public async Task<IList<object>> GetUsers( string sortOrder = "no", string col = "", string val = "",
+            int pageSize = 5,int pageIndex = 1)
         {
             pageIndex = pageIndex - 1;
             sortOrder = sortOrder.ToLower();
@@ -95,34 +93,47 @@ namespace BussinessLogic
                 }
 
             }
-            return user.Skip(pageIndex * pageSize).Take(pageSize);
+            return await user.Skip(pageIndex * pageSize).Take(pageSize).ToArrayAsync();
+            
         }
 
-        // GET: api/RegisteredUsers
-        
-        public IEnumerable<RegisteredUser> GetRegisteredUsers()
+        public async Task<IList<object>> GetUsers(int page = 1, int limit = 5, string sort = "Id", string search = "")
         {
-            return _context.RegisteredUsers;
+            var skip = (page - 1) * limit;
+            if (search == "")
+            {
+                var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
+
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+            else
+            {
+                var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search) || p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
+
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+
         }
 
+
         // GET: api/RegisteredUsers
-        
-        public int GetCount()
+
+        public int TotalRecords()
         {
             return _context.RegisteredUsers.Count();
         }
         // GET: api/RegisteredUsers/5
         
-        public async Task<RegisteredUser> GetRegisteredUser( int id)
+        public async Task<object> Get( int id)
         {
             var registeredUser = await _context.RegisteredUsers.FindAsync(id);
             return registeredUser;
         }
 
         // PUT: api/RegisteredUsers/5
-        public async Task<string> PutRegisteredUser( int id, RegisteredUser registeredUser)
+        public async Task<string> Put( int id, object user)
         {
-          
+            RegisteredUser registeredUser = (RegisteredUser) user;
 
             if (id != registeredUser.Id)
             {
@@ -137,7 +148,7 @@ namespace BussinessLogic
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RegisteredUserExists(id))
+                if (!Exists(id))
                 {
                     return "fail";
                 }
@@ -152,9 +163,9 @@ namespace BussinessLogic
 
         // POST: api/RegisteredUsers
         
-        public async Task<string> PostRegisteredUser( RegisteredUser registeredUser)
+        public async Task<string> Post( object user)
         {
-
+            RegisteredUser registeredUser = (RegisteredUser)user;
             try
             {
                 _context.RegisteredUsers.Add(registeredUser);
@@ -172,7 +183,7 @@ namespace BussinessLogic
 
         // DELETE: api/RegisteredUsers/5
         
-        public async Task<string> DeleteRegisteredUser( int id)
+        public async Task<string> Delete( int id)
         {
          
             var registeredUser = await _context.RegisteredUsers.FindAsync(id);
@@ -194,7 +205,7 @@ namespace BussinessLogic
             return "success";
         }
 
-        public bool RegisteredUserExists(int id)
+        public bool Exists(int id)
         {
             return _context.RegisteredUsers.Any(e => e.Id == id);
         }

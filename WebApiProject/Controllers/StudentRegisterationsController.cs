@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 
@@ -13,9 +14,9 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class StudentRegisterationsController : ControllerBase
     {
-        private readonly StudentRegisterationBL _userBL;
+        private readonly IUserModelBL _userBL;
 
-        public StudentRegisterationsController(StudentRegisterationBL userBl)
+        public StudentRegisterationsController(IUserModelBL userBl)
         {
             _userBL = userBl;
 
@@ -23,7 +24,7 @@ namespace WebApiProject.Controllers
         [Route( "GetAll")]
         public int GetCount()
         {
-            return _userBL.GetCount();
+            return _userBL.TotalRecords();
         }
 
         // GET: api/StudentRegisterations
@@ -31,7 +32,9 @@ namespace WebApiProject.Controllers
         public async Task<IEnumerable<StudentRegisteration>> GetStudentRegisterationsAsync(int pageNo = 1, string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5)
         {
 
-            return await _userBL.GetStudentRegisterationsAsync(pageNo, searchWith, searchData, sortData, pageSize);
+            var List_caster = await _userBL.GetUsers(sortData, searchWith, searchData, pageSize, pageNo);
+            IEnumerable<StudentRegisteration> enumerable_caster = List_caster.Cast<StudentRegisteration>().ToList();
+            return enumerable_caster;
         }
 
         
@@ -46,7 +49,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBL.GetStudentRegisteration(id);
+                await _userBL.Get(id);
 
             }
             catch (Exception EX_NAME)
@@ -72,7 +75,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBL.PutStudentRegisteration(id, studentRegisteration);
+                await _userBL.Put(id, studentRegisteration);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -98,7 +101,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userBL.PostStudentRegisteration(studentRegisteration);
+            await _userBL.Post(studentRegisteration);
 
             return CreatedAtAction("GetStudentRegisteration", new { id = studentRegisteration.Id }, studentRegisteration);
         }
@@ -114,7 +117,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBL.DeleteStudentRegisteration(id);
+                await _userBL.Delete(id);
                 return Ok();
             }
             catch (Exception e)
@@ -125,7 +128,7 @@ namespace WebApiProject.Controllers
 
         private bool StudentRegisterationExists(int id)
         {
-            return _userBL.StudentRegisterationExists(id);
+            return _userBL.Exists(id);
         }
     }
 }

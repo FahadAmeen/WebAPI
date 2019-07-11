@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebApiProject.Controllers
@@ -12,32 +13,29 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly UserBL _userBl;
+        private readonly IUserModelBL _userBl;
 
-        public UsersController(UserBL userBl)
+        public UsersController(IUserModelBL userBl)
         {
             _userBl = userBl;
 
         }
        
-        // GET: api/Users
-        [HttpGet]
-        public IEnumerable<User> GetUsers()
-        {
-            return _userBl.GetUsers();
-        }
+        
 
         // GET: api/Users
         [HttpGet("GetCount")]
         public int GetCount()
         {
-            return _userBl.GetCount();
+            return _userBl.TotalRecords();
         }
 
         [HttpGet("GetAll")]
         public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
-        {   //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
-            return await _userBl.Search(inColumn, forWord, sortBy, pageNo);
+        {
+            var List_caster = await _userBl.GetUsers(inColumn, forWord, sortBy, pageNo, pageSize);
+            List<User> enumerable_caster = List_caster.Cast<User>().ToList();
+            return enumerable_caster;
 
         }
 
@@ -53,7 +51,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.GetUser(id);
+                await _userBl.Get(id);
 
                 return Ok();
             }
@@ -82,7 +80,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.PutUser(id, user);
+                await _userBl.Put(id, user);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -108,7 +106,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userBl.PostUser(user);
+            await _userBl.Post(user);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -124,7 +122,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.DeleteUser(id);
+                await _userBl.Delete(id);
 
                 return Ok();
             }
@@ -136,7 +134,7 @@ namespace WebApiProject.Controllers
 
         private bool UserExists(int id)
         {
-            return _userBl.UserExists(id);
+            return _userBl.Exists(id);
         }
     }
 }

@@ -3,7 +3,9 @@ using BussinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using DataAccess;
 
 namespace WebApiProject.Controllers
 {
@@ -11,8 +13,10 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class RegisteredUsersController : ControllerBase
     {
-        private readonly RegisteredUserBL _userBl;
-        public RegisteredUsersController(RegisteredUserBL userBl)
+
+
+        private readonly IUserModelBL _userBl;
+        public RegisteredUsersController(IUserModelBL userBl)
         {
             _userBl = userBl;
         }
@@ -20,24 +24,21 @@ namespace WebApiProject.Controllers
 
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         [HttpGet("GetAll")]
-        public IEnumerable<RegisteredUser> Indexx(int pageIndex = 1, string sortOrder = "no", string col = "", string val = "",
+        public async Task<IEnumerable<RegisteredUser>> Indexx(int pageIndex = 1, string sortOrder = "no", string col = "", string val = "",
             int pageSize = 5)
         {
-            return _userBl.Indexx(pageIndex, sortOrder, col, val, pageSize);
+            var List_caster = await _userBl.GetUsers(sortOrder, col , val, pageIndex, pageSize);
+            IEnumerable<RegisteredUser> enumerable_caster = List_caster.Cast<RegisteredUser>().ToList();
+            return enumerable_caster;
+
         }
 
-        // GET: api/RegisteredUsers
-        [HttpGet]
-        public IEnumerable<RegisteredUser> GetRegisteredUsers()
-        {
-            return _userBl.GetRegisteredUsers();
-        }
 
         // GET: api/RegisteredUsers
         [HttpGet("GetCount")]
         public int GetCount()
         {
-            return _userBl.GetCount();
+            return _userBl.TotalRecords();
         }
 
 
@@ -47,7 +48,7 @@ namespace WebApiProject.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRegisteredUser([FromRoute] int id)
         {
-            RegisteredUser tempUser = await _userBl.GetRegisteredUser(id);
+            RegisteredUser tempUser = (RegisteredUser) await _userBl.Get(id);
 
             return Ok(tempUser);
         }
@@ -58,7 +59,7 @@ namespace WebApiProject.Controllers
         {
             try
             {
-                await _userBl.PutRegisteredUser(id, registeredUser);
+                await _userBl.Put(id, registeredUser);
             }
             catch (Exception e)
             {
@@ -79,7 +80,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.PostRegisteredUser(registeredUser);
+                await _userBl.Post(registeredUser);
             }
             catch (Exception e)
             {
@@ -102,7 +103,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.DeleteRegisteredUser(id);
+                await _userBl.Delete(id);
                 return Ok();
             }
             catch (Exception e)
@@ -113,7 +114,7 @@ namespace WebApiProject.Controllers
 
         private bool RegisteredUserExists(int id)
         {
-            return _userBl.RegisteredUserExists(id);
+            return _userBl.Exists(id);
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿using System;
+﻿using BussinessObjects;
+using DataAccess;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BussinessObjects;
-using DataAccess;
-using Microsoft.EntityFrameworkCore;
 
 namespace BussinessLogic
 {
-    
-    public class UserBL 
+
+    public class UserBL :IUserModelBL
     {
         private readonly DBContext _context;
 
@@ -20,20 +20,20 @@ namespace BussinessLogic
         }
        
         // GET: api/Users
-        public IEnumerable<User> GetUsers()
+        public IEnumerable<object> Get()
         {
             return _context.Users;
         }
 
         // GET: api/Users
        
-        public int GetCount()
+        public int TotalRecords()
         {
             return _context.Users.Count();
         }
 
       
-        public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
+        public async Task<IList<object>> GetUsers(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
         {   //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
             pageNo = pageNo - 1;
 
@@ -66,10 +66,26 @@ namespace BussinessLogic
 
         }
 
+        public async Task<IList<object>> GetUsers(int page = 1, int limit = 5, string sort = "Id", string search = "")
+        {
+            var skip = (page - 1) * limit;
+            if (search == "")
+            {
+                var users = _context.UserModels.OrderBy(p => EF.Property<object>(p, sort));
+
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+            else
+            {
+                var users = _context.UserModels.Where(p => p.Id.ToString().Contains(search) || p.Name.Contains(search) || p.Email.Contains(search) || p.Comments.Contains(search) || p.Choice.Contains(search)).OrderBy(p => EF.Property<object>(p, sort)); //True version
+
+                return await users.Skip(skip).Take(limit).ToArrayAsync();
+            }
+
+        }
 
 
-        
-        public async Task<User> GetUser( int id)
+        public async Task<object> Get( int id)
         {
 
             var user=new User();
@@ -90,16 +106,16 @@ namespace BussinessLogic
 
 
         
-        public async Task<string> PutUser( int id, User user)
+        public async Task<string> Put( int id, object user)
         {
-            
+            User nUser = (User) user;
 
-            if (id != user.Id)
+            if (id != nUser.Id)
             {
                 return "fail";
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(nUser).State = EntityState.Modified;
 
             try
             {
@@ -107,7 +123,7 @@ namespace BussinessLogic
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!Exists(id))
                 {
                     return "fail";
                 }
@@ -122,13 +138,13 @@ namespace BussinessLogic
 
         // POST: api/Users
        
-        public async Task<string> PostUser( User user)
+        public async Task<string> Post( object user)
         {
-
+            User nUser = (User)user;
 
             try
             {
-                _context.Users.Add(user);
+                _context.Users.Add(nUser);
                 await _context.SaveChangesAsync();
 
             }
@@ -141,7 +157,7 @@ namespace BussinessLogic
 
         // DELETE: api/Users/5
         
-        public async Task<string> DeleteUser( int id)
+        public async Task<string> Delete( int id)
         {
 
             var user = await _context.Users.FindAsync(id);
@@ -163,7 +179,7 @@ namespace BussinessLogic
             return "success";
         }
 
-        public bool UserExists(int id)
+        public bool Exists(int id)
         {
             return _context.Users.Any(e => e.Id == id);
         }
