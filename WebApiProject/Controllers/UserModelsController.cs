@@ -24,28 +24,49 @@ namespace WebApiProject.Controllers
             
             _context = context;
         }
-        
+
         //api/UserModel?page=3&limit=8&sort=Id
+        //[HttpGet]
+        //public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "",string type="json")
+        //{
+        //    var _page=page;
+        //    var _limit=limit;
+        //    var _sort=sort;
+        //    var _search=search;
+        //    var _type=type;
+        //    switch (type)
+        //    {
+        //        case ("json"):
+        //            Request.Headers["Accept"] = "application/json";
+        //            return await Get(_page, _limit, _sort, _search, _type = "json");
+        //        case ("xml"):
+        //            Request.Headers["Accept"] = "application/xml";
+        //            return await Get(_page, _limit, _sort, _search, _type = "xml");
+        //        default:
+        //            return await Get();
+        //    }
+
+        //}
+
         [HttpGet]
-        public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "",string type="json")
+        public async Task<IList<UserModel>> GetUsers(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "")
         {
-            var _page=page;
-            var _limit=limit;
-            var _sort=sort;
-            var _search=search;
-            var _type=type;
-            switch (type)
-            {
-                case ("json"):
-                    Request.Headers["Accept"] = "application/json";
-                    return await Get(_page, _limit, _sort, _search, _type = "json");
-                case ("xml"):
-                    Request.Headers["Accept"] = "application/xml";
-                    return await Get(_page, _limit, _sort, _search, _type = "xml");
-                default:
-                    return await Get();
-            }
-            
+            var _page = page;
+            var _limit = limit;
+            var _sort = sort;
+            var _search = search;
+            //switch (type)
+            //{
+            //    case ("json"):
+            //        Request.Headers["Accept"] = "application/json";
+            //        return await Get(_page, _limit, _sort, _search, _type = "json");
+            //    case ("xml"):
+            //        Request.Headers["Accept"] = "application/xml";
+            //        return await Get(_page, _limit, _sort, _search, _type = "xml");
+            //    default:
+            //        return await Get();
+            //}
+            return await Get(_page, _limit, _sort, _search);
         }
         public async Task<IList<UserModel>> Get(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "", string type = "json")
         {

@@ -68,12 +68,11 @@ namespace WebApiProject
             //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Api for UserModels");
 
             //});
-            //PersonData.Initialize(app);
-            //EmployeeData.Initialize(app);
             UserModelData.Initialize(app);
             StudentRegisterationsData.Initialize(app);
             UserData.Initialize(app);
             RegisteredUserData.Initialize(app);
+            MovieData.Initialize(app);
         }
         
     }

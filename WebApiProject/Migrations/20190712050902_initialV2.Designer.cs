@@ -9,8 +9,8 @@ using WebApiProject.Data;
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190704122137_StudentRegistration")]
-    partial class StudentRegistration
+    [Migration("20190712050902_initialV2")]
+    partial class initialV2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,51 +20,27 @@ namespace WebApiProject.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("WebApiProject.Models.Employee", b =>
+            modelBuilder.Entity("WebApiProject.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Designation");
+                    b.Property<string>("Description");
 
-                    b.Property<int>("Salary");
+                    b.Property<string>("Director");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Genre");
 
-                    b.ToTable("Employees");
-                });
+                    b.Property<string>("Poster");
 
-            modelBuilder.Entity("WebApiProject.Models.Person", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("ReleaseDate");
 
-                    b.Property<int>("Age");
-
-                    b.Property<string>("Gender");
-
-                    b.Property<string>("Name");
+                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Persons");
-                });
-
-            modelBuilder.Entity("WebApiProject.Models.Record", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("Salary");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Records");
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>
