@@ -35,7 +35,7 @@ namespace BussinessLogic
             }
 
         }
-        public async Task<IList<object>> GetUsers(string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5, int pageNo = 1)
+        public async Task<IList<object>> GetUsers(string searchWith = "Id", string searchData = "", string sortData = "Id", int pageNo = 1, int pageSize = 5)
         {
 
             pageNo = pageNo - 1;

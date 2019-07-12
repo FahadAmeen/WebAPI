@@ -21,7 +21,7 @@ namespace BussinessLogic
 
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         public async Task<IList<object>> GetUsers( string sortOrder = "no", string col = "", string val = "",
-            int pageSize = 5,int pageIndex = 1)
+            int pageIndex = 1,int pageSize = 5)
         {
             pageIndex = pageIndex - 1;
             sortOrder = sortOrder.ToLower();

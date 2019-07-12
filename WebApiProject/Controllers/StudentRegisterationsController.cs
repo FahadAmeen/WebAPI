@@ -14,17 +14,17 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class StudentRegisterationsController : ControllerBase
     {
-        private readonly IUserModelBL _userBL;
+        private readonly Func<string, IUserModelBL> _userBl;
 
-        public StudentRegisterationsController(IUserModelBL userBl)
+        public StudentRegisterationsController(Func<string, IUserModelBL> userBl)
         {
-            _userBL = userBl;
+            _userBl = userBl;
 
         }
         [Route( "GetAll")]
         public int GetCount()
         {
-            return _userBL.TotalRecords();
+            return _userBl("StudentRegisteration").TotalRecords();
         }
 
         // GET: api/StudentRegisterations
@@ -32,7 +32,7 @@ namespace WebApiProject.Controllers
         public async Task<IEnumerable<StudentRegisteration>> GetStudentRegisterationsAsync(int pageNo = 1, string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5)
         {
 
-            var List_caster = await _userBL.GetUsers(sortData, searchWith, searchData, pageSize, pageNo);
+            var List_caster = await _userBl("StudentRegisteration").GetUsers( searchWith, searchData, sortData, pageNo,pageSize);
             IEnumerable<StudentRegisteration> enumerable_caster = List_caster.Cast<StudentRegisteration>().ToList();
             return enumerable_caster;
         }
@@ -49,7 +49,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBL.Get(id);
+                await _userBl("StudentRegisteration").Get(id);
 
             }
             catch (Exception EX_NAME)
@@ -75,7 +75,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBL.Put(id, studentRegisteration);
+                await _userBl("StudentRegisteration").Put(id, studentRegisteration);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -101,7 +101,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userBL.Post(studentRegisteration);
+            await _userBl("StudentRegisteration").Post(studentRegisteration);
 
             return CreatedAtAction("GetStudentRegisteration", new { id = studentRegisteration.Id }, studentRegisteration);
         }
@@ -117,7 +117,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBL.Delete(id);
+                await _userBl("StudentRegisteration").Delete(id);
                 return Ok();
             }
             catch (Exception e)
@@ -128,7 +128,7 @@ namespace WebApiProject.Controllers
 
         private bool StudentRegisterationExists(int id)
         {
-            return _userBL.Exists(id);
+            return _userBl("StudentRegisteration").Exists(id);
         }
     }
 }

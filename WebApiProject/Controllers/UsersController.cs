@@ -13,9 +13,9 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserModelBL _userBl;
+        private readonly Func<string, IUserModelBL> _userBl;
 
-        public UsersController(IUserModelBL userBl)
+        public UsersController(Func<string, IUserModelBL> userBl)
         {
             _userBl = userBl;
 
@@ -27,13 +27,13 @@ namespace WebApiProject.Controllers
         [HttpGet("GetCount")]
         public int GetCount()
         {
-            return _userBl.TotalRecords();
+            return _userBl("User").TotalRecords();
         }
 
         [HttpGet("GetAll")]
         public async Task<IList<User>> Search(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
         {
-            var List_caster = await _userBl.GetUsers(inColumn, forWord, sortBy, pageNo, pageSize);
+            var List_caster = await _userBl("User").GetUsers(inColumn, forWord, sortBy, pageNo, pageSize);
             List<User> enumerable_caster = List_caster.Cast<User>().ToList();
             return enumerable_caster;
 
@@ -51,7 +51,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.Get(id);
+                await _userBl("User").Get(id);
 
                 return Ok();
             }
@@ -80,7 +80,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.Put(id, user);
+                await _userBl("User").Put(id, user);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -106,7 +106,7 @@ namespace WebApiProject.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userBl.Post(user);
+            await _userBl("User").Post(user);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -122,7 +122,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.Delete(id);
+                await _userBl("User").Delete(id);
 
                 return Ok();
             }
@@ -134,7 +134,7 @@ namespace WebApiProject.Controllers
 
         private bool UserExists(int id)
         {
-            return _userBl.Exists(id);
+            return _userBl("User").Exists(id);
         }
     }
 }

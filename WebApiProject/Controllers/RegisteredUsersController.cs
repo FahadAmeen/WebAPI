@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DataAccess;
 
 namespace WebApiProject.Controllers
 {
@@ -15,8 +14,8 @@ namespace WebApiProject.Controllers
     {
 
 
-        private readonly IUserModelBL _userBl;
-        public RegisteredUsersController(IUserModelBL userBl)
+        private readonly Func<string, IUserModelBL> _userBl;
+        public RegisteredUsersController(Func<string, IUserModelBL> userBl)
         {
             _userBl = userBl;
         }
@@ -27,7 +26,7 @@ namespace WebApiProject.Controllers
         public async Task<IEnumerable<RegisteredUser>> Indexx(int pageIndex = 1, string sortOrder = "no", string col = "", string val = "",
             int pageSize = 5)
         {
-            var List_caster = await _userBl.GetUsers(sortOrder, col , val, pageIndex, pageSize);
+            var List_caster = await _userBl("RegisteredUser").GetUsers(sortOrder, col , val, pageIndex, pageSize);
             IEnumerable<RegisteredUser> enumerable_caster = List_caster.Cast<RegisteredUser>().ToList();
             return enumerable_caster;
 
@@ -38,7 +37,7 @@ namespace WebApiProject.Controllers
         [HttpGet("GetCount")]
         public int GetCount()
         {
-            return _userBl.TotalRecords();
+            return _userBl("RegisteredUser").TotalRecords();
         }
 
 
@@ -48,7 +47,7 @@ namespace WebApiProject.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRegisteredUser([FromRoute] int id)
         {
-            RegisteredUser tempUser = (RegisteredUser) await _userBl.Get(id);
+            RegisteredUser tempUser = (RegisteredUser) await _userBl("RegisteredUser").Get(id);
 
             return Ok(tempUser);
         }
@@ -59,7 +58,7 @@ namespace WebApiProject.Controllers
         {
             try
             {
-                await _userBl.Put(id, registeredUser);
+                await _userBl("RegisteredUser").Put(id, registeredUser);
             }
             catch (Exception e)
             {
@@ -80,7 +79,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.Post(registeredUser);
+                await _userBl("RegisteredUser").Post(registeredUser);
             }
             catch (Exception e)
             {
@@ -103,7 +102,7 @@ namespace WebApiProject.Controllers
 
             try
             {
-                await _userBl.Delete(id);
+                await _userBl("RegisteredUser").Delete(id);
                 return Ok();
             }
             catch (Exception e)
@@ -114,7 +113,7 @@ namespace WebApiProject.Controllers
 
         private bool RegisteredUserExists(int id)
         {
-            return _userBl.Exists(id);
+            return _userBl("RegisteredUser").Exists(id);
         }
     }
 }

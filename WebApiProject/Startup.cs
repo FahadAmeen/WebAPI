@@ -1,4 +1,6 @@
-﻿using BussinessLogic;
+﻿using System;
+using System.Collections.Generic;
+using BussinessLogic;
 using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,11 +32,29 @@ namespace WebApiProject
 
             //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList")); ;
             services.AddMvc();
-            services.AddTransient<IUserModelBL, UserModelBL>();
-            services.AddTransient<IUserModelBL, RegisteredUserBL>();
-            services.AddTransient<IUserModelBL, StudentRegisterationBL>();
-            services.AddTransient<IUserModelBL, UserBL>();
-            
+
+            services.AddTransient<UserModelBL>();
+            services.AddTransient<RegisteredUserBL>();
+            services.AddTransient<StudentRegisterationBL>();
+            services.AddTransient<UserBL>();
+
+            services.AddTransient<Func<string, IUserModelBL>>(serviceProvider => key =>
+            {
+                switch (key)
+                {
+                    case "UserModel":
+                        return serviceProvider.GetService<UserModelBL>();
+                    case "RegisteredUser":
+                        return serviceProvider.GetService<RegisteredUserBL>();
+                    case "StudentRegisteration":
+                        return serviceProvider.GetService<StudentRegisterationBL>();
+                    case "User":
+                        return serviceProvider.GetService<UserBL>();
+                    default:
+                        throw new KeyNotFoundException(); // or maybe return null, up to you
+                }
+            });
+
             services.AddScoped<DbContext, DBContext>();
         }
 
