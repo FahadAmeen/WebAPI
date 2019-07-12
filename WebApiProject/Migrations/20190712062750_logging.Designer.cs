@@ -9,8 +9,8 @@ using WebApiProject.Data;
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190704095111_DBProdMig")]
-    partial class DBProdMig
+    [Migration("20190712062750_logging")]
+    partial class logging
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,6 +19,23 @@ namespace WebApiProject.Migrations
                 .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("WebApiProject.ErrorLog.LoggingError", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Created");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MyLog");
+                });
 
             modelBuilder.Entity("WebApiProject.Models.Employee", b =>
                 {
@@ -52,21 +69,19 @@ namespace WebApiProject.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("WebApiProject.Models.Product", b =>
+            modelBuilder.Entity("WebApiProject.Models.Record", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Category");
-
                     b.Property<string>("Name");
 
-                    b.Property<double>("Price");
+                    b.Property<int>("Salary");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Records");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.RegisteredUser", b =>
@@ -109,6 +124,27 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("StudentRegisterations");
+                });
+
+            modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("File");
+
+                    b.Property<bool>("IsComplete");
+
+                    b.Property<string>("Priority");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ToDoItems");
                 });
 
             modelBuilder.Entity("WebApiProject.Models.User", b =>

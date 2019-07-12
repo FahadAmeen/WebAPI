@@ -10,8 +10,7 @@ using WebApiProject.Models;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration.Ini;
 using System.Net;
-
-
+using WebApiProject.ErrorLog;
 
 namespace WebApiProject.Controllers
 {
@@ -19,11 +18,13 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class StudentRegisterationsController : ControllerBase
     {
+        private LogNLog _logg;
         private readonly DBContext _context;
 
         public StudentRegisterationsController(DBContext context)
         {
             _context = context;
+            _logg = new LogNLog(context);
 
         }
         [Route( "GetAll")]
@@ -33,9 +34,6 @@ namespace WebApiProject.Controllers
        
         }
 
-//        var count = context.Users
-//.Where(o => Convert.ToInt32(o.Id) == 1)
-//.Count();
 
         // GET: api/StudentRegisterations
         [HttpGet]
@@ -45,101 +43,54 @@ namespace WebApiProject.Controllers
             pageNo = pageNo - 1;
             var user = from s in _context.StudentRegisterations select s;
             user = _context.StudentRegisterations.OrderBy(s=>EF.Property<object>(s, sortData));
-            if (!String.IsNullOrEmpty(searchData))
+            try
             {
-                if (searchWith == "Id" )
+                if (!String.IsNullOrEmpty(searchData))
                 {
-                    user = user.Where(s => s.Id == Int32.Parse(searchData));
-                }
-                else
-                {
-                    user = user.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
+                    if (searchWith == "Id")
+                    {
+                        user = user.Where(s => s.Id == Int32.Parse(searchData));
+                    }
+                    else
+                    {
+                        user = user.Where(s => EF.Property<string>(s, searchWith).Contains(searchData));
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logg.SetLog(ex.ToString());
+            }
+
             return await user.Skip(pageNo * pageSize).Take(pageSize).ToArrayAsync();
         }
-
-        //    switch (sortData)
-        //    {
-        //        case "id":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Id);
-        //            break;
-
-        //        case "name":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Name);
-        //            break;
-
-        //        case "program":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Program);
-        //            break;
-
-        //        case "detail":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Detail);
-        //            break;
-        //        case "filename":
-        //            user = _context.StudentRegisterations.OrderBy(StudentRegisteration => StudentRegisteration.Filename);
-        //            break;
-        //        default:
-        //            break;
-
-        //    }
-        //    if (!String.IsNullOrEmpty(searchData))
-        //    {
-
-        //        searchWith = searchWith.ToLower();
-
-        //        switch (searchWith)
-        //        {
-        //            case "id":
-        //                user = user.Where(s => s.Id == Int32.Parse(searchData));
-        //                break;
-
-        //            case "name":
-        //                user = user.Where(s => s.Name.Contains(searchData));
-        //                break;
-
-
-        //            case "detail":
-        //                user = user.Where(s => s.Detail.Contains(searchData));
-        //                break;
-
-        //            case "program":
-        //                user = user.Where(s => s.Program.Contains(searchData));
-        //                break;
-
-        //            case "filename":
-        //                user = user.Where(s => s.Filename.Contains(searchData));
-        //                break;
-
-        //            default:
-        //                break;
-        //        }
-
-        //    }
-        //    else
-        //        return null;
-
-        //    return user.Skip(pageNo * pageSize).Take(pageSize);
-        //}
-
+        
         // Get: api/StudentRegisterations/id
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentRegisteration([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
+           
+            try
             {
-                return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                 var studentRegisteration = await _context.StudentRegisterations.FindAsync(id);
+
+                if (studentRegisteration == null)
+                {
+                    return NotFound();
+                }
+                return Ok(studentRegisteration);
             }
-
-            var studentRegisteration = await _context.StudentRegisterations.FindAsync(id);
-
-            if (studentRegisteration == null)
+            catch(Exception ex)
             {
-                return NotFound();
+                _logg.SetLog(ex.ToString());
             }
-
-            return Ok(studentRegisteration);
+            return NotFound();
         }
 
         // PUT: api/StudentRegisterations/5
@@ -162,16 +113,22 @@ namespace WebApiProject.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
                 if (!StudentRegisterationExists(id))
                 {
+                    _logg.SetLog(ex.ToString());
                     return NotFound();
+                   
+
                 }
                 else
                 {
+                    _logg.SetLog(ex.ToString());
                     return NoContent();
+                   
                 }
+                
             }
 
             return NoContent();
@@ -217,5 +174,18 @@ namespace WebApiProject.Controllers
         {
             return _context.StudentRegisterations.Any(e => e.Id == id);
         }
+        [HttpDelete("dellog/{datetime}")]
+        public ActionResult<IEnumerable<string>> Delete(string datetime)
+        { //Must give the date format in dd-mm-yy time am or pm
+
+            _logg.Delete(datetime);
+            return new string[] { "Deleted", datetime };
+        }
+        [HttpGet("Getlog")]
+        public List<LoggingError> Get()
+        {
+            return _logg.GetLog();
+        }
+
     }
 }

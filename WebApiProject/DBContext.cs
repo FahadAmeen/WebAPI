@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using WebApiProject.ErrorLog;
 using WebApiProject.Models;
 
 namespace WebApiProject.Data
@@ -32,6 +33,6 @@ namespace WebApiProject.Data
         public DbSet<ToDoItem> ToDoItems { get; set; }
         public object Mapping { get; internal set; }
         public DbSet<Record> Records { get; set; }
-
+        public DbSet<LoggingError> MyLog { get; set; }
     }
 }

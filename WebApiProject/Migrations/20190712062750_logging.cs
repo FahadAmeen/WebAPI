@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApiProject.Migrations
 {
-    public partial class StudentRegistration : Migration
+    public partial class logging : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,21 @@ namespace WebApiProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MyLog",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true),
+                    Created = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MyLog", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +100,23 @@ namespace WebApiProject.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ToDoItems",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Title = table.Column<string>(nullable: true),
+                    IsComplete = table.Column<bool>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Priority = table.Column<string>(nullable: true),
+                    File = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ToDoItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserModels",
                 columns: table => new
                 {
@@ -124,6 +156,9 @@ namespace WebApiProject.Migrations
                 name: "Employees");
 
             migrationBuilder.DropTable(
+                name: "MyLog");
+
+            migrationBuilder.DropTable(
                 name: "Persons");
 
             migrationBuilder.DropTable(
@@ -134,6 +169,9 @@ namespace WebApiProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "StudentRegisterations");
+
+            migrationBuilder.DropTable(
+                name: "ToDoItems");
 
             migrationBuilder.DropTable(
                 name: "UserModels");
