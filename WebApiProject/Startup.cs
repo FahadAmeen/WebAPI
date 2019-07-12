@@ -17,7 +17,7 @@ namespace WebApiProject
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            // Configuration.GetSection("ConnectionStrings"); //this will get whole section from appsettings
+          
             Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         }
 
@@ -26,11 +26,11 @@ namespace WebApiProject
         // This method gets called by the runtime. Use this method to add services to the container... registers new services
         public void ConfigureServices(IServiceCollection services)
         {
-           // services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+          
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList")); ;
+            
             services.AddMvc();
 
             services.AddTransient<UserModelBL>();
@@ -51,7 +51,7 @@ namespace WebApiProject
                     case "User":
                         return serviceProvider.GetService<UserBL>();
                     default:
-                        throw new KeyNotFoundException(); // or maybe return null, up to you
+                        throw new KeyNotFoundException(); 
                 }
             });
 
@@ -72,14 +72,12 @@ namespace WebApiProject
 
             app.UseHttpsRedirection();
             app.UseMvc();
-            //PersonData.Initialize(app);
-            //EmployeeData.Initialize(app);
+            
             UserModelData.Initialize(app);
             StudentRegisterationsData.Initialize(app);
             UserData.Initialize(app);
             RegisteredUserData.Initialize(app);
-            //MovieData.Initialize(app);
-           // PersonData.Initialize(app);
+           
         }
     }
 }
