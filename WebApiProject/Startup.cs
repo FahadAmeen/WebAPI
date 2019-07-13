@@ -44,6 +44,7 @@ namespace WebApiProject
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline... adds middleware components
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+          //  loggerFactory.AddProvider(new CustomLoggerProvider(new CustomLoggerConfiguration()));
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

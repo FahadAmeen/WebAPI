@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration.Ini;
 using System.Net;
 using WebApiProject.ErrorLog;
+using Microsoft.Extensions.Logging;
 
 namespace WebApiProject.Controllers
 {
@@ -18,6 +19,7 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class StudentRegisterationsController : ControllerBase
     {
+        private ILogger logger;
         private LogNLog _logg;
         private readonly DBContext _context;
 
@@ -88,7 +90,7 @@ namespace WebApiProject.Controllers
             }
             catch(Exception ex)
             {
-                _logg.SetLog(ex.ToString());
+               // _logg.SetLog(ex.ToString());
             }
             return NotFound();
         }
@@ -117,6 +119,7 @@ namespace WebApiProject.Controllers
             {
                 if (!StudentRegisterationExists(id))
                 {
+                  //logger.LogError(ex.ToString());
                     _logg.SetLog(ex.ToString());
                     return NotFound();
                    
@@ -175,16 +178,33 @@ namespace WebApiProject.Controllers
             return _context.StudentRegisterations.Any(e => e.Id == id);
         }
         [HttpDelete("dellog/{datetime}")]
-        public ActionResult<IEnumerable<string>> Delete(string datetime)
+        public ActionResult<IEnumerable<string>> Delete(string datetime , string type)
         { //Must give the date format in dd-mm-yy time am or pm
 
-            _logg.Delete(datetime);
-            return new string[] { "Deleted", datetime };
+            _logg.Delete(datetime, type);
+            return new string[] { "Deleted" };
         }
         [HttpGet("Getlog")]
         public List<LoggingError> Get()
         {
             return _logg.GetLog();
+        }
+        [HttpGet("Try")]
+        public ActionResult<IEnumerable<string>> DividedByZero()
+        {
+            try
+            {
+                int a = 2, b = 0, c;
+                c = a / b;
+            }
+            catch (DivideByZeroException ex)
+            {
+                logger.LogError(ex.ToString());
+                // _logg.SetLog(ex.ToString());
+
+            }
+
+            return new string[] { "value3", "value5" };
         }
 
     }
