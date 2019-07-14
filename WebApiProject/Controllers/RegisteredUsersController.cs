@@ -22,7 +22,7 @@ namespace WebApiProject.Controllers
             _context = context;
         }
 
-
+        //https://localhost:44347/api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=id&col=name&val=userName&pageSize=16
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         [HttpGet("GetAll")]
         public IEnumerable<RegisteredUser> Indexx(int pageIndex=1, string sortOrder = "name", string col="name",string val = "userName",
@@ -60,7 +60,7 @@ namespace WebApiProject.Controllers
                 //return user.Skip(pageIndex * pageSize).Take(pageSize);
             }
 
-            if (String.IsNullOrEmpty(val))
+            if (!String.IsNullOrEmpty(val))
             {
                 col = col.ToLower();
                 switch (col)
