@@ -22,10 +22,10 @@ namespace WebApiProject.Controllers
             _context = context;
         }
 
-        //https://localhost:44347/api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=id&col=name&val=userName&pageSize=16
+
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         [HttpGet("GetAll")]
-        public IEnumerable<RegisteredUser> Indexx(int pageIndex=1, string sortOrder = "name", string col="name",string val = "userName",
+        public IEnumerable<RegisteredUser> Indexx(int pageIndex, string sortOrder = "no", string col="name",string val = "userName",
             int pageSize = 10)
         {
             pageIndex = pageIndex - 1;
@@ -110,14 +110,6 @@ namespace WebApiProject.Controllers
         {
             return _context.RegisteredUsers;
         }
-
-        // GET: api/RegisteredUsers
-        [HttpGet("GetCount")]
-        public int GetCount()
-        {
-            return _context.RegisteredUsers.Count();
-        }
-
 
         //api/RegisteredUsers/name?val=userName
         [Microsoft.AspNetCore.Mvc.HttpGet()]

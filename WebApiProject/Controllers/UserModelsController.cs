@@ -93,7 +93,7 @@ namespace WebApiProject.Controllers
                 return await users.Skip(skip).Take(limit).ToArrayAsync();
             }
         }
-        [HttpGet("{TotalcountResponse}")]
+        [HttpGet("TotalcountResponse")]
         public UserModelInfoWrapper CountAndData()
         {
             //int count = _context.UserModels.Count();
@@ -102,7 +102,7 @@ namespace WebApiProject.Controllers
             users.data = _context.UserModels.ToList();
             return users;
         }
-        [HttpGet("{count}")]
+        [HttpGet("count")]
         public int TotalRecords()
         {
 
