@@ -10,9 +10,9 @@ namespace WebApiProject.ErrorLog
         List<LoggingError> GetLog();
         void SetLog(string Message);
 
-        void Delete(string entity, string type);
+        string Delete(string entity, string type);
         void InfoLog(string Message);
         void WarnLog(string Message);
-
+        bool DataExists(string entity, string type);
     }
 }

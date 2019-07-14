@@ -72,7 +72,6 @@ namespace WebApiProject.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentRegisteration([FromRoute] int id)
         {
-           
             try
             {
                 if (!ModelState.IsValid)
@@ -90,7 +89,7 @@ namespace WebApiProject.Controllers
             }
             catch(Exception ex)
             {
-               // _logg.SetLog(ex.ToString());
+                _logg.SetLog(ex.ToString());
             }
             return NotFound();
         }
@@ -177,35 +176,38 @@ namespace WebApiProject.Controllers
         {
             return _context.StudentRegisterations.Any(e => e.Id == id);
         }
-        [HttpDelete("dellog/{datetime}")]
+
+
+        [HttpDelete("dellog")]
         public ActionResult<IEnumerable<string>> Delete(string datetime , string type)
         { //Must give the date format in dd-mm-yy time am or pm
 
             _logg.Delete(datetime, type);
-            return new string[] { "Deleted" };
+            return new string[] { " "};
         }
+
         [HttpGet("Getlog")]
         public List<LoggingError> Get()
         {
             return _logg.GetLog();
         }
-        [HttpGet("Try")]
-        public ActionResult<IEnumerable<string>> DividedByZero()
-        {
-            try
-            {
-                int a = 2, b = 0, c;
-                c = a / b;
-            }
-            catch (DivideByZeroException ex)
-            {
-                logger.LogError(ex.ToString());
-                // _logg.SetLog(ex.ToString());
+        //[HttpGet("Try")]
+        //public ActionResult<IEnumerable<string>> DividedByZero()
+        //{
+        //    try
+        //    {
+        //        int a = 2, b = 0, c;
+        //        c = a / b;
+        //    }
+        //    catch (DivideByZeroException ex)
+        //    {
+        //        //logger.LogError(ex.ToString());
+        //        _logg.SetLog(ex.ToString());
 
-            }
+        //    }
 
-            return new string[] { "value3", "value5" };
-        }
+        //    return new string[] { "value3", "value5" };
+        //}
 
     }
 }

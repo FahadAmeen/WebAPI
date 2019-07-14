@@ -9,7 +9,7 @@ using WebApiProject.Data;
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190712062750_logging")]
+    [Migration("20190713153434_logging")]
     partial class logging
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
