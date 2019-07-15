@@ -11,8 +11,8 @@ namespace WebApiProject.ErrorLog
         void SetLog(string Message);
 
         string Delete(string entity, string type);
-        void InfoLog(string Message);
-        void WarnLog(string Message);
+        void InfoLog(string Message,int info);
+        void WarnLog(object info);
         bool DataExists(string entity, string type);
     }
 }

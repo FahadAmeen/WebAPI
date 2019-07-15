@@ -1,0 +1,53 @@
+﻿@model IEnumerable<MvcProject.Models.LogError>
+@{
+    ViewData["Title"] = "ShowData";
+}
+
+<body>
+    <input type="button" class="btn-primary" style="float:right;" value="Create" onclick="location.href='@Url.Action("userpage", "User")'" />
+    <div><h3>Users Data</h3></div>
+
+    <table class="table table-striped table-bordered" id="myTable">
+        <thead>
+            <tr>
+                <th onclick="location.href='@Url.Action("ShowData", "User")'">
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th onclick="location.href='@Url.Action("ShowData", "User",new {sort  = "Name", pageno=@ViewBag.PageToLoad})'">
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th onclick="location.href='@Url.Action("ShowData", "User",new {sort  = "Email", pageno=@ViewBag.PageToLoad})'">
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th onclick="location.href='@Url.Action("ShowData", "User",new {sort  = "Comments", pageno=@ViewBag.PageToLoad})'">
+                    @Html.DisplayNameFor(model => model.Created)
+                </th>
+                </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete User", "DeleteUser", new { id = item.Created })
+                </td>
+            </tr>
+             }
+                </tbody>
+        </table>
+
+</body>
+

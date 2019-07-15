@@ -19,7 +19,7 @@ namespace WebApiProject.Controllers
     [ApiController]
     public class StudentRegisterationsController : ControllerBase
     {
-        private ILogger logger;
+        
         private LogNLog _logg;
         private readonly DBContext _context;
 
@@ -163,6 +163,7 @@ namespace WebApiProject.Controllers
             var studentRegisteration = await _context.StudentRegisterations.FindAsync(id);
             if (studentRegisteration == null)
             {
+                _logg.WarnLog(id);
                 return NotFound();
             }
 
@@ -178,8 +179,8 @@ namespace WebApiProject.Controllers
         }
 
 
-        [HttpDelete("dellog")]
-        public ActionResult<IEnumerable<string>> Delete(string datetime , string type)
+        [HttpDelete("{datetime}/{type}")]
+        public ActionResult<IEnumerable<string>> Delete([FromRoute] string datetime , [FromRoute] string type)
         { //Must give the date format in dd-mm-yy time am or pm
 
             _logg.Delete(datetime, type);
@@ -191,23 +192,23 @@ namespace WebApiProject.Controllers
         {
             return _logg.GetLog();
         }
-        //[HttpGet("Try")]
-        //public ActionResult<IEnumerable<string>> DividedByZero()
-        //{
-        //    try
-        //    {
-        //        int a = 2, b = 0, c;
-        //        c = a / b;
-        //    }
-        //    catch (DivideByZeroException ex)
-        //    {
-        //        //logger.LogError(ex.ToString());
-        //        _logg.SetLog(ex.ToString());
+        [HttpGet("Try")]
+        public ActionResult<IEnumerable<string>> DividedByZero()
+        {
+            try
+            {
+                int a = 2, b = 0, c;
+                c = a / b;
+            }
+            catch (DivideByZeroException ex)
+            {
+                //logger.LogError(ex.ToString());
+                _logg.SetLog(ex.ToString());
 
-        //    }
+            }
 
-        //    return new string[] { "value3", "value5" };
-        //}
+            return new string[] { "value3", "value5" };
+        }
 
     }
 }

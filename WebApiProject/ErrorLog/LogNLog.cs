@@ -8,7 +8,6 @@ namespace WebApiProject.ErrorLog
 {
     public class LogNLog:ILog
     {
-
         private DBContext _context;
         public LogNLog(DBContext context)
         {
@@ -28,20 +27,13 @@ namespace WebApiProject.ErrorLog
         { 
             //  bool b = _context.MyLog.Where(r => r.Created.Contains(ee) && r.Type.Contains(type));
 
-              //var _dateTime = _context.MyLog.Where(r => r.Created.Contains(ee) && r.Type.Contains(type) );
-            if (!DataExists(entity, type))
-            {
-                return new string[] { "Content Not Found" };
-
-            }
-            else
-            {
+          
                 string ee = entity.Replace('-', '/');
                 var _dateTime = _context.MyLog.Where(r => r.Created.Contains(ee) && r.Type.Contains(type));
                 _context.MyLog.RemoveRange(_dateTime);
                 _context.SaveChanges();
                 return new string[] { "Deleted" };
-            }
+           
 
         }
       public bool DataExists(string entity, string type)
@@ -60,7 +52,7 @@ namespace WebApiProject.ErrorLog
             _context.MyLog.Add(logging);
             _context.SaveChanges();
         }
-        public void InfoLog(string Message)
+        public void InfoLog(string Message,int info)
         {
             LoggingError logging = new LoggingError
             {
@@ -71,18 +63,26 @@ namespace WebApiProject.ErrorLog
             _context.MyLog.Add(logging);
             _context.SaveChanges();
         }
-        public void WarnLog(string Message)
+        public void WarnLog(object info)
         {
-            LoggingError logging = new LoggingError
+            LoggingError logging = new LoggingError();
+
+            if (info.ToString() == "1" || info.ToString() == "2" || info.ToString() == "3" || info.ToString() == "4" || info.ToString() == "5" ||
+                info.ToString() == "6" || info.ToString() == "7" || info.ToString() == "8" || info.ToString() == "9" ||
+                info.ToString() == "0")
             {
-                Type = "Warn",
-                Description = Message,
-                Created = DateTime.Now.ToString()
-            };
+                logging.Description = "Not Found ";
+            }
+            else
+            {
+                logging.Description = info.ToString();
+            }
+            logging.Type = "Warn";
+            logging.Created = DateTime.Now.ToString();
+                       
             _context.MyLog.Add(logging);
             _context.SaveChanges();
         }
-
         string ILog.Delete(string entity, string type)
         {
             throw new NotImplementedException();

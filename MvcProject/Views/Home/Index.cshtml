@@ -1,0 +1,56 @@
+﻿@model IEnumerable<MvcProject.Models.LogError>
+@{
+
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" id="bootstrap-css">
+<link rel="StyleSheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+
+<link rel="stylesheet" type="text/css" href="~/css/TableStyle.css" />
+<div class="container" align="center">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+
+                    @Html.ActionLink("Delete", "DeleteLog","Home", new { datetime = item.Created , type =item.Type})
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+
+</div>
+<br><br>

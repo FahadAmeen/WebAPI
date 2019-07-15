@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\netcoreapp2.1\MvcProject.deps.json" />
+    <Content Include="bin\Debug\netcoreapp2.1\MvcProject.runtimeconfig.dev.json" />
+    <Content Include="bin\Debug\netcoreapp2.1\MvcProject.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebApiProject\WebApiProject.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\netcoreapp2.1\MvcProject.dll" />
+    <None Include="bin\Debug\netcoreapp2.1\MvcProject.pdb" />
+    <None Include="bin\Debug\netcoreapp2.1\MvcProject.Views.dll" />
+    <None Include="bin\Debug\netcoreapp2.1\MvcProject.Views.pdb" />
+    <None Include="bin\Debug\netcoreapp2.1\WebApiProject.dll" />
+    <None Include="bin\Debug\netcoreapp2.1\WebApiProject.pdb" />
+  </ItemGroup>
+
+</Project>
