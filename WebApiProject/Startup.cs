@@ -15,6 +15,7 @@ using WebApiProject.Data;
 
 //to register the dbContext 
 using Microsoft.EntityFrameworkCore;
+using WebApiProject.Helper_classes;
 using WebApiProject.Models;
 
 namespace WebApiProject
@@ -29,10 +30,18 @@ namespace WebApiProject
         }
 
         public IConfiguration Configuration { get; }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         // This method gets called by the runtime. Use this method to add services to the container... registers new services
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowCredentials();
+                    });
+            });
             // services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -42,6 +51,7 @@ namespace WebApiProject
 
             //adding a single object of cache
             services.AddMemoryCache();
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline... adds middleware components
@@ -58,7 +68,8 @@ namespace WebApiProject
 
             app.UseHttpsRedirection();
             app.UseMvc();
-            PersonData.Initialize(app);
+            app.UseCors(MyAllowSpecificOrigins);
+           // PersonData.Initialize(app);
             EmployeeData.Initialize(app);
             UserModelData.Initialize(app);
             StudentRegisterationsData.Initialize(app);

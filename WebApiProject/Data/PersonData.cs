@@ -15,7 +15,7 @@ namespace WebApiProject.Data
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<DBContext>();
-                context.Database.EnsureCreated();
+                //context.Database.EnsureCreated();
                 //context.Database.Migrate();
 
                 // Look for any ailments

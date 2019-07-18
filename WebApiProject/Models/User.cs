@@ -13,10 +13,7 @@ namespace WebApiProject.Models
         {
 
         }
-        public User(object v)
-        {
-            
-        }
+        
 
         [Key]
         public int Id { get; set; }
