@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BussinessObjects;
 
@@ -16,6 +17,7 @@ namespace BussinessLogic
         Task<string> Post(object user);
         Task<string> Delete(int id);
         bool Exists(int id);
+        IEnumerable<Object> GetPermissions();
 
         IList<object> GetAllUsers(string sortOrder = "no", string col = "", string val = "",
             int pageIndex = 1, int pageSize = 5);

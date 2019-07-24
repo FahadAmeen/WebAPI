@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApiProject.Context;
 
 namespace WebApiProject.Controllers
 {
@@ -31,6 +32,14 @@ namespace WebApiProject.Controllers
             IEnumerable<RegisteredUser> enumerable_caster = List_caster.Cast<RegisteredUser>().ToList();
             return enumerable_caster;
 
+        }
+
+        [HttpGet("GetPermission")]
+        public async Task<IEnumerable<Permission>> GetPermissions()
+        {
+            var List_caster = _userBl("RegisteredUser").GetPermissions();
+            IEnumerable<Permission> enumerable_caster = List_caster.Cast<Permission>().ToList();
+            return enumerable_caster;
         }
 
 

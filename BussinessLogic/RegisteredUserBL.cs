@@ -18,7 +18,11 @@ namespace BussinessLogic
             _context = context;
         }
 
-
+        public IEnumerable<Object> GetPermissions()
+        {
+            var perm = _context.Permissions;
+            return perm;
+        }
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
         public IList<object> GetAllUsers( string sortOrder = "no", string col = "", string val = "",
             int pageIndex = 1,int pageSize = 5)

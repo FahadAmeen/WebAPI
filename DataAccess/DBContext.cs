@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using BussinessObjects;
+using WebApiProject.Context;
 
 namespace DataAccess
 {
@@ -31,6 +32,7 @@ namespace DataAccess
 
         //public DbSet<ToDoItem> ToDoItems { get; set; }
         public object Mapping { get; internal set; }
+        public DbSet<Permission> Permissions { get; set; }
         //public DbSet<Record> Records { get; set; }
 
     }

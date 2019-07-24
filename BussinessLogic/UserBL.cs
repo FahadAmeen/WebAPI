@@ -188,5 +188,10 @@ namespace BussinessLogic
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<object> GetPermissions()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
