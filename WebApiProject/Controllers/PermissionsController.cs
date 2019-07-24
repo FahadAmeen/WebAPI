@@ -22,7 +22,7 @@ namespace WebApiProject.Controllers
         }
 
         // GET: api/Permissions
-        [HttpGet]
+        [HttpGet("GetAllPages")]
         public IEnumerable<Permission> GetPermission()
         {
             return _context.Permission;

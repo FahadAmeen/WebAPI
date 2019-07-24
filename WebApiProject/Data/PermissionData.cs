@@ -32,7 +32,7 @@ namespace WebApiProject.Data
             List<Permission> permissionList = new List<Permission>() {
                 new Permission {Pagename = "home", PageURL = "http://localhost:4200/home",HasPermission = false},
                 new Permission {Pagename = "movies", PageURL = "http://localhost:4200",HasPermission = true},
-                new Permission {Pagename = "upcoming", PageURL = "http://localhost:4200/upcoming",HasPermission = false},
+                new Permission {Pagename = "ranking", PageURL = "http://localhost:4200/ranking",HasPermission = false},
             };
             return permissionList;
         }
