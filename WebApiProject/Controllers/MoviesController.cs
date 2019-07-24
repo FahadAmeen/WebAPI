@@ -58,6 +58,7 @@ namespace WebApiProject.Controllers
             movies.data = _context.Movies.ToList();
             return movies;
         }
+        
 
 
         [HttpGet("count")]

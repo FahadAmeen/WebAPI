@@ -83,6 +83,7 @@ namespace WebApiProject
             UserData.Initialize(app);
             RegisteredUserData.Initialize(app);
             MovieData.Initialize(app);
+            PermissionData.Initialize(app);
         }
         
     }
