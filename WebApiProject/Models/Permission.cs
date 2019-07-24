@@ -13,5 +13,17 @@ namespace WebApiProject.Models
         public string Pagename { get; set; }
         public string PageURL { get; set; }
         public bool HasPermission { get; set; }
+
+        public Permission()
+        {
+        }
+
+        public Permission(int id, string pagename, string pageUrl, bool hasPermission)
+        {
+            Id = id;
+            Pagename = pagename;
+            PageURL = pageUrl;
+            HasPermission = hasPermission;
+        }
     }
 }
