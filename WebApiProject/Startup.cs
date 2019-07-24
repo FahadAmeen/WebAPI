@@ -44,7 +44,16 @@ namespace WebApiProject
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddXmlSerializerFormatters();
             //services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "UserModel Api", Version = "v1" }); });
-
+            // Add service and create Policy with options
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("CorsPolicy",
+            //        builder => builder
+            //            .SetIsOriginAllowed((host) => true)
+            //            .AllowAnyMethod()
+            //            .AllowAnyHeader()
+            //            .AllowCredentials());
+            //});
 
         }
 
@@ -62,6 +71,7 @@ namespace WebApiProject
             
             app.UseHttpsRedirection();
             app.UseMvc();
+                //app.UseCors("CorsPolicy");
             //app.UseSwagger();
 
             //app.UseSwaggerUI(c => {

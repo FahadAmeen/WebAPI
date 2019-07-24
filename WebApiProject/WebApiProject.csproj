@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="EntityFramework.SqlServerCompact" Version="6.2.0" />
     <PackageReference Include="MessagePack.AspNetCoreMvcFormatter" Version="1.7.3.7" />
     <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
@@ -23,6 +19,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

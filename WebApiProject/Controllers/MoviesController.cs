@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
 using WebApiProject.Models;
+using WebApiProject.Models.Wrappers;
 
 namespace WebApiProject.Controllers
 {
@@ -43,6 +48,25 @@ namespace WebApiProject.Controllers
             }
 
         }
+
+        [HttpGet("allData")]
+        public MovieInfoWrapper CountAndData()
+        {
+            //int count = _context.UserModels.Count();
+            MovieInfoWrapper movies = new MovieInfoWrapper();
+            movies.count = _context.Movies.Count();
+            movies.data = _context.Movies.ToList();
+            return movies;
+        }
+
+
+        [HttpGet("count")]
+        public int TotalRecords()
+        {
+
+            return _context.Movies.Count();
+        }
+
         public async Task<IList<Movie>> Get(int page = 1, int limit = int.MaxValue, string sort = "Id", string search = "", string type = "json")
         {
             var skip = (page - 1) * limit;
@@ -121,13 +145,22 @@ namespace WebApiProject.Controllers
             {
                 return BadRequest(ModelState);
             }
+            string poster = movie.Poster;
+            int pos = poster.IndexOf(',')+1;
+            int pos2 = poster.IndexOf('$');
+            string fileName = poster.Substring(0, pos2);
+            string base64 = poster.Remove(0, pos);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
+            byte[] imageBytes = Convert.FromBase64String(base64);
+            movie.Poster = filePath;
 
+            System.IO.File.WriteAllBytes(filePath, imageBytes);
+        
             _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
         }
-
         // DELETE: api/Movies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie([FromRoute] int id)
