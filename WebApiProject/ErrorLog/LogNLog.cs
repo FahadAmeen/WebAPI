@@ -25,9 +25,6 @@ namespace WebApiProject.ErrorLog
         }
         public string[] Delete(string entity, string type)
         { 
-            //  bool b = _context.MyLog.Where(r => r.Created.Contains(ee) && r.Type.Contains(type));
-
-          
                 string ee = entity.Replace('-', '/');
                 var _dateTime = _context.MyLog.Where(r => r.Created.Contains(ee) && r.Type.Contains(type));
                 _context.MyLog.RemoveRange(_dateTime);
@@ -67,18 +64,9 @@ namespace WebApiProject.ErrorLog
         {
             LoggingError logging = new LoggingError();
 
-            if (info.ToString() == "1" || info.ToString() == "2" || info.ToString() == "3" || info.ToString() == "4" || info.ToString() == "5" ||
-                info.ToString() == "6" || info.ToString() == "7" || info.ToString() == "8" || info.ToString() == "9" ||
-                info.ToString() == "0")
-            {
-                logging.Description = "Not Found ";
-            }
-            else
-            {
-                logging.Description = info.ToString();
-            }
             logging.Type = "Warn";
             logging.Created = DateTime.Now.ToString();
+            logging.Description = "Not Found  " + info;
                        
             _context.MyLog.Add(logging);
             _context.SaveChanges();

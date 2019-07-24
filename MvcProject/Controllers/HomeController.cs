@@ -39,7 +39,7 @@ namespace MvcProject.Controllers
             {
                 client.BaseAddress = new Uri("https://localhost:44347/api/");
                 //HTTP GET
-                var responseTask = client.GetAsync("StudentRegisterations/Getlog");
+                var responseTask = client.GetAsync("LoggingErrors?pageNo=");
                 responseTask.Wait();
 
                 var result = responseTask.Result;
@@ -71,7 +71,7 @@ namespace MvcProject.Controllers
                 client.BaseAddress = new Uri("https://localhost:44347/api/");
                 string ee = datetime.Replace('/', '-');
                 //HTTP DELETE
-                var deleteTask = client.DeleteAsync($"StudentRegisterations/{ee}/{type}");
+                var deleteTask = client.DeleteAsync($"LoggingErrors/{ee}/{type}");
                 deleteTask.Wait();
 
                 var result = deleteTask.Result;
