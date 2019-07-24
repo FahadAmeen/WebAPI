@@ -19,7 +19,6 @@ namespace WebApiProject.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //EF Seed object creation
-            
             base.OnModelCreating(builder);
 
             builder.Entity<Login>().HasData(
@@ -33,6 +32,23 @@ namespace WebApiProject.Data
                 }, new Login("Alina Ali", "alina ali")
                 {
                     UserId = 3
+                });
+
+
+            builder.Entity<Permission>().HasData(
+                new Permission("http://localhost:4200/home", false)
+                {
+                    Name = "Welcome Page",
+                    Id=1
+
+                }, new Permission("http://localhost:4200/login", true)
+                {
+                    Name = "Login Page",
+                    Id = 2
+                }, new Permission("http://localhost:4200/todoitems", false)
+                {
+                    Name = "Todo Page",
+                    Id = 3
                 });
         }
 
@@ -50,6 +66,7 @@ namespace WebApiProject.Data
         public object Mapping { get; internal set; }
         public DbSet<Record> Records { get; set; }
         public DbSet<Login> Login { get; set; }
+        public DbSet<Permission> Permission { get; set; }
 
     }
 }

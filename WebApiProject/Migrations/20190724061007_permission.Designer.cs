@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20190724061007_permission")]
+    partial class permission
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,25 +82,16 @@ namespace WebApiProject.Migrations
 
             modelBuilder.Entity("WebApiProject.Models.Permission", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("PageUrl");
 
                     b.Property<bool>("isAccessible");
 
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("Permission");
-
-                    b.HasData(
-                        new { Id = 1, Name = "Welcome Page", PageUrl = "http://localhost:4200/home", isAccessible = false },
-                        new { Id = 2, Name = "Login Page", PageUrl = "http://localhost:4200/login", isAccessible = true },
-                        new { Id = 3, Name = "Todo Page", PageUrl = "http://localhost:4200/todoitems", isAccessible = false }
-                    );
                 });
 
             modelBuilder.Entity("WebApiProject.Models.Person", b =>
