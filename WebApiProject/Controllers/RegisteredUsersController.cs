@@ -3,6 +3,7 @@ using BussinessObjects;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace WebApiProject.Controllers
         public async Task<IEnumerable<RegisteredUser>> Indexx(int pageIndex = 1, string sortOrder = "no", string col = "", string val = "",
             int pageSize = 5)
         {
-            var List_caster = await _userBl("RegisteredUser").GetUsers(sortOrder, col , val, pageIndex, pageSize);
+            var List_caster =  _userBl("RegisteredUser").GetAllUsers(sortOrder, col , val, pageIndex, pageSize);
             IEnumerable<RegisteredUser> enumerable_caster = List_caster.Cast<RegisteredUser>().ToList();
             return enumerable_caster;
 
@@ -79,6 +80,13 @@ namespace WebApiProject.Controllers
 
             try
             {
+                string tempFile = registeredUser.FileName;
+                string tempfilename = tempFile.Substring(0, tempFile.IndexOf(";"));
+                string base64 = tempFile.Substring(tempFile.IndexOf(",") + 1);
+                string filename = tempfilename.Substring(9);
+                byte[] imageBytes = Convert.FromBase64String(base64);
+                System.IO.File.WriteAllBytes(@"C:\Users\mhas\Downloads\Compressed\WebAPI\WebApiProject\Uploads\" + filename, imageBytes);
+                //registeredUser.FileName = filename;
                 await _userBl("RegisteredUser").Post(registeredUser);
             }
             catch (Exception e)

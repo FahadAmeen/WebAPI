@@ -20,11 +20,12 @@ namespace BussinessLogic
 
 
         //api/RegisteredUsers/GetAll?pageIndex=1&sortOrder=name&col=password&val=password7&pageSize=16
-        public async Task<IList<object>> GetUsers( string sortOrder = "no", string col = "", string val = "",
+        public IList<object> GetAllUsers( string sortOrder = "no", string col = "", string val = "",
             int pageIndex = 1,int pageSize = 5)
         {
             pageIndex = pageIndex - 1;
             sortOrder = sortOrder.ToLower();
+            var skipCount = pageIndex * pageSize;
             var user = from s in _context.RegisteredUsers
                        select s;
             switch (sortOrder)
@@ -65,36 +66,32 @@ namespace BussinessLogic
                         user = user.Where(s => s.Id == Int32.Parse(val));
                         break;
                     case "name":
-                        user = _context.RegisteredUsers.Where(p =>
-                            string.Equals(p.Name, val, StringComparison.OrdinalIgnoreCase));
+                        user = _context.RegisteredUsers.Where(p =>(p.Name.Contains(val)));
                         break;
                     case "email_address":
                         user = _context.RegisteredUsers.Where(p =>
-                            string.Equals(p.Email_address, val, StringComparison.OrdinalIgnoreCase));
+                            (p.Email_address.Contains(val)));
                         break;
                     case "file_name":
                         user = _context.RegisteredUsers.Where(p =>
-                            string.Equals(p.FileName, val, StringComparison.OrdinalIgnoreCase));
+                            (p.FileName.Contains(val)));
                         break;
                     case "job_type":
                         user = _context.RegisteredUsers.Where(p =>
-                            string.Equals(p.Job_type, val, StringComparison.OrdinalIgnoreCase));
+                            (p.Job_type.Contains(val)));
                         break;
                     case "phone_number":
                         user = _context.RegisteredUsers.Where(p =>
-                            string.Equals(p.Phone_number, val, StringComparison.OrdinalIgnoreCase));
-                        break;
-                    case "password":
-                        user = _context.RegisteredUsers.Where(p =>
-                            string.Equals(p.Password, val, StringComparison.OrdinalIgnoreCase));
+                            (p.Phone_number.Contains(val)));
                         break;
                     default:
                         break;
                 }
 
             }
-            return await user.Skip(pageIndex * pageSize).Take(pageSize).ToArrayAsync();
-            
+            var obj =  user.Skip(skipCount).Take(pageSize).ToArray();
+            return obj;
+
         }
 
         public async Task<IList<object>> GetUsers(int page = 1, int limit = 5, string sort = "Id", string search = "")
@@ -208,6 +205,11 @@ namespace BussinessLogic
         public bool Exists(int id)
         {
             return _context.RegisteredUsers.Any(e => e.Id == id);
+        }
+
+        public Task<IList<object>> GetUsers(string inColumn = "", string forWord = "", string sortBy = "Id", int pageNo = 0, int pageSize = 5)
+        {
+            throw new NotImplementedException();
         }
     }
 }

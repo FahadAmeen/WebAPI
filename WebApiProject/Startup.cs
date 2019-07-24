@@ -14,6 +14,7 @@ namespace WebApiProject
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,8 +30,16 @@ namespace WebApiProject
           
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200",
+                            "http://www.contoso.com");
+                    });
+            });
 
-            
             services.AddMvc();
 
             services.AddTransient<UserModelBL>();
@@ -72,7 +81,7 @@ namespace WebApiProject
 
             app.UseHttpsRedirection();
             app.UseMvc();
-            
+            app.UseCors();
             UserModelData.Initialize(app);
             StudentRegisterationsData.Initialize(app);
             UserData.Initialize(app);

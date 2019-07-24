@@ -166,5 +166,10 @@ namespace BussinessLogic
         {
             return _context.UserModels.Any(e => e.Id == id);
         }
+
+        public IList<object> GetAllUsers(string sortOrder = "no", string col = "", string val = "", int pageIndex = 1, int pageSize = 5)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

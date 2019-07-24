@@ -16,5 +16,8 @@ namespace BussinessLogic
         Task<string> Post(object user);
         Task<string> Delete(int id);
         bool Exists(int id);
+
+        IList<object> GetAllUsers(string sortOrder = "no", string col = "", string val = "",
+            int pageIndex = 1, int pageSize = 5);
     }
 }
