@@ -30,7 +30,7 @@ namespace WebApiProject.Controllers
 
         // GET: api/Permissions/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPermission([FromRoute] string id)
+        public async Task<IActionResult> GetPermission([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -49,14 +49,14 @@ namespace WebApiProject.Controllers
 
         // PUT: api/Permissions/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPermission([FromRoute] string id, [FromBody] Permission permission)
+        public async Task<IActionResult> PutPermission([FromRoute] int id, [FromBody] Permission permission)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != permission.Name)
+            if (id != permission.Id)
             {
                 return BadRequest();
             }
@@ -94,12 +94,12 @@ namespace WebApiProject.Controllers
             _context.Permission.Add(permission);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPermission", new { id = permission.Name }, permission);
+            return CreatedAtAction("GetPermission", new { id = permission.Id }, permission);
         }
 
         // DELETE: api/Permissions/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePermission([FromRoute] string id)
+        public async Task<IActionResult> DeletePermission([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -118,9 +118,9 @@ namespace WebApiProject.Controllers
             return Ok(permission);
         }
 
-        private bool PermissionExists(string id)
+        private bool PermissionExists(int id)
         {
-            return _context.Permission.Any(e => e.Name == id);
+            return _context.Permission.Any(e => e.Id == id);
         }
     }
 }
