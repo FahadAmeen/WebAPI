@@ -38,7 +38,7 @@ namespace WebApiProject.Controllers
             if (!String.IsNullOrEmpty(stringPassword) && !(userName == "") && !(userName==null))
             {
                 //got all users with the current user name 
-                var matchingUsers = selectUsers.Where(s => s.UserName == userName).ToList();
+                var matchingUsers = selectUsers.Where(s => s.UserEmail == userName).ToList();
                 if (matchingUsers.Count()>0)
                 {
                     for (int i = 0; i < matchingUsers.Count(); i++)

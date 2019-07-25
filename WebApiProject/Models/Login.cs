@@ -14,7 +14,8 @@ namespace WebApiProject.Models
     {
         [Key]
         public int UserId { get; set; }
-        public string UserName { get; set; }
+        
+        public string UserEmail { get; set; }
         public byte[] Password { get; set; }
 
         //to help encryptor encrypt password
@@ -25,9 +26,9 @@ namespace WebApiProject.Models
 
         }
 
-        public Login(string username, string psStringPassword)
+        public Login(string useremail, string psStringPassword)
         {
-            UserName = username;
+            UserEmail = useremail;
             stringPassword = psStringPassword;
             
           // this.Password = Encryptor.EncryptStringToBytes_Aes(stringPassword);

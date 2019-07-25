@@ -22,14 +22,14 @@ namespace WebApiProject.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Login>().HasData(
-                new Login("sahar", "12345678")
+                new Login("sahar@gmail.com", "12345678")
                 {
                     UserId = 1 
 
-                }, new Login("saba tahir", "hello s")
+                }, new Login("saba_tahir@yahoo.com", "hello s")
                 {
                     UserId = 2
-                }, new Login("Alina Ali", "alina ali")
+                }, new Login("AlinaAli@rocketmail.com", "alina ali")
                 {
                     UserId = 3
                 });
