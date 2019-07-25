@@ -28,6 +28,15 @@ namespace WebApiProject.Controllers
             return _context.ToDoItems;
         }
 
+        
+        [HttpGet("getCount")]
+        public int GetCountOfItems()
+        {
+            var allItems = _context.ToDoItems;
+            return allItems.Count();
+        }
+
+
         // GET: api/DbToDoItems/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetToDoItem([FromRoute] long id)
