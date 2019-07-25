@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApiProject.Migrations
 {
-    public partial class initial : Migration
+    public partial class items : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,6 +52,21 @@ namespace WebApiProject.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Permission",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
+                    PageUrl = table.Column<string>(nullable: true),
+                    isAccessible = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permission", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,7 +136,7 @@ namespace WebApiProject.Migrations
                 name: "ToDoItems",
                 columns: table => new
                 {
-                    Id = table.Column<long>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(nullable: true),
                     IsComplete = table.Column<bool>(nullable: false),
@@ -170,17 +185,37 @@ namespace WebApiProject.Migrations
             migrationBuilder.InsertData(
                 table: "Login",
                 columns: new[] { "UserId", "Password", "UserName" },
-                values: new object[] { 1, new byte[] { 66, 145, 205, 222, 149, 121, 112, 56, 178, 91, 82, 92, 149, 28, 154, 233 }, "sahar" });
+                values: new object[,]
+                {
+                    { 1, new byte[] { 66, 145, 205, 222, 149, 121, 112, 56, 178, 91, 82, 92, 149, 28, 154, 233 }, "sahar" },
+                    { 2, new byte[] { 15, 154, 179, 67, 101, 118, 152, 215, 18, 220, 20, 210, 161, 5, 150, 209 }, "saba tahir" },
+                    { 3, new byte[] { 222, 181, 24, 67, 220, 146, 43, 164, 232, 212, 154, 113, 246, 185, 241, 13 }, "Alina Ali" }
+                });
 
             migrationBuilder.InsertData(
-                table: "Login",
-                columns: new[] { "UserId", "Password", "UserName" },
-                values: new object[] { 2, new byte[] { 15, 154, 179, 67, 101, 118, 152, 215, 18, 220, 20, 210, 161, 5, 150, 209 }, "saba tahir" });
+                table: "Permission",
+                columns: new[] { "Id", "Name", "PageUrl", "isAccessible" },
+                values: new object[,]
+                {
+                    { 1, "Welcome Page", "/home", true },
+                    { 2, "Login Page", "/login", true },
+                    { 3, "Todo Page", "/todoitems", false }
+                });
 
             migrationBuilder.InsertData(
-                table: "Login",
-                columns: new[] { "UserId", "Password", "UserName" },
-                values: new object[] { 3, new byte[] { 222, 181, 24, 67, 220, 146, 43, 164, 232, 212, 154, 113, 246, 185, 241, 13 }, "Alina Ali" });
+                table: "ToDoItems",
+                columns: new[] { "Id", "Description", "File", "IsComplete", "Priority", "Title" },
+                values: new object[,]
+                {
+                    { 1, "removing ", null, true, "high", "remove bugs" },
+                    { 2, "removing ", null, true, "high", "work on table " },
+                    { 3, "removing ", null, false, "high", "estimate time" },
+                    { 4, "removing ", null, true, "major", "blah blah" },
+                    { 5, "removing ", null, true, "high", "yes no" },
+                    { 6, "removing ", null, false, "medium", "update web apo" },
+                    { 7, "removing ", null, false, "medium", "this is working" },
+                    { 8, "removing ", null, true, "low", "ahan" }
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -193,6 +228,9 @@ namespace WebApiProject.Migrations
 
             migrationBuilder.DropTable(
                 name: "Movies");
+
+            migrationBuilder.DropTable(
+                name: "Permission");
 
             migrationBuilder.DropTable(
                 name: "Persons");

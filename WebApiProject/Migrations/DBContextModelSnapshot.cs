@@ -95,9 +95,9 @@ namespace WebApiProject.Migrations
                     b.ToTable("Permission");
 
                     b.HasData(
-                        new { Id = 1, Name = "Welcome Page", PageUrl = "http://localhost:4200/home", isAccessible = false },
-                        new { Id = 2, Name = "Login Page", PageUrl = "http://localhost:4200/login", isAccessible = true },
-                        new { Id = 3, Name = "Todo Page", PageUrl = "http://localhost:4200/todoitems", isAccessible = false }
+                        new { Id = 1, Name = "Welcome Page", PageUrl = "/home", isAccessible = true },
+                        new { Id = 2, Name = "Login Page", PageUrl = "/login", isAccessible = true },
+                        new { Id = 3, Name = "Todo Page", PageUrl = "/todoitems", isAccessible = false }
                     );
                 });
 
@@ -177,7 +177,7 @@ namespace WebApiProject.Migrations
 
             modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -194,6 +194,17 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ToDoItems");
+
+                    b.HasData(
+                        new { Id = 1, Description = "removing ", IsComplete = true, Priority = "high", Title = "remove bugs" },
+                        new { Id = 2, Description = "removing ", IsComplete = true, Priority = "high", Title = "work on table " },
+                        new { Id = 3, Description = "removing ", IsComplete = false, Priority = "high", Title = "estimate time" },
+                        new { Id = 4, Description = "removing ", IsComplete = true, Priority = "major", Title = "blah blah" },
+                        new { Id = 5, Description = "removing ", IsComplete = true, Priority = "high", Title = "yes no" },
+                        new { Id = 6, Description = "removing ", IsComplete = false, Priority = "medium", Title = "update web apo" },
+                        new { Id = 7, Description = "removing ", IsComplete = false, Priority = "medium", Title = "this is working" },
+                        new { Id = 8, Description = "removing ", IsComplete = true, Priority = "low", Title = "ahan" }
+                    );
                 });
 
             modelBuilder.Entity("WebApiProject.Models.User", b =>

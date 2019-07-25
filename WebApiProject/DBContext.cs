@@ -34,18 +34,45 @@ namespace WebApiProject.Data
                     UserId = 3
                 });
 
+            builder.Entity<ToDoItem>().HasData(
+                new ToDoItem("remove bugs", true, "removing ", "high")
+                {
+                    Id = 1
+
+                }, new ToDoItem("work on table ", true, "removing ", "high")
+                {
+                    Id = 2
+                }, new ToDoItem("estimate time", false, "removing ", "high")
+                {
+                    Id = 3
+                }, new ToDoItem("blah blah", true, "removing ", "major")
+                {
+                    Id = 4
+                }, new ToDoItem("yes no", true, "removing ", "high")
+                {
+                    Id = 5
+                }, new ToDoItem("update web apo", false, "removing ", "medium")
+                {
+                    Id = 6
+                }, new ToDoItem("this is working", false, "removing ", "medium")
+                {
+                    Id = 7
+                }, new ToDoItem("ahan", true, "removing ", "low")
+                {
+                    Id = 8
+                });
 
             builder.Entity<Permission>().HasData(
-                new Permission("http://localhost:4200/home", false)
+                new Permission("/home", true)
                 {
                     Name = "Welcome Page",
                     Id=1
 
-                }, new Permission("http://localhost:4200/login", true)
+                }, new Permission("/login", true)
                 {
                     Name = "Login Page",
                     Id = 2
-                }, new Permission("http://localhost:4200/todoitems", false)
+                }, new Permission("/todoitems", false)
                 {
                     Name = "Todo Page",
                     Id = 3

@@ -10,8 +10,8 @@ using WebApiProject.Data;
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20190714174343_initial")]
-    partial class initial
+    [Migration("20190725065605_items")]
+    partial class items
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,6 +78,29 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("WebApiProject.Models.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("PageUrl");
+
+                    b.Property<bool>("isAccessible");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permission");
+
+                    b.HasData(
+                        new { Id = 1, Name = "Welcome Page", PageUrl = "/home", isAccessible = true },
+                        new { Id = 2, Name = "Login Page", PageUrl = "/login", isAccessible = true },
+                        new { Id = 3, Name = "Todo Page", PageUrl = "/todoitems", isAccessible = false }
+                    );
                 });
 
             modelBuilder.Entity("WebApiProject.Models.Person", b =>
@@ -156,7 +179,7 @@ namespace WebApiProject.Migrations
 
             modelBuilder.Entity("WebApiProject.Models.ToDoItem", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -173,6 +196,17 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ToDoItems");
+
+                    b.HasData(
+                        new { Id = 1, Description = "removing ", IsComplete = true, Priority = "high", Title = "remove bugs" },
+                        new { Id = 2, Description = "removing ", IsComplete = true, Priority = "high", Title = "work on table " },
+                        new { Id = 3, Description = "removing ", IsComplete = false, Priority = "high", Title = "estimate time" },
+                        new { Id = 4, Description = "removing ", IsComplete = true, Priority = "major", Title = "blah blah" },
+                        new { Id = 5, Description = "removing ", IsComplete = true, Priority = "high", Title = "yes no" },
+                        new { Id = 6, Description = "removing ", IsComplete = false, Priority = "medium", Title = "update web apo" },
+                        new { Id = 7, Description = "removing ", IsComplete = false, Priority = "medium", Title = "this is working" },
+                        new { Id = 8, Description = "removing ", IsComplete = true, Priority = "low", Title = "ahan" }
+                    );
                 });
 
             modelBuilder.Entity("WebApiProject.Models.User", b =>
