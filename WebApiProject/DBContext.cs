@@ -18,6 +18,11 @@ namespace WebApiProject.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.Entity<AccessControl>().HasData(
+                new AccessControl { Id = 1, Name = "loglevel-list", Url = "http://localhost:4200/logging", Status = "access" },
+                new AccessControl { Id = 2, Name = "testpage1", Url = "http://localhost:4200/testpage1", Status = "access" },
+                new AccessControl { Id = 3, Name = "testpage2", Url = "http://localhost:4200/testpage2", Status = "denied" }
+                 );
         }
 
         public DbSet<Person> Persons { get; set; }
@@ -34,5 +39,6 @@ namespace WebApiProject.Data
         public object Mapping { get; internal set; }
         public DbSet<Record> Records { get; set; }
         public DbSet<LoggingError> MyLog { get; set; }
+       public DbSet<AccessControl> AccessControl { get; set; }
     }
 }

@@ -27,13 +27,24 @@ namespace WebApiProject
             // Configuration.GetSection("ConnectionStrings"); //this will get whole section from appsettings
             Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         }
-
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container... registers new services
         public void ConfigureServices(IServiceCollection services)
         {
-           // services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://example.com",
+                                        "http://www.contoso.com")
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+            });
+            // services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton<IConfiguration>(Configuration);
@@ -54,6 +65,8 @@ namespace WebApiProject
                 app.UseHsts();
             }
 
+
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseMvc();
             PersonData.Initialize(app);
