@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using WebApiProject.Data;
 using WebApiProject.Models;
 
@@ -15,20 +16,75 @@ namespace WebApiProject.Controllers
     public class DbToDoItemsController : ControllerBase
     {
         private readonly DBContext _context;
+        private CacheClass _cache1;
+        private string _modelName = "ToDoItems";
+        private int _defaultCacheDuration = 1;
 
-        public DbToDoItemsController(DBContext context)
+
+        public DbToDoItemsController(DBContext context, IMemoryCache memoryCache)
         {
+            _cache1 = new CacheClass(memoryCache);
             _context = context;
         }
 
         // GET: api/DbToDoItems
         [HttpGet]
-        public IEnumerable<ToDoItem> GetToDoItems()
+        public async Task<List<ToDoItem>> GetToDoItems(string inColumn = "", string forWord = "", string sortBy = "Id",
+            int pageNo = 0, int pageSize = 5)
         {
-            return _context.ToDoItems;
+            //IMP : Be very careful abt the sortBy property. It should be exactly as the name of the property i.e. very case sensitive
+            pageNo = pageNo - 1;
+
+            var cacheKey = "Get_Items_All_" + inColumn + forWord + sortBy + pageNo + pageSize;
+
+            List<object> alltoDoItems = _cache1.Search(cacheKey);
+
+
+            if (alltoDoItems == null) //no entry in cache hence create an entry in cache
+            {
+                var convertedtoDoItems = _context.ToDoItems; //get toDoItems list from Db
+                var toDoItems = convertedtoDoItems.OrderBy(p => EF.Property<object>(p, sortBy));
+
+                var selecttoDoItems = from s in toDoItems select s;
+
+                if (!String.IsNullOrEmpty(forWord))
+                {
+                    switch (inColumn)
+                    {
+                        case "Id":
+                            selecttoDoItems = selecttoDoItems.Where(s => s.Id == Int32.Parse(forWord));
+                            break;
+
+                        default:
+                            selecttoDoItems = selecttoDoItems.Where(s => EF.Property<string>(s, inColumn).Contains(forWord));
+                            break;
+                    }
+                }
+
+                if (pageNo > -1)
+                {
+                    selecttoDoItems = selecttoDoItems.Skip(pageNo * pageSize).Take(pageSize);
+                }
+
+                List<object> convertedUSer = new List<object>(selecttoDoItems);
+                //store the searched results
+                _cache1.updateCache(cacheKey, _modelName, _defaultCacheDuration, convertedUSer);
+                return selecttoDoItems.ToList();
+            }
+
+            List<ToDoItem> ConvertedtoDoItems = new List<ToDoItem>();
+            for (int i = 0; i < alltoDoItems.Count; i++)
+            {
+                ToDoItem newuser = (ToDoItem)alltoDoItems[i];
+                ConvertedtoDoItems.Add(newuser);
+            }
+
+            return ConvertedtoDoItems.ToList();
+
         }
 
-        
+
+
         [HttpGet("getCount")]
         public int GetCountOfItems()
         {

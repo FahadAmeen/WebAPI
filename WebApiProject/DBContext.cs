@@ -22,7 +22,7 @@ namespace WebApiProject.Data
             base.OnModelCreating(builder);
 
             builder.Entity<Login>().HasData(
-                new Login("sahar@gmail.com", "12345678")
+                new Login("sej@ciklum.com", "12345678")
                 {
                     UserId = 1 
 
@@ -60,6 +60,56 @@ namespace WebApiProject.Data
                 }, new ToDoItem("ahan", true, "removing ", "low")
                 {
                     Id = 8
+                }, new ToDoItem("remove bugs", true, "removing ", "high")
+                {
+                    Id = 9
+
+                }, new ToDoItem("work on table ", true, "removing ", "high")
+                {
+                    Id = 10
+                }, new ToDoItem("estimate time", false, "removing ", "high")
+                {
+                    Id = 13
+                }, new ToDoItem("blah blah", true, "removing ", "major")
+                {
+                    Id = 14
+                }, new ToDoItem("yes no", true, "removing ", "high")
+                {
+                    Id = 15
+                }, new ToDoItem("update web apo", false, "removing ", "medium")
+                {
+                    Id = 16
+                }, new ToDoItem("this is working", false, "removing ", "medium")
+                {
+                    Id = 17
+                }, new ToDoItem("ahan", true, "removing ", "low")
+                {
+                    Id = 18
+                }, new ToDoItem("remove bugs", true, "removing ", "high")
+                {
+                    Id = 11
+
+                }, new ToDoItem("work on table ", true, "removing ", "high")
+                {
+                    Id = 12
+                }, new ToDoItem("estimate time", false, "removing ", "high")
+                {
+                    Id = 19
+                }, new ToDoItem("blah blah", true, "removing ", "major")
+                {
+                    Id = 20
+                }, new ToDoItem("yes no", true, "removing ", "high")
+                {
+                    Id = 21
+                }, new ToDoItem("update web apo", false, "removing ", "medium")
+                {
+                    Id = 22
+                }, new ToDoItem("this is working", false, "removing ", "medium")
+                {
+                    Id = 23
+                }, new ToDoItem("ahan", true, "removing ", "low")
+                {
+                    Id = 24
                 });
 
             builder.Entity<Permission>().HasData(

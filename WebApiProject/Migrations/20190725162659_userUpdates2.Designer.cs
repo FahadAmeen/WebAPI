@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20190725162659_userUpdates2")]
+    partial class userUpdates2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +51,7 @@ namespace WebApiProject.Migrations
                     b.ToTable("Login");
 
                     b.HasData(
-                        new { UserId = 1, Password = new byte[] { 66, 145, 205, 222, 149, 121, 112, 56, 178, 91, 82, 92, 149, 28, 154, 233 }, UserEmail = "sej@ciklum.com" },
+                        new { UserId = 1, Password = new byte[] { 66, 145, 205, 222, 149, 121, 112, 56, 178, 91, 82, 92, 149, 28, 154, 233 }, UserEmail = "sahar@gmail.com" },
                         new { UserId = 2, Password = new byte[] { 15, 154, 179, 67, 101, 118, 152, 215, 18, 220, 20, 210, 161, 5, 150, 209 }, UserEmail = "saba_tahir@yahoo.com" },
                         new { UserId = 3, Password = new byte[] { 222, 181, 24, 67, 220, 146, 43, 164, 232, 212, 154, 113, 246, 185, 241, 13 }, UserEmail = "AlinaAli@rocketmail.com" }
                     );

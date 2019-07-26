@@ -63,7 +63,7 @@ namespace WebApiProject.Controllers
         }
 
         // GET: api/Logins/5
-        
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetLogin([FromRoute] int id)
         {
@@ -82,9 +82,72 @@ namespace WebApiProject.Controllers
             return Ok(login);
         }
 
+        // GET: api/Logins/useremail
+        //[HttpGet("{userEmailPassed}")]
+        ////public Login GetLogin([FromRoute] string userEmailPassed)
+        public Login GetLogin( string userEmailPassed)
+        {
+            Login loginRecords;
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(new Login());
+            //}
+
+            if (!String.IsNullOrEmpty(userEmailPassed))
+            {
+                loginRecords = _context.Login.Where(s => s.UserEmail == userEmailPassed).FirstOrDefault();
+            }
+            else
+            {
+                loginRecords = new Login();
+            }
+
+
+            return loginRecords;
+        }
+
+        // PUT: api/Logins/rida@gmail.com
+        [HttpPut("{userEmailPassed}")]
+        public bool PutLogin([FromRoute] string userEmailPassed, [FromBody] Login login)
+        {
+            if (!ModelState.IsValid)
+            {
+                return false;
+            }
+
+            if (!String.IsNullOrEmpty(userEmailPassed))
+            {
+                var loginRecords = _context.Login.Where(s => s.UserEmail == userEmailPassed).FirstOrDefault();
+
+
+                if (loginRecords==null)
+                {
+                    return false;
+                }
+                else
+                {
+                    loginRecords.stringPassword = login.stringPassword;
+                    loginRecords.UserEmail = login.UserEmail;
+                    loginRecords.Password = Encryptor.Encrypt(loginRecords.stringPassword);
+                    _context.Entry(loginRecords).State = EntityState.Modified;
+                    try
+                    {
+                        _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+
+            return true;
+        }
+
+
+
         // PUT: api/Logins/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLogin([FromRoute] int id, [FromBody] Login login)
+      //  [HttpPut("{id}")]
+     /*   public async Task<IActionResult> PutLogin([FromRoute] int id, [FromBody] Login login)
         {
             if (!ModelState.IsValid)
             {
@@ -115,7 +178,7 @@ namespace WebApiProject.Controllers
             }
 
             return NoContent();
-        }
+        } */
 
         // POST: api/Logins
         [HttpPost]
