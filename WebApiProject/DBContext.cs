@@ -144,6 +144,7 @@ namespace WebApiProject.Data
         public DbSet<Record> Records { get; set; }
         public DbSet<Login> Login { get; set; }
         public DbSet<Permission> Permission { get; set; }
+        public DbSet<WebApiProject.Models.ResetPassword> ResetPassword { get; set; }
 
     }
 }

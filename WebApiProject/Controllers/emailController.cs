@@ -13,6 +13,7 @@ using System.Net.Mail;
 using WebApiProject.Data;
 using WebApiProject.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.ExceptionServices;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
@@ -33,8 +34,37 @@ namespace WebApiProject.Controllers
         }
 
         [HttpGet]
-        public bool sendEmail(string to)
+        public async Task<bool> sendEmailAsync(string to)
         {
+            //First checking if this emailController has as Valid reset duration------
+            List<ResetPassword> allMatchingRecords;
+            allMatchingRecords = _context.ResetPassword.Where(s => s.userEmail == to).ToList();
+            ResetPassword newRecord;
+
+            if (allMatchingRecords.Count() < 1) //create new entry to validate reset request
+            {
+                newRecord = new ResetPassword();
+                newRecord.userEmail = to;
+                newRecord.resetRequestTime  = DateTime.Now;
+                newRecord.expiryTime = newRecord.resetRequestTime.AddDays(1);
+                _context.ResetPassword.Add(newRecord);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                allMatchingRecords = allMatchingRecords.OrderBy(item => item.resetRequestTime).ToList();
+                var latestLoginRecord = allMatchingRecords[allMatchingRecords.Count() - 1];
+                if (latestLoginRecord.expiryTime < DateTime.Now)
+                {
+                    newRecord = new ResetPassword();
+                    newRecord.userEmail = to;
+                    newRecord.resetRequestTime = DateTime.Now;
+                    newRecord.expiryTime = newRecord.resetRequestTime.AddDays(1);
+                    _context.ResetPassword.Add(newRecord);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
             if (userExists(to))
             {
                 MailboxAddress from = new MailboxAddress("Admin", "blahb8818@gmail.com");
@@ -82,28 +112,6 @@ namespace WebApiProject.Controllers
             return false;
         }
 
-        public string OneTimeTokenGenerationForVerification(string userName, int expireTime, string secretToken)
-        {
-            // Adding claims for this token
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, userName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var siningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("MySuperSecureKey"));
-
-            var token = new JwtSecurityToken(
-                issuer: "http//oec.com",
-                audience:"http//oec.com",
-                expires:DateTime.MaxValue.AddHours(1),
-                claims: claims,
-                signingCredentials: new Microsoft.IdentityModel.Tokens.SigningCredentials(siningKey, SecurityAlgorithms.HmacSha256)
-                );
-
-            var tokenHandler = new JwtSecurityTokenHandler().WriteToken(token);
-            return tokenHandler;
-        }
 
     }
 }

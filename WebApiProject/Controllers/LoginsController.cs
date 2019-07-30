@@ -30,8 +30,6 @@ namespace WebApiProject.Controllers
         [HttpGet]
         public bool GetLogin(string userName, string stringPassword )
         {
-
-           
             var allRecords = _context.Login;
             var selectUsers = from s in allRecords select s;
 
