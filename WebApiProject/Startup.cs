@@ -76,7 +76,8 @@ namespace WebApiProject
             UserData.Initialize(app);
             RegisteredUserData.Initialize(app);
             //MovieData.Initialize(app);
-           // PersonData.Initialize(app);
+            // PersonData.Initialize(app);
+            LoggingErrorData.Initialize(app);
         }
     }
 }

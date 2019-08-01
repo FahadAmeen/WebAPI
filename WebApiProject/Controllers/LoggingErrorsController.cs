@@ -25,6 +25,10 @@ namespace WebApiProject.Controllers
             _logg = new LogNLog(context);
         }
 
+ 
+
+
+
         // GET: api/LoggingErrors
         [HttpGet]
         public async Task<IEnumerable<LoggingError>> GetLogAsync(int pageNo = 1, string searchWith = "Id", string searchData = "", string sortData = "Id", int pageSize = 5)

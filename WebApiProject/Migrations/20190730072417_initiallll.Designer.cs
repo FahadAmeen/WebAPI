@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20190730072417_initiallll")]
+    partial class initiallll
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,6 +36,12 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MyLog");
+
+                    b.HasData(
+                        new { Id = 1, Created = "25/07/2019 5:36:56 PM", Description = "Not Found 12", Type = " Warn " },
+                        new { Id = 2, Created = "25/07/2019 5:37:33 PM", Description = "Not Found 200", Type = " Warn " },
+                        new { Id = 3, Created = "25/07/2019 5:37:36 PM", Description = "System.DivideByZeroExceptionAttemptedtodividebyzerat..", Type = " Error " }
+                    );
                 });
 
             modelBuilder.Entity("WebApiProject.Models.AccessControl", b =>

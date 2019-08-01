@@ -23,6 +23,25 @@ namespace WebApiProject.Data
                 new AccessControl { Id = 2, Name = "testpage1", Url = "http://localhost:4200/testpage1", Status = "access" },
                 new AccessControl { Id = 3, Name = "testpage2", Url = "http://localhost:4200/testpage2", Status = "denied" }
                  );
+            //builder.Entity<LoggingError>().HasData(
+            //    new LoggingError { Id = 1, Description = "Not Found 12", Type = " Warn ", Created = "25/07/2019 5:36:56 PM" },
+            //    new LoggingError { Id = 2, Description = "Not Found 200", Type = " Warn ", Created = "25/07/2019 5:37:33 PM" },
+            //    new LoggingError { Id = 3, Description = "System.DivideByZeroExceptionAttemptedtodividebyzerat..", Type = " Error ", Created = "25/07/2019 5:37:36 PM" }
+            //    );
+            builder.Entity<UserLogin>().HasData(
+                new UserLogin ("sahar@gmail.com","aaaa")
+                {
+                     id=1
+                },
+                new UserLogin("sana@hotmail.com", "bbbb")
+                {
+                     id = 2
+                },
+                new UserLogin("rida@yahoo.com", "cccc")
+                {
+                     id = 3
+                }
+                );
         }
 
         public DbSet<Person> Persons { get; set; }
@@ -40,5 +59,6 @@ namespace WebApiProject.Data
         public DbSet<Record> Records { get; set; }
         public DbSet<LoggingError> MyLog { get; set; }
        public DbSet<AccessControl> AccessControl { get; set; }
+        public DbSet<UserLogin> UserLogin { get; set; }
     }
 }
