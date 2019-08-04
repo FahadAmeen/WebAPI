@@ -4,7 +4,9 @@ using System.ComponentModel.Design.Serialization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
 using WebApiProject.Models;
 using WebApiProject.Models.Wrappers;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebApiProject.Controllers
 {
@@ -162,6 +165,31 @@ namespace WebApiProject.Controllers
 
             return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
         }
+        [HttpGet("download/{id}")]
+        public async Task<IActionResult> Download([FromRoute] int id)
+        {
+            
+            var movie = await _context.Movies.FindAsync(id);
+            string fileName = "";
+            string contentType = "";
+            string myFilePath = "";
+            if (movie != null)
+            {
+                // found it
+                myFilePath = movie.Poster;
+                fileName = Path.GetFileNameWithoutExtension(myFilePath);
+                contentType = Path.GetExtension(myFilePath);
+                Byte[] byteArray = System.IO.File.ReadAllBytes(myFilePath.ToString());
+                var file = Convert.ToBase64String(byteArray);
+                return Ok(new FileDownload {file=file, contentType=contentType,fileName=fileName });
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
         // DELETE: api/Movies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie([FromRoute] int id)

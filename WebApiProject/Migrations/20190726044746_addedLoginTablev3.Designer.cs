@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20190726044746_addedLoginTablev3")]
+    partial class addedLoginTablev3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +35,9 @@ namespace WebApiProject.Migrations
                     b.ToTable("Login");
 
                     b.HasData(
-                        new { Id = 1, Email = "fahad@gmail.com", Password = "eHCl155H53UdHMzLw+nKWA==" },
-                        new { Id = 2, Email = "fahd@gmail.com", Password = "eHCl155H53UdHMzLw+nKWA==" },
-                        new { Id = 3, Email = "fahadameen@gmail.com", Password = "eHCl155H53UdHMzLw+nKWA==" },
+                        new { Id = 1, Email = "fahad@gmail.com", Password = "U2FsdGVkX1+amyr7tiQthFJAkQBjRSGat/sMU3HsKgE=" },
+                        new { Id = 2, Email = "fahd@gmail.com", Password = "U2FsdGVkX1+amyr7tiQthFJAkQBjRSGat/sMU3HsKgE=" },
+                        new { Id = 3, Email = "fahadameen@gmail.com", Password = "U2FsdGVkX1+amyr7tiQthFJAkQBjRSGat/sMU3HsKgE=" },
                         new { Id = 4, Email = "fahadj@gmail.com", Password = "123456" }
                     );
                 });

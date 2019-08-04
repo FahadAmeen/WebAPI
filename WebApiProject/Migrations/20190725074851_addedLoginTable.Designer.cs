@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApiProject.Data;
 
 namespace WebApiProject.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20190725074851_addedLoginTable")]
+    partial class addedLoginTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,13 +33,6 @@ namespace WebApiProject.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Login");
-
-                    b.HasData(
-                        new { Id = 1, Email = "fahad@gmail.com", Password = "eHCl155H53UdHMzLw+nKWA==" },
-                        new { Id = 2, Email = "fahd@gmail.com", Password = "eHCl155H53UdHMzLw+nKWA==" },
-                        new { Id = 3, Email = "fahadameen@gmail.com", Password = "eHCl155H53UdHMzLw+nKWA==" },
-                        new { Id = 4, Email = "fahadj@gmail.com", Password = "123456" }
-                    );
                 });
 
             modelBuilder.Entity("WebApiProject.Models.Movie", b =>
