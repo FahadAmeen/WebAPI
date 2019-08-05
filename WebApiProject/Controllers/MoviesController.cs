@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,8 +19,10 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace WebApiProject.Controllers
 {
+   
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class MoviesController : ControllerBase
     {
         private readonly DBContext _context;

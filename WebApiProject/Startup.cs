@@ -32,6 +32,7 @@ namespace WebApiProject
             Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
            
         }
+        readonly string MyAllowSpecificOrigins = "AllowOrigin";
 
         public IConfiguration Configuration { get; }
 
@@ -45,15 +46,18 @@ namespace WebApiProject
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddXmlSerializerFormatters();
             //services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "UserModel Api", Version = "v1" }); });
             // Add service and create Policy with options
-            //services.AddCors(options =>
+            //services.AddCors(c =>
             //{
-            //    options.AddPolicy("CorsPolicy",
-            //        builder => builder
-            //            .SetIsOriginAllowed((host) => true)
-            //            .AllowAnyMethod()
-            //            .AllowAnyHeader()
-            //            .AllowCredentials());
+            //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
             //});
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
+                });
+            });
 
         }
 
@@ -68,10 +72,11 @@ namespace WebApiProject
             {
                 app.UseHsts();
             }
-            
+
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseMvc();
-                //app.UseCors("CorsPolicy");
+            //app.UseCors(options => options.AllowAnyOrigin());
             //app.UseSwagger();
 
             //app.UseSwaggerUI(c => {

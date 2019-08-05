@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class UserModelsController : ControllerBase
     {
         private readonly DBContext _context;

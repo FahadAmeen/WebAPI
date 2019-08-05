@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiProject.Data;
@@ -10,6 +11,7 @@ namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class LoginsController : ControllerBase
     {
         private readonly DBContext _context;
