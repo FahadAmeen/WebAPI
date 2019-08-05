@@ -1,25 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WebApiProject.Data;
 
 //to register the dbContext 
-using Microsoft.EntityFrameworkCore;
-using WebApiProject.Models;
-using Microsoft.Net.Http.Headers;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using System.Net.Http.Formatting;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace WebApiProject
 {
@@ -46,10 +33,7 @@ namespace WebApiProject
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddXmlSerializerFormatters();
             //services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "UserModel Api", Version = "v1" }); });
             // Add service and create Policy with options
-            //services.AddCors(c =>
-            //{
-            //    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
-            //});
+            
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -76,7 +60,6 @@ namespace WebApiProject
             app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseMvc();
-            //app.UseCors(options => options.AllowAnyOrigin());
             //app.UseSwagger();
 
             //app.UseSwaggerUI(c => {
