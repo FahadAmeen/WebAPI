@@ -42,11 +42,7 @@ namespace WebApiProject
 
             services.AddCors(c =>
             {
-                c.AddPolicy(_allowSpecificOrigins,
-                    options =>
-                    {
-                        options.AllowAnyOrigin();
-                    });
+            c.AddPolicy(_allowSpecificOrigins, options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
 
             //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList")); ;
