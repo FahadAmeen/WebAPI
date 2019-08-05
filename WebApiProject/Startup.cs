@@ -22,6 +22,7 @@ namespace WebApiProject
 {
     public class Startup
     {
+        private readonly string _allowSpecificOrigins = "AllowOrigin";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,21 +31,23 @@ namespace WebApiProject
         }
 
         public IConfiguration Configuration { get; }
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+        //readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         // This method gets called by the runtime. Use this method to add services to the container... registers new services
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy(MyAllowSpecificOrigins,
-                    builder =>
-                    {
-                        builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowCredentials();
-                    });
-            });
             // services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
             services.AddDbContext<DBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy(_allowSpecificOrigins,
+                    options =>
+                    {
+                        options.AllowAnyOrigin();
+                    });
+            });
 
             //services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("ToDoList")); ;
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -67,9 +70,10 @@ namespace WebApiProject
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(_allowSpecificOrigins);
             app.UseMvc();
-            app.UseCors(MyAllowSpecificOrigins);
-           // PersonData.Initialize(app);
+
+            // PersonData.Initialize(app);
             EmployeeData.Initialize(app);
             UserModelData.Initialize(app);
             StudentRegisterationsData.Initialize(app);

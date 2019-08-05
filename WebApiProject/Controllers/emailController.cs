@@ -17,11 +17,13 @@ using System.Runtime.ExceptionServices;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Cors;
 
 namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class emailController : ControllerBase
     {
         private MailMessage message = new MailMessage();

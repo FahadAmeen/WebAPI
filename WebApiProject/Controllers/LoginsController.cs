@@ -16,6 +16,7 @@ namespace WebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class LoginsController : ControllerBase
     {
         private readonly DBContext _context;
@@ -26,7 +27,6 @@ namespace WebApiProject.Controllers
         }
 
         // GET: api/Logins
-        [EnableCors]
         [HttpGet]
         public bool GetLogin(string userName, string stringPassword )
         {
